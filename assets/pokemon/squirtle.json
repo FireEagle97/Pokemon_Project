@@ -1,0 +1,13 @@
+{
+  "baseExperienceReward": 63,
+  "baseStateAttack": 48,
+  "baseStatDefense": 65,
+  "baseStateMaxHp": 44,
+  "baseStatSpecialAttack": 50,
+  "baseStatSpecialDefense": 64,
+  "baseStatSpeed": 43,
+  "species": "squirtle",
+  "types": [
+    "water"
+  ]
+}

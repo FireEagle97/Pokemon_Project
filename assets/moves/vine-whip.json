@@ -1,0 +1,12 @@
+{
+  "accuracy": 100,
+  "ailmentChance": 0,
+  "category": "DAMAGE",
+  "damageClass": "PHYSICAL",
+  "heal": 0,
+  "maxPP": 25,
+  "name": "vine-whip",
+  "power": 45,
+  "target": "OPPONENT",
+  "type": "grass"
+}

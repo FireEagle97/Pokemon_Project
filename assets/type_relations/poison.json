@@ -1,0 +1,7 @@
+{
+    "grass": "super_effective",
+    "poison": "not_very_effective",
+    "ground": "not_very_effective",
+    "rock": "not_very_effective",
+    "ghost": "not_very_effective"
+}

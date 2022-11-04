@@ -1,0 +1,12 @@
+{
+    "accuracy": 90,
+    "ailmentChance": 0,
+    "category": "OTHER",
+    "damageClass": "SPECIAL",
+    "heal": 0,
+    "maxPP": 10,
+    "name": "leech-seed",
+    "power": 0,
+    "target": "OPPONENT",
+    "type": "grass"
+  }

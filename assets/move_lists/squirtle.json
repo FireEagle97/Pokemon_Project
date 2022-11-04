@@ -1,0 +1,34 @@
+[
+    {
+        "move": "tackle",
+        "level": 1
+    },
+    {
+        "move": "tail-whip",
+        "level": 1
+    },
+    {
+        "move": "bubble",
+        "level": 8
+    },
+    {
+        "move": "water-gun",
+        "level": 15
+    },
+    {
+        "move": "bite",
+        "level": 22
+    },
+    {
+        "move": "withdraw",
+        "level": 28
+    },
+    {
+        "move": "skull-bash",
+        "level": 35
+    },
+    {
+        "move": "hydro-pump",
+        "level": 46
+    }
+]

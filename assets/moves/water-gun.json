@@ -1,0 +1,12 @@
+{
+    "accuracy": 100,
+    "ailmentChance": 0,
+    "category": "DAMAGE",
+    "damageClass": "SPECIAL",
+    "heal": 0,
+    "maxPP": 25,
+    "name": "water-gun",
+    "power": 40,
+    "target": "OPPONENT",
+    "type": "water"
+  }
