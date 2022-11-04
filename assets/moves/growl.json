@@ -1,0 +1,12 @@
+{
+  "accuracy": 100,
+  "ailmentChance": 0,
+  "category": "OTHER",
+  "damageClass": "SPECIAL",
+  "heal": 0,
+  "maxPP": 40,
+  "name": "growl",
+  "power": 0,
+  "target": "OPPONENT",
+  "type": "normal"
+}
