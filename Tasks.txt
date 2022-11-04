@@ -1,0 +1,18 @@
+Modify the Asset Folder to have 3 functional pokemon - Bastian
+Moves - Bastian
+Pokemon + Create pokemon -  Dany
+Level up - Bastian
+Intro Screen + 3 pokemon choosing page - Maxime 
+Team + Collection - Maxime
+Main Menu + Pokecenter - Dany
+
+Battles/Battle UI (big code) {
+Pokemon/sprites UI - Maxime
+Player/buttons UI (split into fight, item, capture, run) - Dany
+Damage Calculations -  Bastian
+Battle Phase/Turn Order - Bastian
+}
+
+Wild Battles - Maxime
+Trainer Battles - Dany
+ 
