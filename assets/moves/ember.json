@@ -1,0 +1,13 @@
+{
+  "accuracy": 100,
+  "ailment": "BURN",
+  "ailmentChance": 10,
+  "category": "DAMAGE_AND_AILMENT",
+  "damageClass": "SPECIAL",
+  "heal": 0,
+  "maxPP": 25,
+  "name": "ember",
+  "power": 40,
+  "target": "OPPONENT",
+  "type": "fire"
+}

@@ -1,0 +1,14 @@
+{
+  "baseExperienceReward": 64,
+  "baseStateAttack": 49,
+  "baseStatDefense": 49,
+  "baseStateMaxHp": 45,
+  "baseStatSpecialAttack": 65,
+  "baseStatSpecialDefense": 65,
+  "baseStatSpeed": 45,
+  "species": "bulbasaur",
+  "types": [
+    "grass",
+    "poison"
+  ]
+}

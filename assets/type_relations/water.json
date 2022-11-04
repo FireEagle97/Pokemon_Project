@@ -1,0 +1,8 @@
+{
+    "fire": "super_effective",
+    "rock": "super_effective",
+    "ground": "super_effective",
+    "grass": "not_very_effective",
+    "water": "not_very_effective",
+    "dragon": "not_very_effective"
+}
