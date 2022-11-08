@@ -12,11 +12,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
     override fun onStart() {
         super.onStart()
         binding.start.setOnClickListener(){
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 }
