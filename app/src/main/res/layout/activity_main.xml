@@ -11,13 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/title"
-        android:text="Dawson Pokemon"
+        android:text="@string/dawson_pokemon"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="40dp"
         app:layout_constraintTop_toTopOf="parent"
         android:textColor="@color/blue"
-        android:textSize="30dp"/>
+        android:textSize="30sp"/>
     <Button
         android:text="@string/start_game"
         android:layout_width="150dp"
@@ -26,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="400dp"
-        android:layout_marginLeft="160dp"
+        android:layout_marginStart="160dp"
         android:backgroundTint="@android:color/darker_gray">
 
     </Button>
