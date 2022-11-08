@@ -9,8 +9,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val dude = Pokemon("charmander", null);
+        val moveAssigner = MoveAssigner().assignNewMoves(dude, 1, applicationContext)
     }
 
-    val dude = Pokemon("charmander", null);
-    val moveAssigner = MoveAssigner().AssignNewMoves(dude, 1)
 }
