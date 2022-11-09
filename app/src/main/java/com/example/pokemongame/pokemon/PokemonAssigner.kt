@@ -2,20 +2,26 @@ package com.example.pokemongame.pokemon
 
 import com.example.pokemongame.JSONReader
 import android.content.Context
-import com.google.gson.Gson
+import java.util.logging.Logger
 
 class PokemonAssigner {
 
-
+    companion object{
+        val PokemonLog : Logger = Logger.getLogger(PokemonAssigner::class.java.name)
+    }
     //fun parse json
-    fun setAttributes(species: String, context : Context){
+    fun setAttributes(species: String, context : Context): String? {
         val fileList = context.assets.list("pokemon")!!
-        if("$species.json" in fileList){
+        if("$species.json" in fileList) {
             val fileName = "pokemon/$species.json"
-            val jsonString = JSONReader().jSONReader(context,fileName)
-            val gson = Gson()
-
+            return JSONReader().jSONReader(context, fileName)
+            //getting the stats
+//            val gson = Gson()
+//            val listStates = object: TypeToken<List<State>>() {}.type
+//            val statesList : List<State> = gson.fromJson(jsonString,listStates)
+//            statesList.forEachIndexed{index, state -> PokemonLog.info("$index:\n$state")}
         }
+        return "error"
 
 //        var gson = Gson();
 //        Resources.
