@@ -6,6 +6,9 @@ plugins {
 android {
     namespace 'com.example.pokemongame'
     compileSdk 32
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         applicationId "com.example.pokemongame"
