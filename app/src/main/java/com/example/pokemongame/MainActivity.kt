@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val test = Pokemon(4,"charmander")
 
-        val pokemonAssigner = PokemonAssigner().setAttributes(test.species, applicationContext)
-        Toast.makeText(applicationContext,pokemonAssigner, Toast.LENGTH_SHORT).show()
+        val pokemon = PokemonAssigner().createPokemon(test, applicationContext)
+        Toast.makeText(applicationContext,pokemon.types[0], Toast.LENGTH_SHORT).show()
     }
 }

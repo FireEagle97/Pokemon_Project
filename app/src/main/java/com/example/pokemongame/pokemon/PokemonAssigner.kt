@@ -10,25 +10,46 @@ class PokemonAssigner {
         val PokemonLog : Logger = Logger.getLogger(PokemonAssigner::class.java.name)
     }
     //fun parse json
-    fun setAttributes(species: String, context : Context): String? {
-        val fileList = context.assets.list("pokemon")!!
-        if("$species.json" in fileList) {
-            val fileName = "pokemon/$species.json"
-            return JSONReader().jSONReader(context, fileName)
-            //getting the stats
-//            val gson = Gson()
-//            val listStates = object: TypeToken<List<State>>() {}.type
-//            val statesList : List<State> = gson.fromJson(jsonString,listStates)
-//            statesList.forEachIndexed{index, state -> PokemonLog.info("$index:\n$state")}
-        }
-        return "error"
+    fun createPokemon(pokemon : Pokemon, context : Context): Pokemon {
 
-//        var gson = Gson();
-//        Resources.
-//        val a = gson.fromJson(Resources., JsonObject::class.java)
-//        a.asInt("")
-//        a.asInt
-//        var jsonString = gson.fromJson<>()
+        when (pokemon.species) {
+            "bulbasaur" -> {
+                setPokemonAttributes(pokemon, context);
+            }
+            "charmander" ->{
+                setPokemonAttributes(pokemon, context)
+            }
+            "squirtle" -> {
+                setPokemonAttributes(pokemon, context)
+            }
+            "pidgey" -> {
+                setPokemonAttributes(pokemon, context)
+            }
+            "rattata" -> {
+                setPokemonAttributes(pokemon, context)
+            }
+
+        }
+
+    return pokemon;
+    }
+    private fun setPokemonAttributes(pokemon : Pokemon, context: Context) : Pokemon{
+        val fileList = context.assets.list("pokemon")!!
+        if("${pokemon.species}.json" in fileList) {
+            val fileName = "pokemon/${pokemon.species}.json"
+            var data = JSONReader().jSONReader(context, fileName)
+            if(data != null){
+                pokemon.baseExperienceReward = data.baseExperienceReward
+                pokemon.baseStatDefense = data.baseStatDefense
+                pokemon.baseStateAttack = data.baseStateAttack
+                pokemon.baseStatMaxHp = data.baseStatMaxHp
+                pokemon.baseStatSpecialAttack = data.baseStatSpecialAttack
+                pokemon.baseStatSpecialDefense = data.baseStatSpecialDefense
+                pokemon.baseStatSpeed = data.baseStatSpeed
+                pokemon.types = data.types
+            }
+        }
+        return pokemon;
 
     }
 
