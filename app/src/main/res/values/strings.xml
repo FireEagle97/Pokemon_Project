@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PokemonGame</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="wild_battle">Wild Battle</string>
+    <string name="trainer_battle">Trainer Battle</string>
+    <string name="pokemon_center">Pokemon Center</string>
 </resources>
