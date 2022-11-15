@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_weight="2">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/trainer_name_prompt"
+         />
+
+    <EditText
+        android:id="@+id/input_name"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:singleLine="true"
+        android:layout_marginStart="5dp"
+        android:maxLength="20"
+        />
+    <TextView
+        android:id="@+id/starting_pokemon_qeury"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/input_name"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/starting_pokemon_query"
+
+
+        />
+    <RadioGroup
+        android:id="@+id/first_choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/starting_pokemon_qeury"
+        app:layout_constraintStart_toStartOf="parent"
+
+        >
+        <RadioButton
+            android:id="@+id/pokemon1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="blastauise (lvl 4)"
+            android:drawableEnd="@drawable/aa"
+            android:drawablePadding="30dp"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+            />
+
+        <RadioButton
+            android:id="@+id/pokemon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="blastauise (lvl 4)"
+            android:drawableEnd="@drawable/aa"
+            android:drawablePadding="30dp"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+
+            />
+        <RadioButton
+            android:id="@+id/pokemon3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="blastauise (lvl 4)"
+            android:drawableEnd="@drawable/aa"
+            android:drawablePadding="30dp"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+            />
+    </RadioGroup>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/first_choice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/go_to_menu"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
