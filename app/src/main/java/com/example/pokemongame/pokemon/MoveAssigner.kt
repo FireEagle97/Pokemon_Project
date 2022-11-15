@@ -72,31 +72,40 @@ class MoveAssigner {
                         //Flip the boolean
                         noNewMoves = false
 
-                        //Get all new moves
-                        getNewMoves(moveEntry.move, newMovesList, gson, context)
+                        //Ask if the user wants the pokemon to learn that move. Will need to be changed here later on
+                        val userChoice = true;
+                        MoveLog.info("Do you want to learn ${moveEntry.move}?")
+                        if(userChoice){
+                            MoveLog.info("Trainer chose yes")
 
-                        //Replace a move if pokemon already has 4 moves
-                        if (pokemon.moves.count() == 4) {
-                            MoveLog.info("Pokemon already has 4 moves, which move would you like to replace?\n" +
-                                    "1. ${pokemon.moves[0].name}\n" +
-                                    "2. ${pokemon.moves[1].name}\n" +
-                                    "3. ${pokemon.moves[2].name}\n" +
-                                    "4. ${pokemon.moves[3].name}\n")
-                            //testing purposes. Should be replaced here by an app section
-                            val userInput = "1"
-                            val input = userInput.toInt()
-                            if(input in 1..4){
-                                val oldMove = pokemon.moves[input-1].name
-                                pokemon.moves[input-1] = newMovesList[0]
-                                MoveLog.info("$oldMove has been replaced by ${pokemon.moves[input-1].name}")
+                            //Get all new moves
+                            getNewMoves(moveEntry.move, newMovesList, gson, context)
+
+                            //Replace a move if pokemon already has 4 moves
+                            if (pokemon.moves.count() == 4) {
+                                MoveLog.info("Pokemon already has 4 moves, which move would you like to replace?\n" +
+                                        "1. ${pokemon.moves[0].name}\n" +
+                                        "2. ${pokemon.moves[1].name}\n" +
+                                        "3. ${pokemon.moves[2].name}\n" +
+                                        "4. ${pokemon.moves[3].name}\n")
+                                //testing purposes. Should be replaced here by an app section
+                                val userInput = "1"
+                                val input = userInput.toInt()
+                                if(input in 1..4){
+                                    val oldMove = pokemon.moves[input-1].name
+                                    pokemon.moves[input-1] = newMovesList[0]
+                                    MoveLog.info("$oldMove has been replaced by ${pokemon.moves[input-1].name}")
+                                    newMovesList.removeFirst()
+                                }
+
+                            } else {
+                                //Learn new move
+                                pokemon.moves.add(newMovesList[0])
+                                MoveLog.info(pokemon.species + " has learned " + newMovesList[0].name)
                                 newMovesList.removeFirst()
                             }
-
-                        } else {
-                            //Learn new move
-                            pokemon.moves.add(newMovesList[0])
-                            MoveLog.info(pokemon.species + " has learned " + newMovesList[0].name)
-                            newMovesList.removeFirst()
+                        } else{
+                            MoveLog.info("Trainer chose no")
                         }
                     }
                 }
