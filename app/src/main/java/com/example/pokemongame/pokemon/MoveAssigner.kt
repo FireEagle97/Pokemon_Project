@@ -11,7 +11,7 @@ class MoveAssigner {
         val MoveLog: Logger = Logger.getLogger(MoveAssigner::class.java.name)
     }
     //All logs can be replaced with more useful stuff like a TextField
-    //Assigns a new move to a pokemon if a new move can be learned and if the uses chooses so
+    //Assigns a new move to a pokemon if a new move can be learned and if the user chooses so
     fun assignNewMoves(pokemon: Pokemon, level: Int, context: Context){
         val pokemonSpecies = pokemon.species
 
@@ -46,10 +46,7 @@ class MoveAssigner {
                     for (i in level downTo 0) {
                         for (element in moveList) {
                             if (descendingLevel == element.level) {
-                                var elementMove = element.move
-                                var moveJsonString = JSONReader().jSONReader(context, "moves/$elementMove.json")
-                                var move = gson.fromJson(moveJsonString, Move::class.java)
-                                newMovesList.add(move)
+                                getNewMoves(element.move, newMovesList, gson, context)
                             }
                         }
                         descendingLevel--
@@ -59,30 +56,58 @@ class MoveAssigner {
                 //newMovesList.forEach{move -> MoveLog.info(move.name)}
 
                 //Insert the moves in the pokemon
-                newMovesList.forEach{move -> pokemon.moves.add(move)}
+                newMovesList.forEach{ move ->
+                    pokemon.moves.add(move)
+                    MoveLog.info(pokemon.species + " has learned " + move.name)
+                }
             } else {
 
                 //Check if pokemon has new moves to learn
+                //boolean to flip if a new move is learned
+                var noNewMoves = true
                 for (moveEntry in moveList) {
                     if (moveEntry.level == level) {
 
-                        //Get all new moves
+                        //Flip the boolean
+                        noNewMoves = false
 
-                        //Check if pokemon already has moves
-                        if (pokemon.moves!!.size == 4) {
-                            //Ask for move replacement
-                            MoveLog.info("Which move would you like to replace?")
+                        //Get all new moves
+                        getNewMoves(moveEntry.move, newMovesList, gson, context)
+
+                        //Replace a move if pokemon already has 4 moves
+                        var totalMoves = pokemon.moves.count() + newMovesList.count()
+                        if (pokemon.moves.count() > 4) {
+
+                            MoveLog.info("Pokemon already has 4 moves, which move would you like to replace?\n" +
+                                    "1. ${pokemon.moves[0]}\n" +
+                                    "2. ${pokemon.moves[1]}\n" +
+                                    "3. ${pokemon.moves[2]}" +
+                                    "4. ${pokemon.moves[3]}")
+                            switch
+                            newMovesList.removeFirst()
+
                         } else {
-                            //Learn new move here
-                            MoveLog.info(pokemon.species + " has learned " + "move here")
+                            //Learn new move
+                            pokemon.moves.add(newMovesList[0])
+                            MoveLog.info(pokemon.species + " has learned " + newMovesList[0].name)
+                            newMovesList.removeFirst()
                         }
-                    } else {
-                        MoveLog.info("$pokemonSpecies doesn't learn a new move on level $level")
                     }
+                }
+                //If there are no new moves to be learned, print this message
+                if(noNewMoves) {
+                    MoveLog.info("$pokemonSpecies doesn't learn a new move at level $level")
                 }
             }
         } else {
             MoveLog.info("Pokemon data doesn't exist or isn't accessible!")
         }
     }
+
+    private fun getNewMoves(moveName: String, list: MutableList<Move>, gson: Gson, context: Context) {
+        var moveJsonString = JSONReader().jSONReader(context, "moves/$moveName.json")
+        var move = gson.fromJson(moveJsonString, Move::class.java)
+        list.add(move)
+    }
+
 }

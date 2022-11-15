@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         val dude = Pokemon("charmander", mutableListOf());
         val moveAssigner = MoveAssigner().assignNewMoves(dude, 15, applicationContext)
-        //MoveAssigner.MoveLog.info(dude.moves?.count().toString())
-        dude.moves?.forEach {move -> MoveAssigner.MoveLog.info(move.toString())}
     }
 
 }
