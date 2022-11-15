@@ -12,7 +12,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val dude = Pokemon("charmander", mutableListOf());
-        val moveAssigner = MoveAssigner().assignNewMoves(dude, 15, applicationContext)
+        MoveAssigner().assignNewMoves(dude, 15, applicationContext)
+        MoveAssigner().assignNewMoves(dude, 15, applicationContext)
     }
 
 }
