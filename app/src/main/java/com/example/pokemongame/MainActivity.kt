@@ -2,6 +2,7 @@ package com.example.pokemongame
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.pokemongame.pokemon.MoveAssigner
 import com.example.pokemongame.pokemon.Pokemon
 
@@ -10,8 +11,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val dude = Pokemon("charmander", null);
-        val moveAssigner = MoveAssigner().assignNewMoves(dude, 1, applicationContext)
+        val dude = Pokemon("charmander", mutableListOf());
+        val moveAssigner = MoveAssigner().assignNewMoves(dude, 15, applicationContext)
+        //MoveAssigner.MoveLog.info(dude.moves?.count().toString())
+        dude.moves?.forEach {move -> MoveAssigner.MoveLog.info(move.toString())}
     }
 
 }
