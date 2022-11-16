@@ -7,7 +7,7 @@ import java.util.logging.Logger
 
 class Level {
     companion object{
-        val LevelLog: Logger = Logger.getLogger(MoveAssigner::class.java.name)
+        val LevelLog: Logger = Logger.getLogger(Level::class.java.name)
     }
 
     fun addExperience(pokemon: Pokemon, experience: Double, context: Context){
