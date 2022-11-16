@@ -7,12 +7,13 @@ import com.example.pokemongame.pokemon.MoveAssigner
 import com.example.pokemongame.pokemon.Pokemon
 import com.google.gson.Gson
 import java.util.logging.Logger
+import kotlin.math.floor
 
 class DamageCalculations {
     companion object{
         val DamageLog: Logger = Logger.getLogger(DamageCalculations::class.java.name)
     }
-    //If the move does no damage, determine it outside of this class
+    //Note: If the move does no damage because it isn't a damaging move, determine it outside of this class
     fun calculateDamage(attackerPokemon: Pokemon, attackerMove : Move, defenderPokemon: Pokemon, context: Context): Int{
 
         //Attack hits Defence and Special Attack hits Special Defence
@@ -25,19 +26,24 @@ class DamageCalculations {
         //Calculate STAB bonus
         if(attackerMove.type in attackerPokemon.types){
             DamageLog.info("STAB bonus applied!")
-            damage = kotlin.math.floor(damage * 1.5).toInt()
+            damage = floor(damage * 1.5).toInt()
         }
 
         //Type effectiveness
         var multiplier: Double = 1.0
         val gson = Gson()
         var effectivenessJsonString = JSONReader().jSONReader(context, "type_relations/${attackerMove.type}.json")
-        var effectiveness = gson.fromJson(effectivenessJsonString, Effectiveness::class.java)
+        var effectivenessRelations = gson.fromJson(effectivenessJsonString, Map::class.java)
         defenderPokemon.types.forEach {
-            if(effectiveness == null){
-
+            if(effectivenessRelations[it] != null){
+                when(effectivenessRelations[it]){
+                    "no_effect" -> multiplier = 0.0
+                    "not_very_effective" -> multiplier /= 2
+                    "super_effective" -> multiplier *= 2
+                }
             }
         }
+        damage = floor(damage * multiplier).toInt()
 
         return damage
     }
