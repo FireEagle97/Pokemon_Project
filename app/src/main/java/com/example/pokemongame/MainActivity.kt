@@ -3,15 +3,26 @@ package com.example.pokemongame
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.pokemongame.pokemon.MoveAssigner
+import com.example.pokemongame.pokemon.Pokemon
 import com.example.pokemongame.databinding.ActivityMainBinding
 
 private lateinit var binding: ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        //Code to test/assign moves. Can be moved elsewhere
+//        val dude = Pokemon("charmander", mutableListOf());
+//        MoveAssigner().assignNewMoves(dude, 15, applicationContext)
+//        MoveAssigner().assignNewMoves(dude, 15, applicationContext)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    //Into screen
     override fun onStart() {
         super.onStart()
         binding.start.setOnClickListener(){
@@ -19,4 +30,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }
