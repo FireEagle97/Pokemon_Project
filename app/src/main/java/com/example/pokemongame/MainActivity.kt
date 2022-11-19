@@ -24,12 +24,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Into screen
-//    override fun onStart() {
-//        super.onStart()
-//        binding.start.setOnClickListener(){
-//            val intent = Intent(this, RegisterActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+        binding.start.setOnClickListener(){
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+    }
 
 }
