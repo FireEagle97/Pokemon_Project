@@ -55,10 +55,18 @@ class Battle_Phase {
     private fun doMove(attackingPokemon: Pokemon, attackerMove: Move, defendingPokemon: Pokemon, context: Context){
         if(accuracyCheck(attackerMove)){
             //Check if the move does damage
-            if(attackerMove.category == )
+            if(attackerMove.power > 0){
+                DamageCalculations().calculateDamage(attackingPokemon, attackerMove, defendingPokemon, context);
+            } else if(attackerMove.heal > 0){
+                //healing code
+                attackingPokemon.HP += attackerMove.heal
+                BattleLog.info("${attackingPokemon.name} healed itself!")
+            } else {
+                BattleLog.info("Moves that have no power or no heal values do nothing")
+            }
             //Add stuff here
         } else{
-            BattleLog.info("${pokemon.name}'s ${move.name} missed!")
+            BattleLog.info("${attackingPokemon.name}'s ${attackerMove.name} missed!")
         }
     }
 
