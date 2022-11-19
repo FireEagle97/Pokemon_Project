@@ -4,25 +4,41 @@ import android.content.Context
 import kotlin.math.floor
 import com.example.pokemongame.pokemon.MoveAssigner
 import java.util.logging.Logger
+import kotlin.math.pow
 
 class Level {
     companion object{
         val LevelLog: Logger = Logger.getLogger(Level::class.java.name)
     }
 
+    //When creating a new pokemon with a provided level, perform all steps that require that pokemon's
+    //stats to augment and for it to learn new moves. We set the pokemon's level to 0 and progressively
+    //level it up
+    fun initializeLevels(pokemon: Pokemon, level: Int, context: Context){
+        pokemon.level = 0;
+        val totalExperience = level.toDouble().pow(3.toDouble())
+        addExperience(pokemon, totalExperience, context)
+    }
+
+    //Adds the specified experience to a pokemon and calls checkForLevelUp
     fun addExperience(pokemon: Pokemon, experience: Double, context: Context){
         pokemon.experience += experience
         LevelLog.info("${pokemon.name} gained $experience experience points!")
         checkForLevelUp(pokemon, context)
     }
 
+    //Checks if it is time for a pokemon to level up by calculating the level it should have based on its experience and then
+    //calls levelUp a number of times depending on that difference
     private fun checkForLevelUp(pokemon: Pokemon, context: Context){
-        val levelFormula = floor(Math.cbrt(pokemon.experience))
+        val levelFormula: Int = floor(Math.cbrt(pokemon.experience)).toInt()
         if(pokemon.level < levelFormula){
-            levelUp(pokemon, context)
+            for(i in 1..(levelFormula-pokemon.level)) {
+                levelUp(pokemon, context)
+            }
         }
     }
 
+    //levels up a pokemon (raises its level, raises its stats, and calls assignNewMoves())
     private fun levelUp(pokemon: Pokemon, context: Context){
         pokemon.level++
         LevelLog.info("${pokemon.name} has leveled up!")
