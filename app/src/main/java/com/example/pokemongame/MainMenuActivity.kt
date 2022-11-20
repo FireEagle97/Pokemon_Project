@@ -16,5 +16,10 @@ class MainMenuActivity : AppCompatActivity() {
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.pokeCenterBtn.setOnClickListener{
+            val intent = Intent(this, PokemonCenterActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }

@@ -31,6 +31,9 @@
         <activity android:name=".MainMenuActivity">
 
         </activity>
+        <activity android:name=".PokemonCenterActivity">
+
+        </activity>
     </application>
 
 </manifest>
