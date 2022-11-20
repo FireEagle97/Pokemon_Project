@@ -26,21 +26,21 @@ class MainActivity : AppCompatActivity() {
 //        val test = BattleStats(4,"charmander")
         //to test if optional param name is missing
         val pokemon = PokemonCreator().createPokemon(1,"charmander", "charmander",applicationContext)
-//        mainLog.info {
-//            "baseStateDefense: ${pokemon.baseStatDefense}\n" +
-//            "baseStateSpeed: ${pokemon.baseStatSpeed}\n" +
-//            "baseStateAttack: ${pokemon.baseStateAttack}\n" +
-//            "baseStateSpecialDefense: ${pokemon.baseStatSpecialDefense}\n"+
-//            "baseStateSpecialAttack: ${pokemon.baseStatSpecialAttack}\n"+
-//            "baseStatMaxHp: ${pokemon.baseStatMaxHp}\n"+
-//            "species: ${pokemon.species}\n"+
-//            "experience: ${pokemon.experience}\n"+
-//            "Hp: ${pokemon.hp}\n"+
-//            "Level: ${pokemon.level}\n"+
-//            "moves: ${pokemon.moves}\n"+
-//            "name: ${pokemon.name}\n"+
-//            "types: ${pokemon.types}\n"
-//        }
+        mainLog.info {
+            "defense: ${pokemon.defense}\n" +
+            "speed: ${pokemon.speed}\n" +
+            "attack: ${pokemon.attack}\n" +
+            "specialDefense: ${pokemon.specialDefense}\n"+
+            "specialAttack: ${pokemon.specialAttack}\n"+
+            "baseStatMaxHp: ${pokemon.maxHp}\n"+
+            "species: ${pokemon.species}\n"+
+            "experience: ${pokemon.experience}\n"+
+            "Hp: ${pokemon.hp}\n"+
+            "Level: ${pokemon.level}\n"+
+            "moves: ${pokemon.moves}\n"+
+            "name: ${pokemon.name}\n"+
+            "types: ${pokemon.types}\n"
+        }
 
 
         //Code to test/assign moves. Can be moved elsewhere
