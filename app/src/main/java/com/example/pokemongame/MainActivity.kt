@@ -2,16 +2,23 @@ package com.example.pokemongame
 
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainBinding
 import com.example.pokemongame.pokemon.PokemonCreator
+import java.util.logging.Logger
 
 
 private lateinit var binding: ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    companion object{
+        val mainLog : Logger = Logger.getLogger(MainActivity::class.java.name)
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,8 +26,22 @@ class MainActivity : AppCompatActivity() {
 //        val test = BattleStats(4,"charmander")
         //to test if optional param name is missing
         val pokemon = PokemonCreator().createPokemon(1,"charmander", "charmander",applicationContext)
+//        mainLog.info {
+//            "baseStateDefense: ${pokemon.baseStatDefense}\n" +
+//            "baseStateSpeed: ${pokemon.baseStatSpeed}\n" +
+//            "baseStateAttack: ${pokemon.baseStateAttack}\n" +
+//            "baseStateSpecialDefense: ${pokemon.baseStatSpecialDefense}\n"+
+//            "baseStateSpecialAttack: ${pokemon.baseStatSpecialAttack}\n"+
+//            "baseStatMaxHp: ${pokemon.baseStatMaxHp}\n"+
+//            "species: ${pokemon.species}\n"+
+//            "experience: ${pokemon.experience}\n"+
+//            "Hp: ${pokemon.hp}\n"+
+//            "Level: ${pokemon.level}\n"+
+//            "moves: ${pokemon.moves}\n"+
+//            "name: ${pokemon.name}\n"+
+//            "types: ${pokemon.types}\n"
+//        }
 
-        Toast.makeText(applicationContext,pokemon.battleStats.baseStatDefense.toString(), Toast.LENGTH_SHORT).show()
 
         //Code to test/assign moves. Can be moved elsewhere
 //        val dude = Pokemon("charmander", mutableListOf());

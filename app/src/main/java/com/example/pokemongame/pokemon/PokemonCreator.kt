@@ -4,9 +4,13 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.IOException
+import java.util.logging.Logger
 
 
 class PokemonCreator {
+    companion object{
+        val pokemonCreatorLog : Logger = Logger.getLogger(PokemonCreator::class.java.name)
+    }
 
     private fun getPokemonBattleStats(species: String, context: Context): BattleStats {
         val fileList = context.assets.list("pokemon")!!
@@ -39,9 +43,29 @@ class PokemonCreator {
         //temp vals
         val experience: Int = 0
         val hp: Int = battleStats.baseStatMaxHp
-
-        return Pokemon(battleStats, species, name, moves, experience, level, pokemonTypes, hp)
-
-
+        val baseExperienceReward : Int = battleStats.baseExperienceReward
+        val baseStateAttack : Int = battleStats.baseStateAttack
+        val baseStatDefense : Int = battleStats.baseStatDefense
+        val baseStatMaxHp : Int = battleStats.baseStatMaxHp
+        val baseStatSpecialAttack : Int = battleStats.baseStatSpecialAttack
+        val baseStatSpecialDefense : Int = battleStats.baseStatSpecialDefense
+        val baseStatSpeed : Int = battleStats.baseStatSpeed
+        val types : List<String> = battleStats.types
+        return Pokemon(
+                species,
+                baseExperienceReward,
+                baseStateAttack,
+                baseStatDefense,
+                baseStatMaxHp,
+                baseStatSpecialAttack,
+                baseStatSpecialDefense,
+                baseStatSpeed,
+                types,
+                name,
+                moves,
+                experience,
+                level,
+                hp
+        )
     }
 }
