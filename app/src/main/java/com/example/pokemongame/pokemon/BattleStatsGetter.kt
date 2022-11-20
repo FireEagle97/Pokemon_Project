@@ -11,24 +11,27 @@ class BattleStatsGetter {
     companion object{
         val BattleStatsLog : Logger = Logger.getLogger(BattleStats::class.java.name)
     }
-    fun getPokemonBattleStats(species: String, context: Context) {
-        val fileList = context.assets.list("pokemon")!!
-        val battleStatsData :String
-        if("${species}.json" in fileList) {
-            val fileName = "pokemon/${species}.json"
-            try {
-                battleStatsData = context.assets.open(fileName).bufferedReader().use {
-                    it.readText()
 
-                }
-                val gson = Gson()
-                val listBattleStatsType = object : TypeToken<BattleStats>() {}.type
-                return gson.fromJson(battleStatsData, listBattleStatsType)
-            } catch (ioException: IOException) {
+    fun getPokemonBattleStats(species: String, context: Context): BattleStats {
+        val fileList = context.assets.list("pokemon")!!
+        var battleStatsData: String = ""
+        try {
+        if ("${species}.json" in fileList) {
+            val fileName = "pokemon/${species}.json"
+
+            battleStatsData = context.assets.open(fileName).bufferedReader().use {
+                it.readText()
+            }
+
+        }
+        }catch (ioException: IOException) {
                 ioException.printStackTrace()
                 null
             }
-        }
+        val gson = Gson()
+        val listBattleStatsType = object : TypeToken<BattleStats>() {}.type
+
+        return gson.fromJson(battleStatsData, listBattleStatsType)
 
     }
 

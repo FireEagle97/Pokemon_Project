@@ -3,6 +3,7 @@ package com.example.pokemongame
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainBinding
 import com.example.pokemongame.pokemon.BattleStatsGetter
@@ -16,8 +17,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 //        val test = BattleStats(4,"charmander")
-        val pokemon = BattleStatsGetter().getPokemonBattleStats("charmander", applicationContext)
-//        Toast.makeText(applicationContext,pokemon, Toast.LENGTH_SHORT).show()
+        val battleStats = BattleStatsGetter().getPokemonBattleStats("charmander", applicationContext)
+
+        Toast.makeText(applicationContext,battleStats.baseStatDefense.toString(), Toast.LENGTH_SHORT).show()
 
         //Code to test/assign moves. Can be moved elsewhere
 //        val dude = Pokemon("charmander", mutableListOf());

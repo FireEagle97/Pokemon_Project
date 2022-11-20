@@ -13,7 +13,3 @@ data class BattleStats(
 
 )
 
-/**
- * search if we can move PokemonAssinger method to Pokemon class
- *
- */
