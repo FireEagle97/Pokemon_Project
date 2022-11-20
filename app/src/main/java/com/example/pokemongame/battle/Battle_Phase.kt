@@ -7,41 +7,43 @@ import com.example.pokemongame.pokemon.Pokemon
 import java.util.Random
 import java.util.logging.Logger
 
-class Battle_Phase {
+class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableList<Pokemon>) {
     companion object{
         val BattleLog: Logger = Logger.getLogger(Battle_Phase::class.java.name)
     }
     private val random: Random = Random()
 
     //Performs a whole battle turn when the fight button is pressed
-    fun battleTurn(pokemon1: Pokemon, pokemon1Move: Move, pokemon1Index: Int, pokemon2: Pokemon, pokemon2Move: Move, pokemon2Index: Int, context: Context){
+    fun battleTurn(pokemonPlayer: PokemonInTeam, pokemonEnemy: PokemonInTeam, context: Context){
         //List to hold pokemon about to faint
-        var faintList = mutableListOf<Pokemon>()
+        var faintList = mutableListOf<PokemonInTeam>()
         //List to keep the speed order
-        var speedArray: Array<Pokemon> = speedCheck(pokemon1, pokemon2)
+        var speedArray: Array<PokemonInTeam> = speedCheck(pokemonPlayer, pokemonEnemy)
 
         //Call doMove
-        speedArray = doMove(speedArray[0], pokemon1Move, speedArray[1], true, context)
+        doMove(speedArray, true, context)
 
         //Update the teams
-            //Code to update the teams
+            playerTeam[pokemonPlayer.indexInTeam] = speedArray[0].pokemon
+            enemyTeam[pokemonEnemy.indexInTeam] = s
 
         //Check if the opposing pokemon has fainted
-        faintList = faintCheck(speedArray, faintList)
+        faintCheck(speedArray, faintList)
         //If it did, call onFaint
         if(faintList.isNotEmpty()){
             onFaint(speedArray, faintList)
             faintList.clear()
         }
 
-        //If the other pokemon is still alive, it also takes its turn
-        speedArray = doMove(speedArray[1], pokemon2Move, speedArray[0], false, context)
+        //If the other pokemon is still alive, it also takes its turn (order doesn't matter here)
+        doMove(speedArray, false, context)
 
         //Update the teams
             //Code to update the teams
 
         //Check if the opposing pokemon has fainted
-        faintList = faintCheck(speedArray, faintList)
+        faintCheck(speedArray, faintList)
+        //If it did, call onFaint
         if(faintList.isNotEmpty()){
             onFaint(speedArray, faintList)
             faintList.clear()
@@ -49,11 +51,11 @@ class Battle_Phase {
     }
 
     //Determines who should play first based on Speed
-    private fun speedCheck(pokemon1: Pokemon, pokemon2: Pokemon): Array<Pokemon>{
-        val array: Array<Pokemon> = arrayOf<Pokemon>(pokemon1, pokemon2)
+    private fun speedCheck(pokemon1: PokemonInTeam, pokemon2: PokemonInTeam): Array<PokemonInTeam>{
+        val array: Array<PokemonInTeam> = arrayOf<PokemonInTeam>(pokemon1, pokemon2)
 
         //Speed Tie, roll random
-        if (pokemon1.Speed == pokemon2.Speed){
+        if (pokemon1.pokemon.Speed == pokemon2.pokemon.Speed){
             BattleLog.info("Speed tie occurred!")
             return if(random.nextBoolean()){
                 array[0] = pokemon1
@@ -67,7 +69,7 @@ class Battle_Phase {
         }
 
         //Determine who is faster
-        return if(pokemon1.Speed > pokemon2.Speed){
+        return if(pokemon1.pokemon.Speed > pokemon2.pokemon.Speed){
             array[0] = pokemon1
             array[1] = pokemon2
             array
@@ -79,35 +81,36 @@ class Battle_Phase {
     }
 
     //Calls accuracyCheck and, upon a hit, enact move repercussions
-    private fun doMove(attackingPokemon: Pokemon, attackerMove: Move, defendingPokemon: Pokemon, firstTurn: Boolean, context: Context): Array<Pokemon>{
+    private fun doMove(speedArray: Array<PokemonInTeam>, firstTurn: Boolean, context: Context) {
+        //If its the second turn, switch their positions
+        if(!firstTurn){
+            val temp = speedArray[0]
+            speedArray[0] = speedArray[1]
+            speedArray[1] = temp
+        }
+
         //Check if move hits
-        if(accuracyCheck(attackerMove)){
+        if(accuracyCheck(speedArray[0].chosenMove)){
 
             //Check if the move does damage
-            if(attackerMove.power > 0){
-                defendingPokemon.HP -= DamageCalculations().calculateDamage(attackingPokemon, attackerMove, defendingPokemon, context)
+            if(speedArray[0].chosenMove.power > 0){
+                speedArray[1].pokemon.HP -= DamageCalculations().calculateDamage(speedArray[0].pokemon, speedArray[0].chosenMove, speedArray[1].pokemon, context)
                 //Set HP to 0 if it would bring it into the negatives instead
-                if(defendingPokemon.HP < 0){
-                    defendingPokemon.HP = 0
+                if(speedArray[1].HP < 0){
+                    speedArray[1].HP = 0
                 }
 
             //If the move heals, it heals
-            } else if(attackerMove.heal > 0){
-                attackingPokemon.HP += attackerMove.heal
-                BattleLog.info("${attackingPokemon.name} healed itself!")
+            } else if(speedArray[1].chosenMove.heal > 0){
+                speedArray[0].HP += speedArray[1].chosenMove.heal
+                BattleLog.info("${speedArray[0].pokemon.name} healed itself!")
 
             } else {
                 BattleLog.info("Moves that have no power or no heal values do nothing")
             }
         } else{
-            BattleLog.info("${attackingPokemon.name}'s ${attackerMove.name} missed!")
+            BattleLog.info("${speedArray[0].pokemon.name}'s ${speedArray[1].chosenMove.name} missed!")
         }
-
-        //Arrange the array in its original order and send the updated pokemon back
-        if(firstTurn){
-            return arrayOf(attackingPokemon, defendingPokemon)
-        }
-        return arrayOf(defendingPokemon, attackingPokemon)
     }
 
     //Checks if a move should hit
@@ -117,13 +120,12 @@ class Battle_Phase {
     }
 
     //checks if the enemy pokemon is dead
-    private fun faintCheck(pokemonArray: Array<Pokemon>, list: MutableList<Pokemon>): MutableList<Pokemon>{
-        pokemonArray.forEach { pokemon ->
-            if(pokemon.HP <= 0){
-                list.add(pokemon)
+    private fun faintCheck(pokemonArray: Array<PokemonInTeam>, list: MutableList<PokemonInTeam>){
+        pokemonArray.forEach { pokemonInTeam ->
+            if(pokemonInTeam.pokemon.HP <= 0){
+                list.add(pokemonInTeam)
             }
         }
-        return list
     }
 
     private fun onFaint(array: Array<Pokemon>, list: MutableList<Pokemon>){
