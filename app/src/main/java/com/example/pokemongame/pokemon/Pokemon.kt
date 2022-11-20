@@ -8,7 +8,7 @@ data class Pokemon(
                     val moves: MutableList<Move>,
                     val experience : Int,
                     val level : Int,
-                    val types : MutableList<String>,
+                    val types : List<String>,
                     val hp : Int
 
 )

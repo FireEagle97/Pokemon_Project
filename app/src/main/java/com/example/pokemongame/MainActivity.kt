@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainBinding
-import com.example.pokemongame.pokemon.BattleStatsGetter
+import com.example.pokemongame.pokemon.PokemonCreator
 
 
 private lateinit var binding: ActivityMainBinding
@@ -17,9 +17,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 //        val test = BattleStats(4,"charmander")
-        val battleStats = BattleStatsGetter().getPokemonBattleStats("charmander", applicationContext)
+        //to test if optional param name is missing
+        val pokemon = PokemonCreator().createPokemon(1,"charmander", "charmander",applicationContext)
 
-        Toast.makeText(applicationContext,battleStats.baseStatDefense.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,pokemon.battleStats.baseStatDefense.toString(), Toast.LENGTH_SHORT).show()
 
         //Code to test/assign moves. Can be moved elsewhere
 //        val dude = Pokemon("charmander", mutableListOf());
