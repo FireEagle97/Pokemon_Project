@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
 //        val test = BattleStats(4,"charmander")
         //to test if optional param name is missing
-        val pokemon = PokemonCreator().createPokemon(1,"charmander", "charmander",applicationContext)
+        val pokemon = PokemonCreator().createPokemon(1,"charmander",applicationContext)
         mainLog.info {
             "defense: ${pokemon.defense}\n" +
             "speed: ${pokemon.speed}\n" +
