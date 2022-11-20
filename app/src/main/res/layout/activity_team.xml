@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/form_question_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:id="@+id/pokemon_item_list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
     </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
