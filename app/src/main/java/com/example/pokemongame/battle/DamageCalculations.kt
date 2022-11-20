@@ -17,16 +17,16 @@ class DamageCalculations {
     fun calculateDamage(attackerPokemon: Pokemon, attackerMove : Move, defenderPokemon: Pokemon, context: Context): Int{
 
         //Attack hits Defence and Special Attack hits Special Defence
-        var damage: Int = if(attackerMove.damageClass == "PHYSICAL"){
-            calculateInitialDamage(attackerPokemon.level, attackerPokemon.Attack, attackerMove, defenderPokemon.Defence)
+        var damage: Double = if(attackerMove.damageClass == "PHYSICAL"){
+            calculateInitialDamage(attackerPokemon.level, attackerPokemon.attack, attackerMove, defenderPokemon.defense)
         } else {
-            calculateInitialDamage(attackerPokemon.level, attackerPokemon.SpecialAttack, attackerMove, defenderPokemon.SpecialDefence)
+            calculateInitialDamage(attackerPokemon.level, attackerPokemon.specialAttack, attackerMove, defenderPokemon.specialDefense)
         }
 
         //Calculate STAB bonus
         if(attackerMove.type in attackerPokemon.types){
             DamageLog.info("STAB bonus applied!")
-            damage = floor(damage * 1.5).toInt()
+            damage *= 1.5
         }
 
         //Type effectiveness
@@ -43,13 +43,14 @@ class DamageCalculations {
                 }
             }
         }
-        damage = floor(damage * multiplier).toInt()
+        damage = floor(damage * multiplier)
 
-        return damage
+        return damage.toInt()
     }
 
-    private fun calculateInitialDamage(attackerLevel: Int, attackerStat: Int, attackerMove: Move, defenderStat: Int): Int {
-        val damage: Int = (((2 * attackerLevel)/5 + 2) / 50) * attackerMove.power * (attackerStat/defenderStat) + 2
+    private fun calculateInitialDamage(attackerLevel: Int, attackerStat: Int, attackerMove: Move, defenderStat: Int): Double {
+        val damage: Double = ((((2 * attackerLevel.toDouble())/5) + 2) / 50) * attackerMove.power.toDouble() * (attackerStat/defenderStat) + 2
+        DamageLog.info("Initial Damage: $damage")
         return damage
     }
 }
