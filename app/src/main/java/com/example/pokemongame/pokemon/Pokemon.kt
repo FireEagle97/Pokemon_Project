@@ -11,7 +11,7 @@ data class Pokemon(
     var specialDefense: Int,
     var speed: Int,
     var types: List<String>,
-    var name: String? = species,
+    var name: String = species,
     val moves: MutableList<Move>,
     val experience: Int,
     val level: Int,

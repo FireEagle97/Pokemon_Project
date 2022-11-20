@@ -35,7 +35,7 @@ class PokemonCreator {
 
     }
 
-    fun createPokemon(level: Int, species: String,name : String? = species, context: Context): Pokemon {
+    fun createPokemon(level: Int, species: String, context: Context,name : String = species): Pokemon {
         //get The battleStats
         val battleStats: BattleStats = getPokemonBattleStats(species, context)
         val pokemonTypes: List<String> = battleStats.types
