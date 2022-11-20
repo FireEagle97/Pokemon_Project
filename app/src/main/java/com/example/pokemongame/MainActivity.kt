@@ -14,9 +14,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //Code to test/assign moves. Can be moved elsewhere
-//        val dude = Pokemon("charmander", mutableListOf());
+//        val dude = Pokemon("bulbasaur", mutableListOf());
 //        MoveAssigner().assignNewMoves(dude, 15, applicationContext)
 //        MoveAssigner().assignNewMoves(dude, 15, applicationContext)
+//        MoveAssigner.MoveLog.info(dude.moves.toString())
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
