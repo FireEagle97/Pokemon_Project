@@ -34,7 +34,7 @@ class PokemonRecyclerAdapter(private val pokemonList: MutableList<String>):
                     notifyItemRangeChanged(adapterPosition -1, 2)
                 }
         }
-   }
+     }
    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
