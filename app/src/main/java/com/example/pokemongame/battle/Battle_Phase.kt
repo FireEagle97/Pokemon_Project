@@ -24,8 +24,7 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
         doMove(speedArray, true, context)
 
         //Update the teams
-            playerTeam[pokemonPlayer.indexInTeam] = speedArray[0].pokemon
-            enemyTeam[pokemonEnemy.indexInTeam] = s
+        updateTeam(pokemonPlayer, pokemonEnemy, speedArray)
 
         //Check if the opposing pokemon has fainted
         faintCheck(speedArray, faintList)
@@ -39,7 +38,7 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
         doMove(speedArray, false, context)
 
         //Update the teams
-            //Code to update the teams
+        updateTeam(pokemonPlayer, pokemonEnemy, speedArray)
 
         //Check if the opposing pokemon has fainted
         faintCheck(speedArray, faintList)
@@ -128,7 +127,20 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
         }
     }
 
-    private fun onFaint(array: Array<Pokemon>, list: MutableList<Pokemon>){
+    private fun updateTeam(pokemonPlayer: PokemonInTeam, pokemonEnemy: PokemonInTeam, speedArray: Array<PokemonInTeam>){
+        if(speedArray[0].inPlayerTeam) {
+            playerTeam[pokemonPlayer.indexInTeam] = speedArray[0].pokemon
+        } else {
+            playerTeam[pokemonPlayer.indexInTeam] = speedArray[1].pokemon
+        }
+        if(speedArray[1].inPlayerTeam) {
+            enemyTeam[pokemonEnemy.indexInTeam] = speedArray[0].pokemon
+        } else {
+            enemyTeam[pokemonEnemy.indexInTeam] = speedArray[1].pokemon
+        }
+    }
+
+    private fun onFaint(array: Array<PokemonInTeam>, list: MutableList<PokemonInTeam>){
         //If both pokemon are dead, switch both
         if(list.count() == 2){
             //endOfMatchCondition
