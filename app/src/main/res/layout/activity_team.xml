@@ -3,29 +3,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pokemon_item_list"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-    </androidx.recyclerview.widget.RecyclerView>
+<!--    <androidx.fragment.app.FragmentContainerView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/pokemon_item_list"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+<!--    </androidx.recyclerview.widget.RecyclerView>-->
 
+<!--    </androidx.fragment.app.FragmentContainerView>-->
+    <androidx.fragment.app.FragmentContainerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.example.pokemongame.team_collection.TeamFragment" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--android:orientation="horizontal"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="match_parent">-->
-<!--<fragment android:name="com.example.news.ArticleListFragment"-->
+<!--    android:orientation="horizontal"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+<!--<fragment-->
 <!--    android:id="@+id/list"-->
 <!--    android:layout_weight="1"-->
 <!--    android:layout_width="0dp"-->
-<!--    android:layout_height="match_parent" />-->
-<!--<fragment android:name="com.example.news.ArticleReaderFragment"-->
+<!--    android:layout_height="match_parent" >-->
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/pokemon_item_list"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent">-->
+<!--        </androidx.recyclerview.widget.RecyclerView>-->
+<!--</fragment>-->
+<!--<fragment-->
 <!--    android:id="@+id/viewer"-->
 <!--    android:layout_weight="2"-->
 <!--    android:layout_width="0dp"-->
-<!--    android:layout_height="match_parent" />-->
+<!--    android:layout_height="match_parent"-->
+<!--    >-->
+<!--</fragment>-->
 <!--</LinearLayout>-->
