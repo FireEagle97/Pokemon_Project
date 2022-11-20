@@ -1,17 +1,47 @@
 package com.example.pokemongame
 
+
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
-import com.example.pokemongame.pokemon.MoveAssigner
-import com.example.pokemongame.pokemon.Pokemon
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainBinding
+import com.example.pokemongame.pokemon.PokemonCreator
+import java.util.logging.Logger
+
 
 private lateinit var binding: ActivityMainBinding
+
 class MainActivity : AppCompatActivity() {
+    companion object{
+        val mainLog : Logger = Logger.getLogger(MainActivity::class.java.name)
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        val test = BattleStats(4,"charmander")
+        //to test if optional param name is missing
+        val pokemon = PokemonCreator().createPokemon(1,"charmander",applicationContext)
+        mainLog.info {
+            "defense: ${pokemon.defense}\n" +
+            "speed: ${pokemon.speed}\n" +
+            "attack: ${pokemon.attack}\n" +
+            "specialDefense: ${pokemon.specialDefense}\n"+
+            "specialAttack: ${pokemon.specialAttack}\n"+
+            "baseStatMaxHp: ${pokemon.maxHp}\n"+
+            "species: ${pokemon.species}\n"+
+            "experience: ${pokemon.experience}\n"+
+            "Hp: ${pokemon.hp}\n"+
+            "Level: ${pokemon.level}\n"+
+            "moves: ${pokemon.moves}\n"+
+            "name: ${pokemon.name}\n"+
+            "types: ${pokemon.types}\n"
+        }
+
 
         //Code to test/assign moves. Can be moved elsewhere
 //        val dude = Pokemon("bulbasaur", mutableListOf());
