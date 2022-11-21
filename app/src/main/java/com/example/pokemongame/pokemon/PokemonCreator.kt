@@ -71,12 +71,12 @@ class PokemonCreator {
         val pokemonTypes: List<String> = battleStats.types
         val moves: MutableList<Move> = mutableListOf()
         //temp vals
-        val experience: Int = 0
-        val hp: Int = battleStats.baseStatMaxHp
+        val experience: Double = 0.0
+        val hp: Int = battleStats.baseStateMaxHp
         val baseExperienceReward : Int = battleStats.baseExperienceReward
         val baseStateAttack : Int = battleStats.baseStateAttack
         val baseStatDefense : Int = battleStats.baseStatDefense
-        val baseStatMaxHp : Int = battleStats.baseStatMaxHp
+        val baseStatMaxHp : Int = battleStats.baseStateMaxHp
         val baseStatSpecialAttack : Int = battleStats.baseStatSpecialAttack
         val baseStatSpecialDefense : Int = battleStats.baseStatSpecialDefense
         val baseStatSpeed : Int = battleStats.baseStatSpeed

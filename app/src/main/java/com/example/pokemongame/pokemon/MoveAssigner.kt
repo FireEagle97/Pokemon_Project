@@ -122,6 +122,7 @@ class MoveAssigner {
     private fun getNewMoves(moveName: String, list: MutableList<Move>, gson: Gson, context: Context) {
         var moveJsonString = JSONReader().jSONReader(context, "moves/$moveName.json")
         var move = gson.fromJson(moveJsonString, Move::class.java)
+        move.pp = move.maxPP
         list.add(move)
     }
 
