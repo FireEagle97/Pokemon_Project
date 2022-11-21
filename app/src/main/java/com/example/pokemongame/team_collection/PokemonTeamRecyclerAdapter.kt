@@ -2,14 +2,13 @@ package com.example.pokemongame.team_collection
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pokemongame.databinding.PokemonItemBinding
+import com.example.pokemongame.databinding.PokemonItemTeamBinding
 
-class PokemonRecyclerAdapter(private val pokemonList: MutableList<String>):
-    RecyclerView.Adapter<PokemonRecyclerAdapter.ViewHolder>(){
+class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<String>):
+    RecyclerView.Adapter<PokemonTeamRecyclerAdapter.ViewHolder>(){
 
-   inner class ViewHolder(val binding: PokemonItemBinding) : RecyclerView.ViewHolder(binding.root){
+   inner class ViewHolder(val binding: PokemonItemTeamBinding) : RecyclerView.ViewHolder(binding.root){
         init {
             binding.moveOver.setOnClickListener(){
                 if(pokemonList.size > 1) {
@@ -38,7 +37,7 @@ class PokemonRecyclerAdapter(private val pokemonList: MutableList<String>):
    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = PokemonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = PokemonItemTeamBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

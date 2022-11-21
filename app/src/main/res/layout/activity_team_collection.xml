@@ -4,6 +4,12 @@
     android:layout_height="match_parent">
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/team_fragment"
-        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"/>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/collection_fragment"
+        android:layout_width="wrap_content"
+        android:layout_weight="2"
         android:layout_height="match_parent" />
 </LinearLayout>

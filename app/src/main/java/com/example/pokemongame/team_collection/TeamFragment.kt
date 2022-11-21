@@ -5,12 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.pokemongame.R
 class TeamFragment : Fragment() {
     private var pokemon: ArrayList<String>? = null
@@ -46,7 +42,7 @@ class TeamFragment : Fragment() {
         recycler = view.findViewById(R.id.recycler_view)
         recycler.layoutManager
         if(pokemon != null) {
-            val adapter: PokemonRecyclerAdapter = PokemonRecyclerAdapter(
+            val adapter: PokemonTeamRecyclerAdapter = PokemonTeamRecyclerAdapter(
                 pokemon!!.toMutableList()
             )
             recycler.adapter = adapter
