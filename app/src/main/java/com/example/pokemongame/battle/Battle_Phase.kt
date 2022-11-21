@@ -1,58 +1,55 @@
 package com.example.pokemongame.battle
 
 import android.content.Context
-import android.hardware.camera2.CameraManager.AvailabilityCallback
-import androidx.annotation.ArrayRes
 import com.example.pokemongame.pokemon.Level
 import com.example.pokemongame.pokemon.Move
 import com.example.pokemongame.pokemon.Pokemon
 import java.util.Random
 import java.util.logging.Logger
 
-class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableList<Pokemon>) {
+class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>) {
     companion object{
         val BattleLog: Logger = Logger.getLogger(Battle_Phase::class.java.name)
     }
     private val random: Random = Random()
 
-    //Performs a whole turn when any button is pressed. Run logic is handled outside of here since it isn't the same as the games
-    fun playTurn(pokemonPlayer: ActivePokemon, pokemonEnemy: ActivePokemon, inTrainerBattle: Boolean, context: Context){
+    //Performs a whole turn when any button is pressed. This returns a boolean that tells the external code when to
+    //exit upon victory or loss so that it can go back to the main menu. (Run button logic is handled outside of this class though)
+    fun playBattleTurn(pokemonPlayer: ActivePokemon, pokemonEnemy: ActivePokemon, inTrainerBattle: Boolean, context: Context): Boolean{
         //List to keep the speed order
         var speedArray: Array<ActivePokemon> = speedCheck(pokemonPlayer, pokemonEnemy)
 
-        val opposingFainted: Boolean = playSingularTurn(speedArray, true, inTrainerBattle, pokemonPlayer.indexInTeam,
-            pokemonEnemy.indexInTeam, context)
+        //array to hold booleans that dictate if the opposing pokemon is dead [0] or if the battle should end [1]
+        //I would put this in two values instead, but when they are function parameters they are transformed
+        //into val, which makes it impossible to change them
+        var faintedAndEndBattleArray = arrayOf(false, false)
+
+        //First turn
+        playSingularTurn(speedArray, true, inTrainerBattle, pokemonPlayer.indexInTeam,
+            pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
         //If the opposing pokemon is dead, skip its turn, else perform its turn
-        if(opposingFainted){
+        if(faintedAndEndBattleArray[0]){
             BattleLog.info("Other pokemon is dead. Skipping turn...")
+            faintedAndEndBattleArray[0] = false
         } else {
-            //Start of second player's turn
-            playSingularTurn(speedArray, false, inTrainerBattle, pokemonPlayer.indexInTeam, pokemonEnemy.indexInTeam, context)
+            //Second turn
+            playSingularTurn(speedArray, false, inTrainerBattle, pokemonPlayer.indexInTeam, pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
         }
+
+        return faintedAndEndBattleArray[1]
     }
 
     //Plays a single trainer's turn
     private fun playSingularTurn(speedArray: Array<ActivePokemon>, firstTurn: Boolean, inTrainerBattle: Boolean,
-                                 pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, context: Context): Boolean{
-        var opposingFainted = false
+                                 pokemonPlayerIndex: Int, pokemonEnemyIndex: Int,
+                                 faintedAndEndBattleArray: Array<Boolean>, context: Context){
         var index = if (firstTurn){
             0
         } else {
             1
         }
-        //Check for switch
-        if(speedArray[index].willSwitch){
-            BattleLog.info("Switch called!")
-            //Code to switch here (swap between speedArray and teams above) (also must transform switching out pokemon
-            //back into a Pokemon object and switching in into an ActivePokemon with null chosenMove and false booleans)
-        }
 
-        //Check for items
-        if(speedArray[index].willCapture || speedArray[index].willUsePotion){
-            //Code for using items here.
-        }
-
-        //Call doMove
+        //Call doMove if the chosenMove isn't null (because of a switch or item use)
         if(speedArray[index].chosenMove != null) {
             doMove(speedArray, firstTurn, context)
 
@@ -62,14 +59,13 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
             //Check if the opposing pokemon has fainted
             //If it did, call onFaint
             if(faintCheck(speedArray, firstTurn)){
-                opposingFainted = true
-                onFaint(speedArray, firstTurn, inTrainerBattle, pokemonPlayerIndex, pokemonEnemyIndex, context)
+                faintedAndEndBattleArray[0] = true
+                faintedAndEndBattleArray[1] = onFaint(speedArray, firstTurn,
+                    inTrainerBattle, pokemonPlayerIndex, pokemonEnemyIndex, context)
             }
-
         } else {
             BattleLog.info("Trainer chose another action than fighting. Turn will be skipped")
         }
-        return opposingFainted
     }
 
     //Determines who should play first based on Speed
@@ -116,20 +112,20 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
 
             //Check if the move does damage
             if(speedArray[0].chosenMove!!.power > 0){
-                speedArray[1].pokemon.HP -= DamageCalculations().calculateDamage(speedArray[0].pokemon,
+                speedArray[1].pokemon.hp -= DamageCalculations().calculateDamage(speedArray[0].pokemon,
                     speedArray[0].chosenMove!!, speedArray[1].pokemon, context)
                 //Set HP to 0 if it would bring it into the negatives instead
-                if(speedArray[1].HP < 0){
-                    speedArray[1].HP = 0
+                if(speedArray[1].hp < 0){
+                    speedArray[1].hp = 0
                 }
                 BattleLog.info("New HP of defending pokemon: ${speedArray[1].pokemon.hp}")
 
             //If the move heals, it heals
             } else if(speedArray[0].chosenMove!!.heal > 0){
-                speedArray[0].HP += speedArray[0].chosenMove!!.heal
+                speedArray[0].hp += speedArray[0].chosenMove!!.heal
                 //Set HP to maxHP if the healing would bring the hp beyond it
-                if(speedArray[0].pokemon.hp > speedArray[0].pokemon.maxHP){
-                    speedArray[0].pokemon.hp = speedArray[0].pokemon.maxHP
+                if(speedArray[0].pokemon.hp > speedArray[0].pokemon.maxHp){
+                    speedArray[0].pokemon.hp = speedArray[0].pokemon.maxHp
                 }
                 BattleLog.info("${speedArray[0].pokemon.name} healed itself!")
                 BattleLog.info("New HP of healed pokemon: ${speedArray[0].pokemon.hp}")
@@ -154,6 +150,7 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
     //checks if the enemy pokemon is dead
     private fun faintCheck(speedArray: Array<ActivePokemon>, firstTurn: Boolean): Boolean {
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
+        //If we properly take care of the array order, the opposing pokemon will always be in [1]
         if(speedArray[1].pokemon.hp == 0) {
             swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
             return true
@@ -162,7 +159,7 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
         return false
     }
 
-    //Updates the teams to hold the updated correct values
+    //Updates the teams to retain the updated correct values (like hp and exp gained or lost)
     private fun updateTeam(pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, speedArray: Array<ActivePokemon>){
         if(speedArray[0].inPlayerTeam) {
             playerTeam[pokemonPlayerIndex] = speedArray[0].pokemon
@@ -176,13 +173,14 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
         }
     }
 
-    //Checks if someone won, else forces a switch
+    //Awards experience, checks if someone won, else forces a switch
     private fun onFaint(speedArray: Array<ActivePokemon>, firstTurn: Boolean, inTrainerBattle: Boolean,
-                        pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, context: Context){
-
+                        pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, context: Context): Boolean{
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
+
         //Fainted pokemon will always be in [1]
         BattleLog.info("${speedArray[1].pokemon.name} has fainted!")
+
         //Give exp to victor
         var gainedExperience: Double = 0.3 * speedArray[1].pokemon.experienceReward * speedArray[1].pokemon.level
         if(inTrainerBattle){
@@ -193,20 +191,37 @@ class Battle_Phase(val playerTeam: MutableList<Pokemon>, val enemyTeam: MutableL
         //Update teams due to xp gain
         updateTeam(pokemonPlayerIndex, pokemonEnemyIndex, speedArray)
 
-        //Switch pokemons if possible, else declare victory
-            //If no other pokemons can be switched for opponent, declare victory
-                //declare victory and return to Main Menu
-            //If no other pokemons can be switched for player, declare loss
-                //declare loss and return to Main Menu
-        //Code to switch here (swap between speedArray and teams above) (also must transform switching out pokemon
-        //back into a Pokemon object and switching in into an ActivePokemon with null chosenMove and false booleans)
-
+        //Check if a victory condition is achieved for either party. If not, force a switch
+        val playerTeamFainted = checkIfTeamAllFainted(playerTeam)
+        val enemyTeamFainted = checkIfTeamAllFainted(enemyTeam)
+        if(playerTeamFainted || enemyTeamFainted){
+            if(enemyTeamFainted){
+                BattleLog.info("You won!")
+            }
+            else if(checkIfTeamAllFainted(playerTeam)) {
+                BattleLog.info("You lost...")
+            }
+            swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
+            return true
+        } else {
+            //Code to switch here (swap between speedArray and teams above) (also must transform switching out pokemon
+            //back into a Pokemon object and switching in into an ActivePokemon with null chosenMove)
+        }
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
-
+        return false
     }
 
-    private fun checkEndOfMatchCondition(){
-
+    private fun checkIfTeamAllFainted(team: MutableList<Pokemon>): Boolean{
+        var counter = 0
+        for(pokemon in team){
+            if(pokemon.hp == 0){
+                counter++
+            }
+        }
+        if(counter == 6){
+            return true
+        }
+        return false
     }
 
     //Used to switch the positions of the ActivePokemons in the array
