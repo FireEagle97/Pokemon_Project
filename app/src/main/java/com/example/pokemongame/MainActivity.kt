@@ -26,9 +26,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        val test = BattleStats(4,"charmander")
+        //to test if optional param name is missing
+        val pokemon = PokemonCreator().createPokemon(1,"charmander",applicationContext)
+        mainLog.info {
+            "defense: ${pokemon.defense}\n" +
+            "speed: ${pokemon.speed}\n" +
+            "attack: ${pokemon.attack}\n" +
+            "specialDefense: ${pokemon.specialDefense}\n"+
+            "specialAttack: ${pokemon.specialAttack}\n"+
+            "baseStatMaxHp: ${pokemon.maxHp}\n"+
+            "experience: ${pokemon.experience}\n"+
+            "Hp: ${pokemon.hp}\n"+
+            "Level: ${pokemon.level}\n"+
+            "moves: ${pokemon.moves}\n"+
+            "name: ${pokemon.name}\n"
+        }
         //val charmander = PokemonCreator().createPokemon(15,"charmander",applicationContext)
         //val squirtle = PokemonCreator().createPokemon(15, "squirtle", applicationContext)
         //mainLog.info(charmander.toString())
+
 
         //Test levels (a pokemon needs to be created first)
         //Level().initializeLevels(charmander, charmander.level, applicationContext)
