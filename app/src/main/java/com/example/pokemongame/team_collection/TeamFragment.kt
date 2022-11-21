@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.pokemongame.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -20,12 +25,13 @@ private const val ARG_PARAM1 = "pokemon"
 class TeamFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var pokemon: ArrayList<String>? = null
+    private var layoutManager: RecyclerView.LayoutManager? = null
     private lateinit var recycler: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            pokemon = it.getStringArrayList(ARG_PARAM1) as ArrayList<String>
+            pokemon = it.getSerializable("pokemon") as ArrayList<String>
         }
     }
 
@@ -38,34 +44,32 @@ class TeamFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TeamFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(pokemon: ArrayList<String>) =
-            TeamFragment().apply {
-                arguments = Bundle().apply {
-                    putStringArrayList(ARG_PARAM1, pokemon)
-                }
-            }
+        fun newInstance(myList : ArrayList<String>): TeamFragment {
+            val args = Bundle()
+            args.putSerializable("pokemon",myList);
+            val fragment = TeamFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recycler = view.findViewById(R.id.list)
+        recycler = view.findViewById(R.id.recycler_view)
         recycler.layoutManager
         if(pokemon != null) {
             val adapter: PokemonRecyclerAdapter = PokemonRecyclerAdapter(
-                arguments?.getStringArrayList(
-                    ARG_PARAM1)!!.toMutableList())
+                pokemon!!.toMutableList()
+            )
             recycler.adapter = adapter
+            layoutManager = LinearLayoutManager(context)
+            recycler.layoutManager = layoutManager
             adapter.notifyDataSetChanged()
         }
+        Toast.makeText(context, pokemon?.get(0) ?: "Can't find", Toast.LENGTH_LONG).show()
 
+//        adapter = PokemonRecyclerAdapter(pokemon)
+//        binding.pokemonItemList.adapter = adapter
+//        binding.pokemonItemList.layoutManager = LinearLayoutManager(this)
 
         super.onViewCreated(view, savedInstanceState)
     }

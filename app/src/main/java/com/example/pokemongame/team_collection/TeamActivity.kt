@@ -12,6 +12,7 @@ class TeamActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityTeamBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -20,6 +21,8 @@ class TeamActivity: AppCompatActivity() {
         pokemon.add("Anakin")
         pokemon.add("Ahsoka")
         pokemon.add("Captain Rex")
+
+
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = TeamFragment.newInstance(pokemon as ArrayList<String>)
