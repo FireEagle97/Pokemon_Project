@@ -17,7 +17,7 @@
         />
 
     <ImageButton
-        android:id="@+id/move_down"
+        android:id="@+id/move"
         app:layout_constraintEnd_toEndOf="@id/pokemon_info"
         app:layout_constraintTop_toTopOf="@id/pokemon_info"
         android:layout_width="wrap_content"

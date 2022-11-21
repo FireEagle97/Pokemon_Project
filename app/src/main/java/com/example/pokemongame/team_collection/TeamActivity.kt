@@ -38,9 +38,14 @@ class TeamActivity: AppCompatActivity() {
 
             binding.recyclerView.adapter = teamAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
-            collectionAdapter = PokemonCollectionRecyclerAdapter(collection, pokemon) { pos: Int ->
+            collectionAdapter = PokemonCollectionRecyclerAdapter(collection) { name: String, pos: Int ->
                 run {
-                    teamAdapter.notifyItemInserted(pos)
+                    if(pokemon.size < 6){
+                    collection.removeAt(pos)
+                    collectionAdapter.notifyItemRemoved(pos)
+                    pokemon.add(name)
+                    teamAdapter.notifyItemInserted(pokemon.size - 1)
+                }
                 }
             }
             binding.collectionRecyclerView.adapter = collectionAdapter

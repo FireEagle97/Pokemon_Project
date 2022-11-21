@@ -5,20 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.databinding.PokemonItemCollectionBinding
 
-class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<String> , private val teamList: MutableList<String>, private val listener: (position: Int) -> Unit):
+class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<String> ,  private val listener: (name: String, position: Int) -> Unit):
     RecyclerView.Adapter<PokemonCollectionRecyclerAdapter.ViewHolder>(){
 
     inner class ViewHolder(val binding: PokemonItemCollectionBinding) : RecyclerView.ViewHolder(binding.root){
         init {
 
-            binding.moveDown.setOnClickListener(){
-                if(pokemonList.size > 1 && teamList.size < 6) {
-                    var temp = pokemonList[adapterPosition]
-                    pokemonList.removeAt(adapterPosition)
-                    teamList.add(temp)
-                    notifyItemRemoved(adapterPosition)
-                    listener(teamList.size-1)
-                }
+            binding.move.setOnClickListener(){
+                    val pokemonToMove = pokemonList[adapterPosition]
+                    listener(pokemonToMove, adapterPosition)
 
             }
         }
