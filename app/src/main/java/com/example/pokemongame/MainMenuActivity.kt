@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.pokemongame.databinding.ActivityMainBinding
 import com.example.pokemongame.databinding.ActivityRegisterBinding
 import  com.example.pokemongame.databinding.ActivityMainMenuBinding
@@ -17,8 +18,10 @@ class MainMenuActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.pokeCenterBtn.setOnClickListener{
-            val intent = Intent(this, PokemonCenterActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, PokemonCenterActivity::class.java)
+//            startActivity(intent)
+            //call a method to reset pp to maxPP and hp to maxHp
+            Toast.makeText(applicationContext, "Your pokemon team is ready to battle! ", Toast.LENGTH_SHORT).show()
         }
 
     }

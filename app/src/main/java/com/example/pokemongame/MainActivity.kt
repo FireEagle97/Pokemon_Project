@@ -33,13 +33,11 @@ class MainActivity : AppCompatActivity() {
             "specialDefense: ${pokemon.specialDefense}\n"+
             "specialAttack: ${pokemon.specialAttack}\n"+
             "baseStatMaxHp: ${pokemon.maxHp}\n"+
-            "species: ${pokemon.species}\n"+
             "experience: ${pokemon.experience}\n"+
             "Hp: ${pokemon.hp}\n"+
             "Level: ${pokemon.level}\n"+
             "moves: ${pokemon.moves}\n"+
-            "name: ${pokemon.name}\n"+
-            "types: ${pokemon.types}\n"
+            "name: ${pokemon.name}\n"
         }
 
 

@@ -14,7 +14,7 @@ class MoveAssigner {
     //All logs can be replaced with more useful stuff like a TextField
     //Assigns a new move to a pokemon if a new move can be learned and if the user chooses so
     fun assignNewMoves(pokemon: Pokemon, level: Int, context: Context){
-        val pokemonSpecies = pokemon.species
+        val pokemonSpecies = pokemon.battleStats.species
 
         //get the file list from the move_lists folder
         val fileList = context.assets.list("move_lists")!!
@@ -59,7 +59,7 @@ class MoveAssigner {
                 //Insert the moves in the pokemon
                 newMovesList.forEach{ move ->
                     pokemon.moves.add(move)
-                    MoveLog.info(pokemon.species + " has learned " + move.name)
+                    MoveLog.info(pokemon.battleStats.species + " has learned " + move.name)
                 }
             } else {
 
@@ -101,7 +101,7 @@ class MoveAssigner {
                             } else {
                                 //Learn new move
                                 pokemon.moves.add(newMovesList[0])
-                                MoveLog.info(pokemon.species + " has learned " + newMovesList[0].name)
+                                MoveLog.info(pokemon.battleStats.species + " has learned " + newMovesList[0].name)
                                 newMovesList.removeFirst()
                             }
                         } else{
