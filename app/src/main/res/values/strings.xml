@@ -11,4 +11,8 @@
     <string name="starting_pokemon_query">Select your starting pokemon!</string>
     <string name="go_to_menu">Go to menu</string>
     <string name="change_team">Change Team</string>
+    <string name="battle_fight">Fight</string>
+    <string name="battle_run">Run</string>
+    <string name="switch_pokemon">Switch Pokemon</string>
+    <string name="item">Item</string>
 </resources>
