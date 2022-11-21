@@ -1,11 +1,8 @@
 package com.example.pokemongame
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.pokemongame.databinding.ActivityMainBinding
-import com.example.pokemongame.databinding.ActivityRegisterBinding
 import  com.example.pokemongame.databinding.ActivityMainMenuBinding
 import com.example.pokemongame.team_collection.TeamActivity
 

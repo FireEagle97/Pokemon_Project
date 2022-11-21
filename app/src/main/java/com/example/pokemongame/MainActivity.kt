@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         //val charmander = PokemonCreator().createPokemon(15,"charmander",applicationContext)
         //val squirtle = PokemonCreator().createPokemon(15, "squirtle", applicationContext)
         //mainLog.info(charmander.toString())

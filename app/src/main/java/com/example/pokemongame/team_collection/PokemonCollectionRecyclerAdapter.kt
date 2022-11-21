@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.databinding.PokemonItemCollectionBinding
+import com.example.pokemongame.pokemon.Pokemon
 
-class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<String> ,  private val listener: (name: String, position: Int) -> Unit):
+class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Pokemon> ,  private val listener: (pokemon: Pokemon, position: Int) -> Unit):
     RecyclerView.Adapter<PokemonCollectionRecyclerAdapter.ViewHolder>(){
 
     inner class ViewHolder(val binding: PokemonItemCollectionBinding) : RecyclerView.ViewHolder(binding.root){
@@ -14,7 +15,6 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Stri
             binding.move.setOnClickListener(){
                     val pokemonToMove = pokemonList[adapterPosition]
                     listener(pokemonToMove, adapterPosition)
-
             }
         }
     }
@@ -30,10 +30,13 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Stri
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //this will need to be changed to use pokemon class
         val binding = holder.binding
         val pokemonInfo = pokemonList[position]
-        binding.pokemonInfo.text = pokemonInfo
+        binding.pokemonInfo.text = buildString {
+        append(pokemonInfo.name)
+        append(" ")
+        append(pokemonInfo.hp)
+    }
     }
 
 
