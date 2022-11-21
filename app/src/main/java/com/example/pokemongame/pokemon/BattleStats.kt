@@ -5,7 +5,7 @@ data class BattleStats(
             var baseExperienceReward : Int,
             var baseStateAttack : Int,
             var baseStatDefense : Int,
-            var baseStatMaxHp : Int,
+            var baseStateMaxHp : Int,
             var baseStatSpecialAttack : Int,
             var baseStatSpecialDefense : Int,
             var baseStatSpeed : Int,
