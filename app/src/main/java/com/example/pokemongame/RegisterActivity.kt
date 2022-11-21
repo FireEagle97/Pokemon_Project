@@ -12,9 +12,11 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Three default pokemon for the user to choose from
+        val charmander = PokemonCreator().createPokemon(5,"charmander",applicationContext)
+        val squirtle = PokemonCreator().createPokemon(5,"squirtle",applicationContext)
+        val bulbasaur =PokemonCreator().createPokemon(5,"bulbasaur",applicationContext)
 
-        val pokemon = PokemonCreator().createPokemon(4, "squirtle", applicationContext)
-        binding.pokemon1.text = pokemon.name
         binding.menuBtn?.setOnClickListener{
             val intent = Intent(this, MainMenuActivity::class.java)
             startActivity(intent)

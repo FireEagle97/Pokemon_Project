@@ -24,8 +24,6 @@ class TeamActivity: AppCompatActivity() {
         setContentView(binding.root)
         if(savedInstanceState == null) {
             team = mutableListOf<Pokemon>()
-//            val charmander = PokemonCreator().createPokemon(15,"charmander",applicationContext)
-
             team.add(PokemonCreator().createPokemon(4, "charmander", applicationContext))
             team.add(PokemonCreator().createPokemon(4, "bulbasaur", applicationContext))
             team.add(PokemonCreator().createPokemon(4, "charmander", applicationContext))

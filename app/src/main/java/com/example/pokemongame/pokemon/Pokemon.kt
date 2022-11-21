@@ -1,5 +1,7 @@
 package com.example.pokemongame.pokemon
 
+import com.example.pokemongame.R
+
 data class Pokemon(
     val species: String,
     var experienceReward: Int,
@@ -17,3 +19,4 @@ data class Pokemon(
     val hp: Int
 
 )
+

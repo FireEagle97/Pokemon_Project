@@ -10,7 +10,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text=""
-        android:drawableEnd="@drawable/aa"
+        android:drawableEnd=""
         android:drawablePadding="30dp"
         android:textSize="20sp"
         android:textStyle="bold"
