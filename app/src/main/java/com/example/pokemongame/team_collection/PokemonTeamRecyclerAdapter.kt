@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.databinding.PokemonItemTeamBinding
 
-class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<String>):
+class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<String>, private val listener: (item: String) -> Unit):
     RecyclerView.Adapter<PokemonTeamRecyclerAdapter.ViewHolder>(){
 
    inner class ViewHolder(val binding: PokemonItemTeamBinding) : RecyclerView.ViewHolder(binding.root){
@@ -15,7 +15,7 @@ class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<String>):
                     val temp = pokemonList[adapterPosition]
                     pokemonList.removeAt(adapterPosition)
                     notifyItemRemoved(adapterPosition)
-
+                    listener(temp)
                 }
             }
             binding.moveDown.setOnClickListener(){

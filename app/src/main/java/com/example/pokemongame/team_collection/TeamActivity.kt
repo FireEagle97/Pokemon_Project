@@ -27,10 +27,19 @@ class TeamActivity: AppCompatActivity() {
             pokemon.add("Anakin")
             pokemon.add("Ahsoka")
             pokemon.add("Captain Rex")
-            teamAdapter = PokemonTeamRecyclerAdapter(pokemon)
+            collection = mutableListOf<String>("Arya Stark", "Tyrion Lannister", "Euron Greyjoy", "Daenerys")
+
+            teamAdapter = PokemonTeamRecyclerAdapter(pokemon) { name: String ->
+                run {
+                    collection.add(name)
+                    if(this::collectionAdapter.isInitialized){
+                        collectionAdapter.notifyItemInserted(collection.size -1)
+                    }
+                }
+            }
+
             binding.recyclerView.adapter = teamAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
-            collection = mutableListOf<String>("Arya Stark", "Tyrion Lannister", "Euron Greyjoy", "Daenerys")
             collectionAdapter = PokemonCollectionRecyclerAdapter(collection, pokemon) { pos: Int ->
                 run {
                     teamAdapter.notifyItemInserted(pos)
