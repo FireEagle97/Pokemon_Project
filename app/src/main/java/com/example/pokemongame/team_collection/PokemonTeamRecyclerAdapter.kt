@@ -12,8 +12,10 @@ class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<String>):
         init {
             binding.moveOver.setOnClickListener(){
                 if(pokemonList.size > 1) {
+                    val temp = pokemonList[adapterPosition]
                     pokemonList.removeAt(adapterPosition)
                     notifyItemRemoved(adapterPosition)
+
                 }
             }
             binding.moveDown.setOnClickListener(){
