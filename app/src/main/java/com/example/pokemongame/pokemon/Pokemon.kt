@@ -15,7 +15,7 @@ data class Pokemon(
     val moves: MutableList<Move>,
     val experience: Int,
     val level: Int,
-    val hp: Int
+    var hp: Int
 
 )
 
