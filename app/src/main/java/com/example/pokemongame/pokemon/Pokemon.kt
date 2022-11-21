@@ -2,7 +2,7 @@ package com.example.pokemongame.pokemon
 
 //experience type is temporary an int
 data class Pokemon(
-    val species: String,
+    val battleStats: BattleStats,
     var experienceReward: Int,
     var attack: Int,
     var defense: Int,
@@ -10,8 +10,7 @@ data class Pokemon(
     var specialAttack: Int,
     var specialDefense: Int,
     var speed: Int,
-    var types: List<String>,
-    var name: String = species,
+    var name: String,
     val moves: MutableList<Move>,
     val experience: Int,
     val level: Int,

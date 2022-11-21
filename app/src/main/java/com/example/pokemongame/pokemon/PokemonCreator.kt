@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.IOException
 import java.util.logging.Logger
-
+import java.util.Random
 
 class PokemonCreator {
     companion object{
@@ -49,7 +49,20 @@ class PokemonCreator {
     //temp code to return a list of random Pokemon
     //will use it to generate the opponent team
     fun generateOpponentTeam(context: Context): List<Pokemon>{
+        val randPokemons = Random().nextInt(7);
+        //get max and min levels in players team
+        //temp value till I get the real values
+        val minLevel = 5
+        val maxLevel = 15
+        val speciesList : MutableList<String> = mutableListOf("bulbasaur", "charmander", "pidgey")
 
+        val rndPokeList : MutableList<Pokemon> = mutableListOf()
+        for(i in 0..randPokemons){
+            val rndSpecies = speciesList[Random().nextInt(speciesList.size)]
+            val rndLevel = (minLevel..maxLevel).shuffled().last()
+            rndPokeList.add(createPokemon(rndLevel,rndSpecies, context))
+        }
+        return rndPokeList
     }
 
     fun createPokemon(level: Int, species: String, context: Context,name : String = species): Pokemon {
@@ -67,9 +80,8 @@ class PokemonCreator {
         val baseStatSpecialAttack : Int = battleStats.baseStatSpecialAttack
         val baseStatSpecialDefense : Int = battleStats.baseStatSpecialDefense
         val baseStatSpeed : Int = battleStats.baseStatSpeed
-        val types : List<String> = battleStats.types
         return Pokemon(
-                species,
+                battleStats,
                 baseExperienceReward,
                 baseStateAttack,
                 baseStatDefense,
@@ -77,7 +89,6 @@ class PokemonCreator {
                 baseStatSpecialAttack,
                 baseStatSpecialDefense,
                 baseStatSpeed,
-                types,
                 name,
                 moves,
                 experience,
