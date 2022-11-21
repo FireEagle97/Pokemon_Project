@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.example.pokemongame.databinding.ActivityMainBinding
 import com.example.pokemongame.databinding.ActivityRegisterBinding
 import  com.example.pokemongame.databinding.ActivityMainMenuBinding
+import com.example.pokemongame.team_collection.TeamActivity
 
 private lateinit var binding: ActivityMainMenuBinding
 
@@ -18,6 +19,10 @@ class MainMenuActivity : AppCompatActivity() {
 
         binding.pokeCenterBtn.setOnClickListener{
             val intent = Intent(this, PokemonCenterActivity::class.java)
+            startActivity(intent)
+        }
+        binding.changeTeamBtn.setOnClickListener(){
+            val intent = Intent(this, TeamActivity::class.java)
             startActivity(intent)
         }
 

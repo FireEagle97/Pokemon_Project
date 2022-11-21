@@ -10,6 +10,5 @@
     <string name="trainer_name_prompt">Please enter your name, trainer!</string>
     <string name="starting_pokemon_query">Select your starting pokemon!</string>
     <string name="go_to_menu">Go to menu</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="change_team">Change Team</string>
 </resources>
