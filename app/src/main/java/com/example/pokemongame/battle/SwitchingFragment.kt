@@ -25,6 +25,7 @@ class SwitchingFragment(): DialogFragment() {
         recyclerView.adapter = SwitchAdapter(team)
         return view
     }
+
     companion object {
         const val TAG = "SwitchDialog"
     }

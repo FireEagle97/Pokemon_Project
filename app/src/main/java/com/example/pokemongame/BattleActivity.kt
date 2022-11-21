@@ -37,6 +37,9 @@ class BattleActivity : AppCompatActivity() {
 
 
         binding.button.setOnClickListener {
+//            fragmentManager.setFragmentResultListener("request", this){ _, bundle ->
+//                team = bundle.getSerializable("team") as ArrayList<Pokemon>
+//            }
             switchFragment.show(fragmentManager, SwitchingFragment.TAG)
         }
     }
