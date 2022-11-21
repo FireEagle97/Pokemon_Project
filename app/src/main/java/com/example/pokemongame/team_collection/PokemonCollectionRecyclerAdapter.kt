@@ -12,11 +12,9 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Stri
         init {
 
             binding.moveDown.setOnClickListener(){
-                if(adapterPosition < pokemonList.size -1){
-                    val temp:String = pokemonList[adapterPosition + 1]
-                    pokemonList[adapterPosition + 1] = pokemonList[adapterPosition]
-                    pokemonList[adapterPosition] = temp
-                    notifyItemRangeChanged(adapterPosition, 2)
+                if(pokemonList.size > 1) {
+                    pokemonList.removeAt(adapterPosition)
+                    notifyItemRemoved(adapterPosition)
                 }
 
             }
