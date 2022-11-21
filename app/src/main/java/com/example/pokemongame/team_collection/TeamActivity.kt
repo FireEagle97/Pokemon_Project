@@ -26,7 +26,7 @@ class TeamActivity: AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = TeamFragment.newInstance(pokemon as ArrayList<String>)
-        fragmentTransaction.add(R.id.fragment_container_view, fragment)
+        fragmentTransaction.add(R.id.team_fragment, fragment)
         fragmentTransaction.commit()
 
     }

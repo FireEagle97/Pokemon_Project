@@ -12,18 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.pokemongame.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "pokemon"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TeamFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TeamFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var pokemon: ArrayList<String>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
     private lateinit var recycler: RecyclerView
@@ -63,14 +52,7 @@ class TeamFragment : Fragment() {
             recycler.adapter = adapter
             layoutManager = LinearLayoutManager(context)
             recycler.layoutManager = layoutManager
-            adapter.notifyDataSetChanged()
         }
-        Toast.makeText(context, pokemon?.get(0) ?: "Can't find", Toast.LENGTH_LONG).show()
-
-//        adapter = PokemonRecyclerAdapter(pokemon)
-//        binding.pokemonItemList.adapter = adapter
-//        binding.pokemonItemList.layoutManager = LinearLayoutManager(this)
-
         super.onViewCreated(view, savedInstanceState)
     }
 
