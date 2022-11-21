@@ -34,6 +34,9 @@
         <activity android:name=".PokemonCenterActivity">
 
         </activity>
+        <activity android:name=".BattleActivity">
+
+        </activity>
     </application>
 
 </manifest>

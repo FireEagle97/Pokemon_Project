@@ -21,5 +21,11 @@ class MainMenuActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //Testing switching
+        binding.wildBattleBtn.setOnClickListener{
+            val intent = Intent(this, BattleActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
