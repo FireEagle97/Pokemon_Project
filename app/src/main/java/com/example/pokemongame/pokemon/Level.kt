@@ -40,27 +40,27 @@ class Level {
     //levels up a pokemon (raises its level, raises its stats, and calls assignNewMoves())
     private fun levelUp(pokemon: Pokemon, context: Context){
         pokemon.level++
-        LevelLog.info("${pokemon.name} has leveled up!")
+        LevelLog.info("${pokemon.name} has leveled up to level ${pokemon.level}!")
 
         //Stat changes (MaxHP has a different formula than the others)
-        val newMaxHPStat = floor((((pokemon.MaxHP + 10) * pokemon.level) / 50).toDouble()) + pokemon.level + 10
+        val newMaxHPStat = floor((((pokemon.maxHp + 10) * pokemon.level) / 50).toDouble()) + pokemon.level + 10
         LevelLog.info("${pokemon.name}'s MaxHP stat has increased to $newMaxHPStat")
-        pokemon.MaxHP = newMaxHPStat.toInt()
-        val newAttackStat = floor((((pokemon.Attack + 10) * pokemon.level) / 50).toDouble()) + 5
+        pokemon.maxHp = newMaxHPStat.toInt()
+        val newAttackStat = floor((((pokemon.attack + 10) * pokemon.level) / 50).toDouble()) + 5
         LevelLog.info("${pokemon.name}'s Attack stat has increased to $newAttackStat")
-        pokemon.Attack = newAttackStat.toInt()
-        val newDefenceStat = floor((((pokemon.Defence + 10) * pokemon.level) / 50).toDouble()) + 5
+        pokemon.attack = newAttackStat.toInt()
+        val newDefenceStat = floor((((pokemon.defense + 10) * pokemon.level) / 50).toDouble()) + 5
         LevelLog.info("${pokemon.name}'s Defence stat has increased to $newDefenceStat")
-        pokemon.Defence = newDefenceStat.toInt()
-        val newSpecialAttackStat = floor((((pokemon.SpecialAttack + 10) * pokemon.level) / 50).toDouble()) + 5
+        pokemon.defense = newDefenceStat.toInt()
+        val newSpecialAttackStat = floor((((pokemon.specialAttack + 10) * pokemon.level) / 50).toDouble()) + 5
         LevelLog.info("${pokemon.name}'s Special Attack stat has increased to $newSpecialAttackStat")
-        pokemon.SpecialAttack = newSpecialAttackStat.toInt()
-        val newSpecialDefenceStat = floor((((pokemon.SpecialDefence + 10) * pokemon.level) / 50).toDouble()) + 5
+        pokemon.specialAttack = newSpecialAttackStat.toInt()
+        val newSpecialDefenceStat = floor((((pokemon.specialDefense + 10) * pokemon.level) / 50).toDouble()) + 5
         LevelLog.info("${pokemon.name}'s Special Defence stat has increased to $newSpecialDefenceStat")
-        pokemon.SpecialDefence = newSpecialDefenceStat.toInt()
-        val newSpeedStat = floor((((pokemon.Speed + 10) * pokemon.level) / 50).toDouble()) + 5
+        pokemon.specialDefense = newSpecialDefenceStat.toInt()
+        val newSpeedStat = floor((((pokemon.speed + 10) * pokemon.level) / 50).toDouble()) + 5
         LevelLog.info("${pokemon.name}'s Speed stat has increased to $newSpeedStat")
-        pokemon.Speed = newSpeedStat.toInt()
+        pokemon.speed = newSpeedStat.toInt()
 
         //Assign new moves (if any)
         MoveAssigner().assignNewMoves(pokemon, pokemon.level, context)

@@ -73,7 +73,7 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
         val array: Array<ActivePokemon> = arrayOf<ActivePokemon>(pokemon1, pokemon2)
 
         //Speed Tie, roll random
-        if (pokemon1.pokemon.Speed == pokemon2.pokemon.Speed){
+        if (pokemon1.pokemon.speed == pokemon2.pokemon.speed){
             BattleLog.info("Speed tie occurred!")
             return if(random.nextBoolean()){
                 array[0] = pokemon1
@@ -87,7 +87,7 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
         }
 
         //Determine who is faster
-        return if(pokemon1.pokemon.Speed > pokemon2.pokemon.Speed){
+        return if(pokemon1.pokemon.speed > pokemon2.pokemon.speed){
             array[0] = pokemon1
             array[1] = pokemon2
             array
@@ -115,14 +115,14 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
                 speedArray[1].pokemon.hp -= DamageCalculations().calculateDamage(speedArray[0].pokemon,
                     speedArray[0].chosenMove!!, speedArray[1].pokemon, context)
                 //Set HP to 0 if it would bring it into the negatives instead
-                if(speedArray[1].hp < 0){
-                    speedArray[1].hp = 0
+                if(speedArray[1].pokemon.hp < 0){
+                    speedArray[1].pokemon.hp = 0
                 }
                 BattleLog.info("New HP of defending pokemon: ${speedArray[1].pokemon.hp}")
 
             //If the move heals, it heals
             } else if(speedArray[0].chosenMove!!.heal > 0){
-                speedArray[0].hp += speedArray[0].chosenMove!!.heal
+                speedArray[0].pokemon.hp += speedArray[0].chosenMove!!.heal
                 //Set HP to maxHP if the healing would bring the hp beyond it
                 if(speedArray[0].pokemon.hp > speedArray[0].pokemon.maxHp){
                     speedArray[0].pokemon.hp = speedArray[0].pokemon.maxHp

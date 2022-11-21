@@ -28,6 +28,12 @@
         <activity android:name=".RegisterActivity">
             
         </activity>
+        <activity android:name=".MainMenuActivity">
+
+        </activity>
+        <activity android:name=".PokemonCenterActivity">
+
+        </activity>
     </application>
 
 </manifest>
