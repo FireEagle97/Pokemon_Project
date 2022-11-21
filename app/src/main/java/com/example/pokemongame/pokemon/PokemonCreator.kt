@@ -46,6 +46,11 @@ class PokemonCreator {
         }
         return pokemonList
     }
+    //temp code to return a list of random Pokemon
+    //will use it to generate the opponent team
+    fun generateOpponentTeam(context: Context): List<Pokemon>{
+
+    }
 
     fun createPokemon(level: Int, species: String, context: Context,name : String = species): Pokemon {
         //get The battleStats
