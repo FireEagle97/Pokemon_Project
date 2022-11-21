@@ -31,10 +31,8 @@ class TeamActivity: AppCompatActivity() {
 
             teamAdapter = PokemonTeamRecyclerAdapter(pokemon) { name: String ->
                 run {
-                    if (this::collectionAdapter.isInitialized) {
                         collection.add(name)
                         collectionAdapter.notifyItemInserted(collection.size - 1)
-                    }
                 }
             }
 
