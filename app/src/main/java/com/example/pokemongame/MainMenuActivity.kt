@@ -1,24 +1,25 @@
 package com.example.pokemongame
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.pokemongame.databinding.ActivityMainBinding
 import com.example.pokemongame.databinding.ActivityRegisterBinding
-import com.example.pokemongame.team_collection.TeamActivity
+import  com.example.pokemongame.databinding.ActivityMainMenuBinding
 
-private lateinit var binding: ActivityRegisterBinding
-class RegisterActivity : AppCompatActivity() {
+private lateinit var binding: ActivityMainMenuBinding
+
+class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        binding.menuBtn?.setOnClickListener{
-            val intent = Intent(this, MainMenuActivity::class.java)
+        binding.pokeCenterBtn.setOnClickListener{
+            val intent = Intent(this, PokemonCenterActivity::class.java)
             startActivity(intent)
         }
-    }
 
+    }
 }

@@ -80,7 +80,7 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/submit"
+        android:id="@+id/menuBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/first_choice"

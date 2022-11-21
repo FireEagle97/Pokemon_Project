@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">PokemonGame</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="wild_battle">Wild Battle</string>
+    <string name="trainer_battle">Trainer Battle</string>
+    <string name="pokemon_center">Pokemon Center</string>
     <string name="start_game">Start Game</string>
     <string name="dawson_pokemon">Dawson Pokemon</string>
     <string name="credit">Created by Dany Makhoul, Bastian Fernandez-Cortez and Maxime Rayvich</string>

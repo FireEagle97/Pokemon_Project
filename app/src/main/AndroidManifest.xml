@@ -27,7 +27,16 @@
         <activity android:name=".RegisterActivity">
             
         </activity>
+<<<<<<< HEAD
         <activity android:name=".team_collection.TeamActivity" />
+=======
+        <activity android:name=".MainMenuActivity">
+
+        </activity>
+        <activity android:name=".PokemonCenterActivity">
+
+        </activity>
+>>>>>>> 676ffc2b373a7e9a716a222a72d2e9a5a57a08f2
     </application>
 
 </manifest>
