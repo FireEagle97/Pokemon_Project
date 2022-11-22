@@ -9,11 +9,9 @@ import com.example.pokemongame.pokemon.PokemonCreator
 
 class TeamActivity: AppCompatActivity() {
     private lateinit var binding: ActivityTeamCollectionBinding
-
-//    private lateinit var pokemon: MutableList<String>
-//    private lateinit var collection: MutableList<String>
     private lateinit var collection: MutableList<Pokemon>
     private lateinit var team: MutableList<Pokemon>
+    private lateinit var trainerName: String
     private lateinit var collectionAdapter: PokemonCollectionRecyclerAdapter
     private lateinit var teamAdapter: PokemonTeamRecyclerAdapter
 
@@ -22,20 +20,25 @@ class TeamActivity: AppCompatActivity() {
 
         binding = ActivityTeamCollectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if(savedInstanceState == null) {
-            team = mutableListOf<Pokemon>()
-            team.add(PokemonCreator().createPokemon(4, "charmander", applicationContext))
-            team.add(PokemonCreator().createPokemon(4, "bulbasaur", applicationContext))
-            team.add(PokemonCreator().createPokemon(4, "charmander", applicationContext))
-            team.add(PokemonCreator().createPokemon(4, "squirtle", applicationContext))
+//        if(savedInstanceState == null) {
+//            team = mutableListOf<Pokemon>()
+//            team.add(PokemonCreator().createPokemon(4, "charmander", applicationContext))
+//            team.add(PokemonCreator().createPokemon(4, "bulbasaur", applicationContext))
+//            team.add(PokemonCreator().createPokemon(4, "charmander", applicationContext))
+//            team.add(PokemonCreator().createPokemon(4, "squirtle", applicationContext))
+//
+//            collection = mutableListOf<Pokemon>()
+//            collection.add(PokemonCreator().createPokemon(4, "squirtle", applicationContext))
+//            collection.add(PokemonCreator().createPokemon(3, "squirtle", applicationContext))
+//            collection.add(PokemonCreator().createPokemon(3, "squirtle", applicationContext))
+//            collection.add(PokemonCreator().createPokemon(3, "squirtle", applicationContext))
+            team = intent.getSerializableExtra("team") as ArrayList<Pokemon>
+            collection = intent.getSerializableExtra("collection") as ArrayList<Pokemon>
+            trainerName = intent.getStringExtra("trainerName").toString()
 
-            collection = mutableListOf<Pokemon>()
-            collection.add(PokemonCreator().createPokemon(4, "squirtle", applicationContext))
-            collection.add(PokemonCreator().createPokemon(3, "squirtle", applicationContext))
-            collection.add(PokemonCreator().createPokemon(3, "squirtle", applicationContext))
-            collection.add(PokemonCreator().createPokemon(3, "squirtle", applicationContext))
 
-            collectionAdapter = PokemonCollectionRecyclerAdapter(collection) { pokemon: Pokemon, pos: Int ->
+
+        collectionAdapter = PokemonCollectionRecyclerAdapter(collection) { pokemon: Pokemon, pos: Int ->
                 run {
                     if(team.size < 6){
                     collection.removeAt(pos)
@@ -94,7 +97,7 @@ class TeamActivity: AppCompatActivity() {
 
 
 
-        }
+//        }
 
 
     }

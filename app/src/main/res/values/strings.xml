@@ -13,4 +13,5 @@
     <string name="change_team">Change Team</string>
     <string name="what_will_your_pokemon_s_name_be">What will your pokemon\'s name be?</string>
     <string name="must_enter_trainer_name">Must enter trainer name!</string>
+    <string name="save">save</string>
 </resources>
