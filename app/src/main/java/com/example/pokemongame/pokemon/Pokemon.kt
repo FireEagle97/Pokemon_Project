@@ -15,6 +15,5 @@ data class Pokemon(
     var experience: Double,
     var level: Int,
     var hp: Int,
-    var willBeSwitched: Boolean
 
 )

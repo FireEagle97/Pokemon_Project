@@ -66,7 +66,6 @@ class PokemonCreator {
                 experience,
                 level,
                 hp,
-                false
         )
     }
 }

@@ -18,6 +18,7 @@ import com.example.pokemongame.pokemon.Pokemon
 
 class SwitchingFragment(): DialogFragment() {
     lateinit var pokemonTeam: ArrayList<Pokemon>
+    lateinit var teamPosition: Array<Int>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,12 +29,13 @@ class SwitchingFragment(): DialogFragment() {
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
         pokemonTeam = requireArguments().getSerializable("team") as ArrayList<Pokemon>
-        recyclerView.adapter = SwitchAdapter(pokemonTeam, this)
+        teamPosition = requireArguments().getSerializable("teamPosition") as Array<Int>
+        recyclerView.adapter = SwitchAdapter(pokemonTeam, teamPosition,this)
         return view
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        setFragmentResult("team", bundleOf("team" to pokemonTeam))
+        setFragmentResult("teamPosition", bundleOf("teamPosition" to teamPosition))
     }
 }

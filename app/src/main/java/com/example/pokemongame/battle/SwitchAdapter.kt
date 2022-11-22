@@ -10,9 +10,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.R
 import com.example.pokemongame.pokemon.Pokemon
+import java.text.FieldPosition
 import kotlin.coroutines.coroutineContext
 
-class SwitchAdapter(private val team: ArrayList<Pokemon>, val dialogFragment: DialogFragment): RecyclerView.Adapter<SwitchAdapter.ViewHolder>() {
+class SwitchAdapter(private val team: ArrayList<Pokemon>, var teamPosition: Array<Int>, val dialogFragment: DialogFragment): RecyclerView.Adapter<SwitchAdapter.ViewHolder>() {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val pokemonName: TextView = view.findViewById(R.id.pokemonName)
         val pokemonHP: TextView = view.findViewById(R.id.pokemonHP)
@@ -31,7 +32,7 @@ class SwitchAdapter(private val team: ArrayList<Pokemon>, val dialogFragment: Di
         viewHolder.pokemonHP.text = team[position].hp.toString()
         viewHolder.switchButton.setOnClickListener{
             if(team[position].hp > 0){
-                flipWillSwitchPokemon(position)
+                getTeamPosition(position)
                 dialogFragment.dismiss()
             } else {
                 Toast.makeText(viewHolder.itemView.context, "You cannot switch-in a pokemon with no HP remaining", Toast.LENGTH_SHORT)
@@ -43,8 +44,8 @@ class SwitchAdapter(private val team: ArrayList<Pokemon>, val dialogFragment: Di
         return team.size
     }
 
-    fun flipWillSwitchPokemon(position: Int) {
-        team[position].willBeSwitched = true
+    fun getTeamPosition(position: Int) {
+        teamPosition[0] = position
     }
 }
 
