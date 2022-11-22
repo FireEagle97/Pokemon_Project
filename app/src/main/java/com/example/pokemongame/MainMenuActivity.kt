@@ -2,19 +2,28 @@ package com.example.pokemongame
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
 import com.example.pokemongame.pokemon.Pokemon
 import com.example.pokemongame.team_collection.TeamActivity
 
-private lateinit var binding: ActivityMainMenuBinding
-private lateinit var team: ArrayList<Pokemon>
-private lateinit var trainerName: String
-private lateinit var collection: ArrayList<Pokemon>
-private var reqCode: Int = 1234
+
+
+
+
 
 class MainMenuActivity : AppCompatActivity() {
+    companion object {
+        private const val LOG_TAG = "M_M_ACTIVITY_DEV_LOG"
+        private const val REQ_CODE = 1234
+    }
+    private lateinit var binding: ActivityMainMenuBinding
+    private lateinit var team: ArrayList<Pokemon>
+    private lateinit var trainerName: String
+    private lateinit var collection: ArrayList<Pokemon>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
@@ -48,20 +57,27 @@ class MainMenuActivity : AppCompatActivity() {
             intent.putExtra("team", team)
             intent.putExtra("collection", collection)
             intent.putExtra("trainerName", trainerName)
-            startActivityForResult(intent, reqCode)
+            startActivityForResult(intent, REQ_CODE)
         }
 
 
     }
-    // will need to check if need to do anyting in oncreate
+    // will need to check if need to do anything in oncreate to make sure this data is set
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == reqCode) {
+            if (requestCode == REQ_CODE) {
                 team = data!!.getSerializableExtra("team") as ArrayList<Pokemon>
                 collection = data.getSerializableExtra("collection") as ArrayList<Pokemon>
                 trainerName = data.getStringExtra("trainerName").toString()
             }
-            super.onActivityResult(requestCode, resultCode, data)
+            else {
+                Log.w(LOG_TAG, "Returning from an unknown activity")
+            }
+        }
+     else {
+        Log.w(LOG_TAG, "Activity result was not 'Activity.RESULT_OK' (-1), was '$resultCode'")
+    }
+
+    super.onActivityResult(requestCode, resultCode, data)
         }
     }
-}
