@@ -1,17 +1,23 @@
 package com.example.pokemongame.battle
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.R
 import com.example.pokemongame.pokemon.Pokemon
 
 class SwitchingFragment(): DialogFragment() {
+    lateinit var pokemonTeam: ArrayList<Pokemon>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -21,12 +27,13 @@ class SwitchingFragment(): DialogFragment() {
         var recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        val team: ArrayList<Pokemon> = requireArguments().getSerializable("team") as ArrayList<Pokemon>
-        recyclerView.adapter = SwitchAdapter(team)
+        pokemonTeam = requireArguments().getSerializable("team") as ArrayList<Pokemon>
+        recyclerView.adapter = SwitchAdapter(pokemonTeam, this)
         return view
     }
 
-    companion object {
-        const val TAG = "SwitchDialog"
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        setFragmentResult("team", bundleOf("team" to pokemonTeam))
     }
 }

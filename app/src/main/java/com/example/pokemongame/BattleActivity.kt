@@ -20,7 +20,6 @@ class BattleActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        super.onStart()
 
         val charmander = PokemonCreator().createPokemon(15,"charmander",applicationContext)
         val squirtle = PokemonCreator().createPokemon(15, "squirtle", applicationContext)
@@ -29,18 +28,26 @@ class BattleActivity : AppCompatActivity() {
         var team: ArrayList<Pokemon> =  arrayListOf(squirtle, charmander)
         Battle_Phase.BattleLog.info(team[0].hp.toString()+" "+ team[1].hp.toString())
 
+
+        //Switching code
         val bundle = Bundle()
         bundle.putSerializable("team", team)
         val fragmentManager = supportFragmentManager
         val switchFragment = SwitchingFragment()
         switchFragment.arguments = bundle
 
-
         binding.button.setOnClickListener {
-//            fragmentManager.setFragmentResultListener("request", this){ _, bundle ->
-//                team = bundle.getSerializable("team") as ArrayList<Pokemon>
-//            }
-            switchFragment.show(fragmentManager, SwitchingFragment.TAG)
+            switchFragment.show(fragmentManager, "fragment")
         }
+
+        fragmentManager.setFragmentResultListener("team", this){ requestKey, bundle ->
+            //Update the team with the pokemon to switch
+            team = bundle.getSerializable("team") as ArrayList<Pokemon>
+            //Copy the pokemon
+            //Reset the willSwitch value of both of them
+            //Transform the copied pokemon into an ActivePokemon with a null chosenMove and shove it in .playBattleTurn
+        }
+
+        super.onStart()
     }
 }

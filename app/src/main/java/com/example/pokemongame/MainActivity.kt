@@ -26,9 +26,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val charmander = PokemonCreator().createPokemon(15,"charmander",applicationContext)
-        val squirtle = PokemonCreator().createPokemon(15, "squirtle", applicationContext)
-        mainLog.info(charmander.toString())
+        //val charmander = PokemonCreator().createPokemon(15,"charmander",applicationContext)
+        //val squirtle = PokemonCreator().createPokemon(15, "squirtle", applicationContext)
+        //mainLog.info(charmander.toString())
 
         //Test levels (a pokemon needs to be created first)
         //Level().initializeLevels(charmander, charmander.level, applicationContext)
