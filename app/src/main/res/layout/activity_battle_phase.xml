@@ -14,6 +14,78 @@
         android:src="@drawable/battle_ground_port"
         />
 
+    <TextView
+        android:id="@+id/pokemon1_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon1name"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/pokemon2_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon1name"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/pokemon1_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon1level"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon1_name"
+        />
+
+    <TextView
+        android:id="@+id/pokemon2_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon2level"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pokemon2_name"
+        />
+
+    <TextView
+        android:id="@+id/pokemon1_hp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon1hp"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon1_level"
+        />
+
+
     <Button
         android:id="@+id/fightBtn"
         android:layout_width="wrap_content"
@@ -30,6 +102,20 @@
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
       />
+
+    <TextView
+        android:id="@+id/pokemon2_hp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon2hp"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pokemon2_level"
+        />
     <Button
         android:id="@+id/runBtn"
         android:layout_width="wrap_content"
@@ -50,12 +136,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
         android:text="@string/switch_pokemon"
         android:textColor="@color/blue"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/itemBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/runBtn"
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
@@ -65,12 +152,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
+
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
         android:text="@string/item"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/switchPokeBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/fightBtn"
         app:strokeColor="@color/blue"

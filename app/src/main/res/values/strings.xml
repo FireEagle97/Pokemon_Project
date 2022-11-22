@@ -15,4 +15,9 @@
     <string name="battle_run">Run</string>
     <string name="switch_pokemon">Switch Pokemon</string>
     <string name="item">Item</string>
+    <string name="pokemon1name">pokemon1Name</string>
+    <string name="pokemon1level">pokemon1level</string>
+    <string name="pokemon1hp">pokemon1hp</string>
+    <string name="pokemon2level">pokemon2level</string>
+    <string name="pokemon2hp">pokemon2hp</string>
 </resources>
