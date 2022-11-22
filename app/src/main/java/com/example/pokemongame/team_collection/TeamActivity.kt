@@ -58,11 +58,16 @@ class TeamActivity: AppCompatActivity() {
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
             binding.collectionRecyclerView.adapter = collectionAdapter
             binding.collectionRecyclerView.layoutManager = LinearLayoutManager(this)
+            //pass updated lists back
+            binding.save.setOnClickListener(){
+                intent.putExtra("collection", collection as ArrayList<Pokemon>)
+                intent.putExtra("team", team as ArrayList<Pokemon>)
+                intent.putExtra("trainerName", trainerName)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
 //            binding.collectionRecyclerView.adapter = collectionAdapter
 //            binding.collectionRecyclerView.layoutManager = LinearLayoutManager(this)
-
-
-
 //            pokemon = mutableListOf<String>()
 //            pokemon.add("Obi-Wan")
 //            pokemon.add("Anakin")
