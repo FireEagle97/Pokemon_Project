@@ -35,7 +35,7 @@
 
         <activity android:name=".BattlePhaseActivity">
         </activity>
-        <activity android:name=".BattleActivity">
+        <activity android:name=".TrainerBattleActivity">
 
         </activity>
 

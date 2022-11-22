@@ -34,29 +34,10 @@ class PokemonCreator {
         return gson.fromJson(battleStatsData, listBattleStatsType)
 
     }
-    //temp code to return a list of random Pokemon
-    //will use it to generate the opponent team
-    fun generateOpponentTeam(context: Context): List<Pokemon>{
-        val randPokemons = Random().nextInt(7);
-        //get max and min levels in players team
-        //temp value till I get the real values
-        val minLevel = 5
-        val maxLevel = 15
-        val speciesList : MutableList<String> = mutableListOf("bulbasaur", "charmander", "pidgey")
-
-        val rndPokeList : MutableList<Pokemon> = mutableListOf()
-        for(i in 0..randPokemons){
-            val rndSpecies = speciesList[Random().nextInt(speciesList.size)]
-            val rndLevel = (minLevel..maxLevel).shuffled().last()
-            rndPokeList.add(createPokemon(rndLevel,rndSpecies, context))
-        }
-        return rndPokeList
-    }
 
     fun createPokemon(level: Int, species: String, context: Context,name : String = species): Pokemon {
         //get The battleStats
         val battleStats: BattleStats = getPokemonBattleStats(species, context)
-        val pokemonTypes: List<String> = battleStats.types
         val moves: MutableList<Move> = mutableListOf()
         //temp vals
         val experience: Double = 0.0

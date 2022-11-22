@@ -7,9 +7,9 @@ import com.example.pokemongame.pokemon.Pokemon
 import java.util.Random
 import java.util.logging.Logger
 
-class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>) {
+class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>) {
     companion object{
-        val BattleLog: Logger = Logger.getLogger(Battle_Phase::class.java.name)
+        val BattleLog: Logger = Logger.getLogger(BattlePhase::class.java.name)
     }
     private val random: Random = Random()
 
@@ -73,7 +73,7 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
 
     //Determines who should play first based on Speed
     private fun speedCheck(pokemon1: ActivePokemon, pokemon2: ActivePokemon): Array<ActivePokemon>{
-        val array: Array<ActivePokemon> = arrayOf<ActivePokemon>(pokemon1, pokemon2)
+        val array: Array<ActivePokemon> = arrayOf(pokemon1, pokemon2)
 
         //Speed Tie, roll random
         if (pokemon1.pokemon.speed == pokemon2.pokemon.speed){
