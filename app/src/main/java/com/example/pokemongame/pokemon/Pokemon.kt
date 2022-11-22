@@ -1,5 +1,7 @@
 package com.example.pokemongame.pokemon
 
+import com.example.pokemongame.R
+
 data class Pokemon(
     var battleStats: BattleStats,
     var experienceReward: Int,
@@ -15,4 +17,12 @@ data class Pokemon(
     var level: Int,
     var hp: Int
 
-)
+): java.io.Serializable
+//given pokemon species finds its resource files (hard coded)
+fun getPokemonImageResourceId(species: String): Int =
+    when(species){
+        "squirtle" -> R.drawable.squirtle
+        "bulbasaur" -> R.drawable.bulbasaur
+        "charmander" -> R.drawable.charmander
+        else -> R.drawable.question_mark
+    }

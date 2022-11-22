@@ -41,7 +41,7 @@ class PokemonCreator {
         val pokemon3 = createPokemon(3, "chamander", context)
         val pokemonList : List<Pokemon> = listOf(pokemon1,pokemon2,pokemon3)
         for (pokemon in pokemonList) {
-            pokemon.hp = pokemon.maxHp
+            pokemon.hp = 0
             pokemon.moves.forEachIndexed{ index, move -> move.pp = move.maxPP}
         }
         return pokemonList
@@ -72,7 +72,7 @@ class PokemonCreator {
         val moves: MutableList<Move> = mutableListOf()
         //temp vals
         val experience: Double = 0.0
-        val hp: Int = battleStats.baseStateMaxHp
+        val hp: Int = 0
         val baseExperienceReward : Int = battleStats.baseExperienceReward
         val baseStateAttack : Int = battleStats.baseStateAttack
         val baseStatDefense : Int = battleStats.baseStatDefense
