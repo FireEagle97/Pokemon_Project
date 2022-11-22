@@ -30,10 +30,18 @@ class DamageCalculations {
         }
 
         //Type effectiveness
+        val multiplier : Double = calculateTypeEffectiveness(attackerMove, defenderPokemon, context)
+        damage = floor(damage * multiplier)
+
+        return damage.toInt()
+    }
+
+    private fun calculateTypeEffectiveness(attackerMove: Move, defenderPokemon: Pokemon, context: Context): Double{
         var multiplier: Double = 1.0
         val gson = Gson()
         var effectivenessJsonString = JSONReader().jSONReader(context, "type_relations/${attackerMove.type}.json")
         var effectivenessRelations = gson.fromJson(effectivenessJsonString, Map::class.java)
+
         defenderPokemon.battleStats.types.forEach {
             if(effectivenessRelations[it] != null){
                 when(effectivenessRelations[it]){
@@ -43,9 +51,15 @@ class DamageCalculations {
                 }
             }
         }
-        damage = floor(damage * multiplier)
-
-        return damage.toInt()
+        //Log a battle message
+        when(multiplier){
+            0.0 -> DamageLog.info("It had no effect...")
+            0.25 -> DamageLog.info("It's barely effective...")
+            0.50 -> DamageLog.info("It's not very effective...")
+            2.0 -> DamageLog.info("It's super effective!")
+            4.0 -> DamageLog.info("It's hyper effective!")
+        }
+        return multiplier
     }
 
     private fun calculateInitialDamage(attackerLevel: Int, attackerStat: Int, attackerMove: Move, defenderStat: Int): Double {

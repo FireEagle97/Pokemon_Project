@@ -32,7 +32,10 @@
         <activity android:name=".MainMenuActivity">
 
         </activity>
+
         <activity android:name=".BattlePhaseActivity">
+        </activity>
+        <activity android:name=".BattleActivity">
 
         </activity>
 
