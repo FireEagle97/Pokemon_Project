@@ -1,23 +1,23 @@
 package com.example.pokemongame
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
 import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.pokemon.PokemonCreator
 import com.example.pokemongame.team_collection.TeamActivity
-
-
-
-private lateinit var binding: ActivityMainMenuBinding
-
+import java.util.logging.Logger
 
 
 class MainMenuActivity : AppCompatActivity() {
     companion object {
         private const val LOG_TAG = "M_M_ACTIVITY_DEV_LOG"
+        val mainMenuLog : Logger = Logger.getLogger(MainMenuActivity::class.java.name)
         private const val REQ_CODE = 1234
     }
     private lateinit var binding: ActivityMainMenuBinding
@@ -25,6 +25,7 @@ class MainMenuActivity : AppCompatActivity() {
     private lateinit var trainerName: String
     private lateinit var collection: ArrayList<Pokemon>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
@@ -46,17 +47,18 @@ class MainMenuActivity : AppCompatActivity() {
 //        collection.add(pokemon)
 
 
-
-
-
-
         binding.pokeCenterBtn.setOnClickListener {
-//            val intent = Intent(this, PokemonCenterActivity::class.java)
-//            startActivity(intent)
-            //call a method to reset pp to maxPP and hp to maxHp
+            for (pokemon in team) {
+                pokemon.hp = pokemon.maxHp
+                mainMenuLog.info { "hp:${pokemon.hp}" }
+                pokemon.moves.forEachIndexed { index, move ->
+                    move.pp = move.maxPP
+                    mainMenuLog.info { "movepp:${move.pp}" }
+                }
+            }
             Toast.makeText(
                 applicationContext,
-                "Your pokemon team is ready to battle! ",
+                "Your pokemon team has been restored to full health! ",
                 Toast.LENGTH_SHORT
             ).show()
         }
