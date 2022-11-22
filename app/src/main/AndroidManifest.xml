@@ -31,7 +31,7 @@
         <activity android:name=".MainMenuActivity">
 
         </activity>
-        <activity android:name=".PokemonCenterActivity">
+        <activity android:name=".BattlePhaseActivity">
 
         </activity>
     </application>

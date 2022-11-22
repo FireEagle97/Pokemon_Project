@@ -24,7 +24,7 @@ class DamageCalculations {
         }
 
         //Calculate STAB bonus
-        if(attackerMove.type in attackerPokemon.types){
+        if(attackerMove.type in attackerPokemon.battleStats.types){
             DamageLog.info("STAB bonus applied!")
             damage *= 1.5
         }
@@ -34,7 +34,7 @@ class DamageCalculations {
         val gson = Gson()
         var effectivenessJsonString = JSONReader().jSONReader(context, "type_relations/${attackerMove.type}.json")
         var effectivenessRelations = gson.fromJson(effectivenessJsonString, Map::class.java)
-        defenderPokemon.types.forEach {
+        defenderPokemon.battleStats.types.forEach {
             if(effectivenessRelations[it] != null){
                 when(effectivenessRelations[it]){
                     "no_effect" -> multiplier = 0.0

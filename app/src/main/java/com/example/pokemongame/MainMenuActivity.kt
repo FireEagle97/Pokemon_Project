@@ -1,5 +1,6 @@
 package com.example.pokemongame
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,10 @@ class MainMenuActivity : AppCompatActivity() {
 //            startActivity(intent)
             //call a method to reset pp to maxPP and hp to maxHp
             Toast.makeText(applicationContext, "Your pokemon team is ready to battle! ", Toast.LENGTH_SHORT).show()
+        }
+        binding.trainerBattleBtn.setOnClickListener{
+            val intent = Intent(this, BattlePhaseActivity::class.java)
+            startActivity(intent)
         }
 
     }
