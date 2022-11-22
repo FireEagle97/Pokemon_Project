@@ -17,7 +17,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -28,12 +27,15 @@
         <activity android:name=".RegisterActivity">
             
         </activity>
+
+        <activity android:name=".team_collection.TeamActivity" />
         <activity android:name=".MainMenuActivity">
 
         </activity>
         <activity android:name=".BattlePhaseActivity">
 
         </activity>
+
     </application>
 
 </manifest>

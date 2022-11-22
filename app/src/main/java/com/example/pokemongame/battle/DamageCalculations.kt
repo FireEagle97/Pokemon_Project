@@ -49,7 +49,7 @@ class DamageCalculations {
     }
 
     private fun calculateInitialDamage(attackerLevel: Int, attackerStat: Int, attackerMove: Move, defenderStat: Int): Double {
-        val damage: Double = ((((2 * attackerLevel.toDouble())/5) + 2) / 50) * attackerMove.power.toDouble() * (attackerStat/defenderStat) + 2
+        val damage: Double = ((((2 * attackerLevel.toDouble())/5) + 2) / 50) * attackerMove.power.toDouble() * (attackerStat.toDouble()/defenderStat.toDouble()) + 2
         DamageLog.info("Initial Damage: $damage")
         return damage
     }
