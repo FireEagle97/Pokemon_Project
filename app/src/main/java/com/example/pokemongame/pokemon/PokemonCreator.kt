@@ -34,11 +34,6 @@ class PokemonCreator {
         return gson.fromJson(battleStatsData, listBattleStatsType)
 
     }
-    //temp code to reset pp and hp to its max value
-    fun resetPokemons(pokemonList: ArrayList<Pokemon>,context: Context) : ArrayList<Pokemon>{
-
-        return pokemonList
-    }
     //temp code to return a list of random Pokemon
     //will use it to generate the opponent team
     fun generateOpponentTeam(context: Context): List<Pokemon>{
