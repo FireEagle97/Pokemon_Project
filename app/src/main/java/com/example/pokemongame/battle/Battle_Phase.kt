@@ -15,22 +15,25 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
 
     //Performs a whole turn when any button is pressed. This returns a boolean that tells the external code when to
     //exit upon victory or loss so that it can go back to the main menu. (Run button logic is handled outside of this class though)
-    fun playBattleTurn(pokemonPlayer: ActivePokemon, pokemonEnemy: ActivePokemon, inTrainerBattle: Boolean, context: Context): Array<Boolean>{
+    fun playBattlePhase(pokemonPlayer: ActivePokemon, pokemonEnemy: ActivePokemon, inTrainerBattle: Boolean, context: Context): Array<Boolean>{
         //List to keep the speed order
         var speedArray: Array<ActivePokemon> = speedCheck(pokemonPlayer, pokemonEnemy)
 
         //array to hold booleans that dictate if the battle should end [0] or if the opposing pokemon has fainted [1]
+        // or if the fainted pokemon is in the player's team [2]
         //I would put this in two values instead, but when they are function parameters they are transformed
         //into val, which makes it impossible to change them
-        var faintedAndEndBattleArray = arrayOf(false, false)
+        var faintedAndEndBattleArray = arrayOf(false, false, false)
 
         //First turn
         playSingularTurn(speedArray, true, inTrainerBattle, pokemonPlayer.indexInTeam,
             pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
-        //If the opposing pokemon is dead, skip its turn, else perform its turn
+        //If the opposing pokemon has fainted, skip its turn, else perform its turn
         if(faintedAndEndBattleArray[1]){
-            BattleLog.info("Other pokemon is dead. Skipping turn...")
-            faintedAndEndBattleArray[1] = false
+            //Check if the battle ended, if so, do not log this message
+            if(!faintedAndEndBattleArray[0]) {
+                BattleLog.info("A pokemon has fainted before it could take its turn. Skipping turn...")
+            }
         } else {
             //Second turn
             playSingularTurn(speedArray, false, inTrainerBattle, pokemonPlayer.indexInTeam, pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
@@ -111,6 +114,7 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
             BattleLog.info("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!")
 
             //Check if the move does damage
+            BattleLog.info("Old HP of defending pokemon: ${speedArray[1].pokemon.hp}")
             if(speedArray[0].chosenMove!!.power > 0){
                 speedArray[1].pokemon.hp -= DamageCalculations().calculateDamage(speedArray[0].pokemon,
                     speedArray[0].chosenMove!!, speedArray[1].pokemon, context)
@@ -203,18 +207,21 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
             }
             swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
             faintedAndEndBattleArray[0] = true
+        } else {
+            //Find if fainted pokemon is in player team or not
+            faintedAndEndBattleArray[2] = speedArray[1].inPlayerTeam
         }
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
     }
 
-    private fun checkIfTeamAllFainted(team: MutableList<Pokemon>): Boolean{
+    private fun checkIfTeamAllFainted(team: ArrayList<Pokemon>): Boolean{
         var counter = 0
         for(pokemon in team){
             if(pokemon.hp == 0){
                 counter++
             }
         }
-        if(counter == 6){
+        if(counter == team.count()){
             return true
         }
         return false

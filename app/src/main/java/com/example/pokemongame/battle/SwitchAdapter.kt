@@ -13,7 +13,7 @@ import com.example.pokemongame.pokemon.Pokemon
 import java.text.FieldPosition
 import kotlin.coroutines.coroutineContext
 
-class SwitchAdapter(private val team: ArrayList<Pokemon>, var teamPosition: Array<Int>, val dialogFragment: DialogFragment): RecyclerView.Adapter<SwitchAdapter.ViewHolder>() {
+class SwitchAdapter(private val team: ArrayList<Pokemon>, var teamPosition: IntArray, val dialogFragment: DialogFragment): RecyclerView.Adapter<SwitchAdapter.ViewHolder>() {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val pokemonName: TextView = view.findViewById(R.id.pokemonName)
         val pokemonHP: TextView = view.findViewById(R.id.pokemonHP)
@@ -30,12 +30,13 @@ class SwitchAdapter(private val team: ArrayList<Pokemon>, var teamPosition: Arra
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int){
         viewHolder.pokemonName.text = team[position].name
         viewHolder.pokemonHP.text = team[position].hp.toString()
+        //Asks for a pokemon above 0 hp, else a toast appears
         viewHolder.switchButton.setOnClickListener{
             if(team[position].hp > 0){
                 getTeamPosition(position)
                 dialogFragment.dismiss()
             } else {
-                Toast.makeText(viewHolder.itemView.context, "You cannot switch-in a pokemon with no HP remaining", Toast.LENGTH_SHORT)
+                Toast.makeText(viewHolder.itemView.context, "You cannot switch-in a pokemon with no HP remaining", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -44,7 +45,8 @@ class SwitchAdapter(private val team: ArrayList<Pokemon>, var teamPosition: Arra
         return team.size
     }
 
-    fun getTeamPosition(position: Int) {
+    //Store the position in the teamPosition
+    private fun getTeamPosition(position: Int) {
         teamPosition[0] = position
     }
 }
