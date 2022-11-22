@@ -9,11 +9,6 @@ import com.example.pokemongame.databinding.ActivityMainMenuBinding
 import com.example.pokemongame.pokemon.Pokemon
 import com.example.pokemongame.team_collection.TeamActivity
 
-
-
-
-
-
 class MainMenuActivity : AppCompatActivity() {
     companion object {
         private const val LOG_TAG = "M_M_ACTIVITY_DEV_LOG"
@@ -35,8 +30,11 @@ class MainMenuActivity : AppCompatActivity() {
         collection = if (intent.hasExtra("collection")) {
             intent.getSerializableExtra("collection") as ArrayList<Pokemon>
         } else {
-            ArrayList<Pokemon>() // if not passed, create empty one
+            ArrayList<Pokemon>()
+           // if not passed, create empty one
         }
+
+
 
 
 
@@ -62,7 +60,6 @@ class MainMenuActivity : AppCompatActivity() {
 
 
     }
-    // will need to check if need to do anything in oncreate to make sure this data is set
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQ_CODE) {

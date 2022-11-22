@@ -17,7 +17,7 @@ class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<Pokemon>, 
                     val temp = pokemonList[adapterPosition]
                     pokemonList.removeAt(adapterPosition)
                     notifyItemRemoved(adapterPosition)
-                    listener(temp)
+                    listener(temp) //listener takes care of changing the collection
                 }
             }
             binding.moveDown.setOnClickListener(){
@@ -46,7 +46,7 @@ class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<Pokemon>, 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //this will need to be changed to use pokemon class
+        //WILL NEED TO DECIDE WHAT DATA TO SHOW HERE
         val binding = holder.binding
         val pokemonInfo = pokemonList[position]
         binding.pokemonInfo.text = buildString {

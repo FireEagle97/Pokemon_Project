@@ -15,7 +15,7 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Poke
 
             binding.move.setOnClickListener(){
                     val pokemonToMove = pokemonList[adapterPosition]
-                    listener(pokemonToMove, adapterPosition)
+                    listener(pokemonToMove, adapterPosition) // what to do defined in TeamActivity
             }
         }
     }
@@ -33,6 +33,7 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Poke
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         val pokemonInfo = pokemonList[position]
+        // WILL NEED TO DECIDE HOW TO DISPLAY POKEMON (WHAT INFO)
         binding.pokemonInfo.text = buildString {
         append(pokemonInfo.name)
         append(" ")
