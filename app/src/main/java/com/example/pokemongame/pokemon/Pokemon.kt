@@ -20,3 +20,7 @@ data class Pokemon(
 
 )
 
+fun getPokemonImageResourceId(species: String): Int =
+    when(species){
+        "squirtle" ->
+    }
