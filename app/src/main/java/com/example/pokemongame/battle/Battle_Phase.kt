@@ -188,6 +188,7 @@ class Battle_Phase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<
         //Give exp to victor
         var gainedExperience: Double = 0.3 * speedArray[1].pokemon.experienceReward * speedArray[1].pokemon.level
         if(inTrainerBattle){
+            BattleLog.info("Double xp applied due to trainer battle!")
             gainedExperience *= 2.0
         }
         Level().addExperience(speedArray[0].pokemon, gainedExperience, context)

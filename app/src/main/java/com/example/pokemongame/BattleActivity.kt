@@ -1,5 +1,6 @@
 package com.example.pokemongame
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -23,39 +24,39 @@ class BattleActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        //Init Level class for utility
+        //Trainer name from intent
+        val trainerName = intent.getStringExtra("trainerName").toString()
+        //Collection from intent (used for catching)
+        var collection = intent.getSerializableExtra("collection") as ArrayList<Pokemon>
+
+        //Initialize Level class for utility
         val levelClass = Level()
-        //Init fragmentManager for various tasks
+        //Initialize fragmentManager for various tasks
         val fragmentManager = supportFragmentManager
+
         //Will hold the position of a yet-to-be switched-in pokemon in the player`s team
         var teamPositionArray: IntArray = intArrayOf(-1)
-        //Array to trigger a switch and end of battle
+        //Array to trigger a switch and the end of the battle
         var faintedAndEndBattleArray: Array<Boolean> = arrayOf(false, false, false)
 
-        //here Determine if it's a trainer battle or wild encounter by receiving the incoming
+        //Determine if it's a trainer battle or wild encounter by receiving the incoming
         //intent holding the boolean (true if in trainer battle, false if not)
-        var inTrainerBattle = false
+        var inTrainerBattle = intent.getBooleanExtra("inTrainerBattle", false)
 
         //here Generate enemy team (whether the enemy team is a wild team with one pokemon or a trainer's team
         //is determined by the boolean inTrainerBattle above)
 
         //Testing block
-            val charmander = PokemonCreator().createPokemon(15,"charmander",applicationContext)
-            val squirtle = PokemonCreator().createPokemon(15, "squirtle", applicationContext)
-            val bulbasaur = PokemonCreator().createPokemon(15, "bulbasaur", applicationContext)
-            val charmander2 = PokemonCreator().createPokemon(16,"charmander",applicationContext, "charmander2")
-            levelClass.initializeLevels(charmander, charmander.level, applicationContext)
-            levelClass.initializeLevels(squirtle, squirtle.level, applicationContext)
+            val bulbasaur = PokemonCreator().createPokemon(2, "bulbasaur", applicationContext)
+            val charmander2 = PokemonCreator().createPokemon(2,"charmander",applicationContext, "charmander2")
             levelClass.initializeLevels(bulbasaur, bulbasaur.level, applicationContext)
             levelClass.initializeLevels(charmander2, charmander2.level, applicationContext)
-            charmander.hp = charmander.maxHp
-            squirtle.hp = squirtle.maxHp
             bulbasaur.hp = bulbasaur.maxHp
             charmander2.hp = charmander2.maxHp
         //Testing block ended
 
-        //Holds the player's team. here change it to incoming intent's team
-        var playerTeam =  arrayListOf(squirtle, charmander)
+        //Holds the player's team
+        var playerTeam =  intent.getSerializableExtra("team") as ArrayList<Pokemon>
         //Holds the the enemy's team. here change it to generated enemy team above
         var enemyTeam = arrayListOf(bulbasaur, charmander2)
         //Init Battle Phase with respective teams for utility and data consistency
@@ -76,7 +77,7 @@ class BattleActivity : AppCompatActivity() {
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
             //playerActivePokemon var
             playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
-            Battle_Phase.BattleLog.info("Trainer's ${playerActivePokemon.pokemon.name} switched in!")
+            Battle_Phase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
         }
 
         //here Send out pokemon in index 0 for both teams in the UI
@@ -90,13 +91,13 @@ class BattleActivity : AppCompatActivity() {
             if(!faintedAndEndBattleArray[0]) {
                 Battle_Phase.BattleLog.info("Turn Begun")
 
-                //here Select a Move (Make buttons appear/make them visible on screen. Do not prompt a dialog.
+                //here Select a Move (Make buttons visible/invisible. Do not prompt a dialog.
                 //I lost too many hours dealing with DialogFragments)
                     //For testing purposes, hardcoded the choice
                     playerActivePokemon.chosenMove = playerActivePokemon.pokemon.moves[0]
                     enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[0]
 
-                //here Use an Item logic (make buttons visible)
+                //here Use an Item logic (make buttons visible/invisible)
 
                 //Switching button OnClickListener. here, callBattlePhase should be called as well
                 binding.button.setOnClickListener {
@@ -129,7 +130,12 @@ class BattleActivity : AppCompatActivity() {
                 Battle_Phase.BattleLog.info("Turn Ended")
             } else {
                 Battle_Phase.BattleLog.info("Battle Ended")
-                //here Return to main menu (send back player team with intent)
+                //Return to main menu
+                intent.putExtra("collection", collection as ArrayList<Pokemon>)
+                intent.putExtra("team", playerTeam as ArrayList<Pokemon>)
+                intent.putExtra("trainerName", trainerName)
+                setResult(RESULT_OK, intent)
+                finish()
             }
         }
         super.onStart()
