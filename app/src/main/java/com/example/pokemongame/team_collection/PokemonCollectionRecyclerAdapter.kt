@@ -38,7 +38,7 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Poke
         append(" ")
         append(pokemonInfo.hp)
     }
-        binding.pokemonInfo.setCompoundDrawablesWithIntrinsicBounds(0,0,getPokemonImageResourceId(pokemonInfo.species),0,)
+        binding.pokemonInfo.setCompoundDrawablesWithIntrinsicBounds(0,0,getPokemonImageResourceId(pokemonInfo.battleStats.species),0,)
     }
 
 

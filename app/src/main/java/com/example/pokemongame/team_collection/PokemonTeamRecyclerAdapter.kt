@@ -55,7 +55,7 @@ class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<Pokemon>, 
         append(pokemonInfo.hp)
     }
         binding.pokemonInfo.setCompoundDrawablesWithIntrinsicBounds(0,0,
-            getPokemonImageResourceId(pokemonInfo.species),0,)
+            getPokemonImageResourceId(pokemonInfo.battleStats.species),0,)
 
 
 
