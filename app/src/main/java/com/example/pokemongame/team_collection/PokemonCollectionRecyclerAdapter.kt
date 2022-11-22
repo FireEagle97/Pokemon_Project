@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.databinding.PokemonItemCollectionBinding
 import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.pokemon.getPokemonImageResourceId
 
 class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Pokemon> ,  private val listener: (pokemon: Pokemon, position: Int) -> Unit):
     RecyclerView.Adapter<PokemonCollectionRecyclerAdapter.ViewHolder>(){
@@ -37,6 +38,7 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Poke
         append(" ")
         append(pokemonInfo.hp)
     }
+        binding.pokemonInfo.setCompoundDrawablesWithIntrinsicBounds(0,0,getPokemonImageResourceId(pokemonInfo.species),0,)
     }
 
 

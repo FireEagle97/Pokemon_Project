@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.databinding.PokemonItemTeamBinding
 import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.pokemon.getPokemonImageResourceId
 
 class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<Pokemon>, private val listener: (pokemon: Pokemon) -> Unit):
     RecyclerView.Adapter<PokemonTeamRecyclerAdapter.ViewHolder>(){
@@ -53,9 +54,12 @@ class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<Pokemon>, 
         append(" ")
         append(pokemonInfo.hp)
     }
+        binding.pokemonInfo.setCompoundDrawablesWithIntrinsicBounds(0,0,
+            getPokemonImageResourceId(pokemonInfo.species),0,)
 
 
-        }
+
+    }
 
     override fun getItemCount(): Int {
         return pokemonList.size

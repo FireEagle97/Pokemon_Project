@@ -10,11 +10,10 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text=""
-        android:drawableEnd=""
         android:drawablePadding="30dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        />
+        app:drawableEndCompat="@drawable/question_mark" />
     <ImageButton
      android:id="@+id/move_up"
      android:layout_width="wrap_content"
