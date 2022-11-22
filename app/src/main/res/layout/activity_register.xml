@@ -16,7 +16,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/trainer_name_prompt"
          />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/must_enter_trainer_name"
+        app:layout_constraintStart_toStartOf="@id/input_name"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toBottomOf="@id/starting_pokemon_qeury"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        />
     <EditText
         android:id="@+id/input_name"
         android:layout_width="150dp"
@@ -78,6 +87,27 @@
             android:layout_marginTop="20dp"
             />
     </RadioGroup>
+    <TextView
+        android:id="@+id/pokemonNameQuery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/first_choice"
+        android:text="@string/what_will_your_pokemon_s_name_be"
+        android:visibility="gone"
+        />
+
+    <EditText
+        android:id="@+id/pokemon_name_input"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:maxLength="20"
+        android:singleLine="true"
+        app:layout_constraintStart_toEndOf="@+id/pokemonNameQuery"
+        app:layout_constraintTop_toBottomOf="@id/first_choice" />
 
     <Button
         android:id="@+id/menuBtn"
@@ -87,7 +117,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/go_to_menu" />
+        android:text="@string/go_to_menu"
+        android:visibility="gone"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
