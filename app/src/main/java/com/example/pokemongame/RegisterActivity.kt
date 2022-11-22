@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityRegisterBinding
+import com.example.pokemongame.pokemon.Level
 import com.example.pokemongame.pokemon.Pokemon
 import com.example.pokemongame.pokemon.PokemonCreator
 
 
-private lateinit var binding: ActivityRegisterBinding
 class RegisterActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRegisterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -50,14 +51,15 @@ class RegisterActivity : AppCompatActivity() {
                     } else {
                         pokemonSpecies[ind]
                     }
-                    team.add(
-                        PokemonCreator().createPokemon(
-                            5,
-                            pokemonSpecies[ind],
-                            applicationContext,
-                            name
-                        )
+                    val pokemon = PokemonCreator().createPokemon(
+                        5,
+                        pokemonSpecies[ind],
+                        applicationContext,
+                        name
                     )
+                    Level().initializeLevels(pokemon,pokemon.level,applicationContext)
+                    pokemon.hp = pokemon.maxHp
+                    team.add(pokemon)
                     //passing team & trainer name to next activity
                     val intent = Intent(this, MainMenuActivity::class.java)
                     intent.putExtra("team", team)

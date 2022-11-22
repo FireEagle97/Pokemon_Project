@@ -6,7 +6,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
+import com.example.pokemongame.pokemon.Level
 import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.pokemon.PokemonCreator
 import com.example.pokemongame.team_collection.TeamActivity
 
 class MainMenuActivity : AppCompatActivity() {
@@ -33,6 +35,11 @@ class MainMenuActivity : AppCompatActivity() {
             ArrayList<Pokemon>()
            // if not passed, create empty one
         }
+        //in here for testing purposes, just to see that colelction also works
+//        val pokemon = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
+//        Level().initializeLevels(pokemon,pokemon.level,applicationContext)
+//        pokemon.hp = pokemon.maxHp
+//        collection.add(pokemon)
 
 
 
