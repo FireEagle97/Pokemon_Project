@@ -22,13 +22,18 @@
 
     <Button
         android:id="@+id/start"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="112dp"
-        android:backgroundTint="@android:color/darker_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
         android:text="@string/start_game"
+        android:fontFamily="@font/opensansbold"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:backgroundTint="@color/yellow"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.122"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title">
 
@@ -39,7 +44,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:text="@string/credit"
-    app:layout_constraintTop_toBottomOf="@id/start"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     android:textColor="@color/black"
     android:background="@color/white"
