@@ -58,8 +58,10 @@ class RegisterActivity : AppCompatActivity() {
                             name
                         )
                     )
-
+                    //passing team & trainer name to next activity
                     val intent = Intent(this, MainMenuActivity::class.java)
+                    intent.putExtra("team", team)
+                    intent.putExtra("trainerName", binding.inputName.text.toString())
                     startActivity(intent)
                 }
             else{
