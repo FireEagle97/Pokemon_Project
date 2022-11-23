@@ -8,13 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.example.pokemongame.battle.ActivePokemon
 import com.example.pokemongame.battle.BattlePhase
+import com.example.pokemongame.battle.SelectMovesFragment
 import com.example.pokemongame.battle.SwitchingFragment
-import com.example.pokemongame.pokemon.Level
-import com.example.pokemongame.pokemon.Pokemon
-import com.example.pokemongame.pokemon.PokemonCreator
 import com.example.pokemongame.databinding.ActivityTrainerBattleBinding
-import com.example.pokemongame.pokemon.getPokemonImageResourceId
-import com.example.pokemongame.pokemon.MoveAssigner
+import com.example.pokemongame.pokemon.*
 import java.util.*
 import java.util.logging.Logger
 import kotlin.collections.ArrayList
@@ -46,7 +43,8 @@ class TrainerBattleActivity : AppCompatActivity() {
         val levelClass = Level()
         //Initialize fragmentManager for various tasks
         val fragmentManager = supportFragmentManager
-
+        //hold a move position
+        var movePositionArray: IntArray = intArrayOf(-1)
         //Will hold the position of a yet-to-be switched-in pokemon in the player`s team
         var teamPositionArray: IntArray = intArrayOf(-1)
         //Array to trigger a switch and the end of the battle
@@ -128,59 +126,63 @@ class TrainerBattleActivity : AppCompatActivity() {
         //here The buttonProceed is a temporary way to manage the turn order. In reality, all buttons should have
         //OnClickListeners (except Run) that eventually call .playBattleTurn, but before doing so, they should
         //change either the playerActivePokemon or enemyActivePokemon's properties according to the logic of the action
-//        binding.buttonProceed.setOnClickListener{
+        binding.fightBtn.setOnClickListener{
+            selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
+        }
+        //If the battle shouldn't end
+//        if(!faintedAndEndBattleArray[0]) {
+//            BattlePhase.BattleLog.info("Turn Begun")
+//
+//            //here Select a Move (Make buttons visible/invisible. Do not prompt a dialog.
+//            //I lost too many hours dealing with DialogFragments)
+//            //For testing purposes, hardcoded the choice
+//            binding.fightBtn.setOnClickListener{
+//                selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
+//            }
+//            playerActivePokemon.chosenMove = playerActivePokemon.pokemon.moves[0]
+//            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[0]
+//
+//            //here Use an Item logic (make buttons visible/invisible)
+//
+//            //Switching button OnClickListener. here, callBattlePhase should be called as well
+            binding.switchPokeBtn.setOnClickListener {
+                switch(playerTeam, teamPositionArray, fragmentManager)
+            }
+
+//            //here Run logic
+//
+//            //Battle phase call. Also updates faintedAndEndBattleArray (this should be copied and moved in OnClickListeners)
+//            callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
 //
 //            //If the battle shouldn't end
-//            if(!faintedAndEndBattleArray[0]) {
-//                BattlePhase.BattleLog.info("Turn Begun")
-//
-//                //here Select a Move (Make buttons visible/invisible. Do not prompt a dialog.
-//                //I lost too many hours dealing with DialogFragments)
-//                //For testing purposes, hardcoded the choice
-//                playerActivePokemon.chosenMove = playerActivePokemon.pokemon.moves[0]
-//                enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[0]
-//
-//                //here Use an Item logic (make buttons visible/invisible)
-//
-//                //Switching button OnClickListener. here, callBattlePhase should be called as well
-//                binding.button.setOnClickListener {
-//                    switch(playerTeam, teamPositionArray, fragmentManager)
-//                }
-//
-//                //here Run logic
-//
-//                //Battle phase call. Also updates faintedAndEndBattleArray (this should be copied and moved in OnClickListeners)
-//                callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
-//
-//                //If the battle shouldn't end
-//                if(!faintedAndEndBattleArray[0]){
-//                    //Force Switch for enemy team if their active pokemon faints
-//                    if(faintedAndEndBattleArray[1] && !faintedAndEndBattleArray[2]){
-//                        for(pokemon in enemyTeam){
-//                            if(pokemon.hp > 0){
-//                                enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
-//                                BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
-//                                break
-//                            }
+//            if(!faintedAndEndBattleArray[0]){
+//                //Force Switch for enemy team if their active pokemon faints
+//                if(faintedAndEndBattleArray[1] && !faintedAndEndBattleArray[2]){
+//                    for(pokemon in enemyTeam){
+//                        if(pokemon.hp > 0){
+//                            enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
+//                            BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
+//                            break
 //                        }
 //                    }
-//
-//                    //Force Switch for player team if their active pokemon faints
-//                    if(faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
-//                        switch(playerTeam, teamPositionArray, fragmentManager)
-//                    }
 //                }
-//                BattlePhase.BattleLog.info("Turn Ended")
-//            } else {
-//                BattlePhase.BattleLog.info("Battle Ended")
-//                //Return to main menu
-//                intent.putExtra("collection", collection as ArrayList<Pokemon>)
-//                intent.putExtra("team", playerTeam as ArrayList<Pokemon>)
-//                intent.putExtra("trainerName", trainerName)
-//                setResult(RESULT_OK, intent)
-//                finish()
+//
+//                //Force Switch for player team if their active pokemon faints
+//                if(faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
+//                    switch(playerTeam, teamPositionArray, fragmentManager)
+//                }
 //            }
+//            BattlePhase.BattleLog.info("Turn Ended")
+//        } else {
+//            BattlePhase.BattleLog.info("Battle Ended")
+//            //Return to main menu
+//            intent.putExtra("collection", collection as ArrayList<Pokemon>)
+//            intent.putExtra("team", playerTeam as ArrayList<Pokemon>)
+//            intent.putExtra("trainerName", trainerName)
+//            setResult(RESULT_OK, intent)
+//            finish()
 //        }
+
         super.onStart()
     }
 
@@ -192,6 +194,15 @@ class TrainerBattleActivity : AppCompatActivity() {
         val switchFragment = SwitchingFragment()
         switchFragment.arguments = bundle
         switchFragment.show(fragmentManager, "fragment")
+    }
+
+    private fun selectMove(movesList: ArrayList<Move>, movePositionArray: IntArray, fragmentManager: FragmentManager){
+        val bundle = Bundle()
+        bundle.putSerializable("moves", movesList)
+        bundle.putIntArray("movePosition", movePositionArray)
+        val selectMoveFragment = SelectMovesFragment()
+        selectMoveFragment.arguments = bundle
+        selectMoveFragment.show(fragmentManager, "fragment")
     }
 
     //Calls the battle phase and updated the faintedAndEndBattleArray

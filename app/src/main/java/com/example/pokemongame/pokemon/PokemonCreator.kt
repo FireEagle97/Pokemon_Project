@@ -38,7 +38,7 @@ class PokemonCreator {
     fun createPokemon(level: Int, species: String, context: Context,name : String = species): Pokemon {
         //get The battleStats
         val battleStats: BattleStats = getPokemonBattleStats(species, context)
-        val moves: MutableList<Move> = mutableListOf()
+        val moves: ArrayList<Move> = arrayListOf()
         //temp vals
         val experience: Double = 0.0
         val hp: Int = 0
