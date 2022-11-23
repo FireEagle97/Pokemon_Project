@@ -29,4 +29,6 @@
     <string name="move_down">move down</string>
     <string name="move_over">move over</string>
     <string name="move_to_team">move_to_team</string>
+    <string name="collection">COLLECTION</string>
+    <string name="team">TEAM</string>
 </resources>
