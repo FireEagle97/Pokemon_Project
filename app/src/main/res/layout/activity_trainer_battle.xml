@@ -4,24 +4,204 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/battle_ground_port"
+        />
+
+    <TextView
+        android:id="@+id/pokemon1_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="180dp"
-        android:text="@string/switch_button"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/pokemon1name"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/pokemon2_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon1name"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/pokemon1_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon1level"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon1_name"
+        />
+
+    <TextView
+        android:id="@+id/pokemon2_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon2level"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pokemon2_name"
+        />
+
+    <TextView
+        android:id="@+id/pokemon1_hp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon1hp"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon1_level"
+        />
+
 
     <Button
-        android:id="@+id/button_proceed"
+        android:id="@+id/fightBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="119dp"
-        android:text="Proceed"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:backgroundTint="@color/yellow"
+        android:fontFamily="@font/opensansbold"
+        android:text="@string/battle_fight"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:strokeColor="@color/blue"
+        app:strokeWidth="2dp"
+        />
+
+    <TextView
+        android:id="@+id/pokemon2_hp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pokemon2hp"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pokemon2_level"
+        />
+    <Button
+        android:id="@+id/runBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:backgroundTint="@color/yellow"
+        android:fontFamily="@font/opensansbold"
+        android:text="@string/battle_run"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/fightBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="2dp"
+        />
+    <Button
+        android:id="@+id/switchPokeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/yellow"
+        android:fontFamily="@font/opensansbold"
+        android:text="@string/switch_pokemon"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/runBtn"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="2dp"
+        />
+    <Button
+        android:id="@+id/itemBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+
+        android:backgroundTint="@color/yellow"
+        android:fontFamily="@font/opensansbold"
+        android:text="@string/item"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/switchPokeBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fightBtn"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="2dp"
+        />
+
+    <ImageView
+        android:id="@+id/pokemon1_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/question_mark"
+        app:layout_constraintBottom_toTopOf="@id/runBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="150dp"
+        />
+
+    <ImageView
+        android:id="@+id/pokemon2_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/question_mark"
+        app:layout_constraintBottom_toTopOf="@id/runBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="150dp"
+        />
+
+<!--    <Button-->
+<!--        android:id="@+id/button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="180dp"-->
+<!--        android:text="@string/switch_button"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/button_proceed"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="119dp"-->
+<!--        android:text="Proceed"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
