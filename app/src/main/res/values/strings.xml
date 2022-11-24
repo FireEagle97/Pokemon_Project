@@ -24,4 +24,11 @@
     <string name="must_enter_trainer_name">Must enter trainer name!</string>
     <string name="save">save</string>
     <string name="trainer_name">Enter your name</string>
+    <string name="image_of_the_pokemon">image_of_the_pokemon</string>
+    <string name="move_up">move up</string>
+    <string name="move_down">move down</string>
+    <string name="move_over">move over</string>
+    <string name="move_to_team">move_to_team</string>
+    <string name="collection">COLLECTION</string>
+    <string name="team">TEAM</string>
 </resources>
