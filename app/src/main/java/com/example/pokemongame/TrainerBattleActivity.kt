@@ -92,7 +92,7 @@ class TrainerBattleActivity : AppCompatActivity() {
 
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")
-        //ActivePokemon for the player
+//        ActivePokemon for the player
         var playerActivePokemon = ActivePokemon(playerTeam[0], null, 0, true)
         //ActivePokemon for the enemy
         var enemyActivePokemon = ActivePokemon(enemyTeam[0], null, 0, false)
@@ -105,8 +105,20 @@ class TrainerBattleActivity : AppCompatActivity() {
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
             //playerActivePokemon var
             playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
+            updateUI(playerActivePokemon,enemyActivePokemon)
             BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
         }
+
+        fragmentManager.setFragmentResultListener("movePosition", this){ requestKey, bundle ->
+            //Get the position of the pokemon to be switched-in
+            var movePosition = bundle.getInt("movePosition")
+            //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
+            //playerActivePokemon var
+//            playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
+            updateUI(playerActivePokemon,enemyActivePokemon)
+            BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+        }
+
 
         //here Send out pokemon in index 0 for both teams in the UI
         binding.pokemon1Name.text = playerActivePokemon.pokemon.name
@@ -126,11 +138,27 @@ class TrainerBattleActivity : AppCompatActivity() {
         //here The buttonProceed is a temporary way to manage the turn order. In reality, all buttons should have
         //OnClickListeners (except Run) that eventually call .playBattleTurn, but before doing so, they should
         //change either the playerActivePokemon or enemyActivePokemon's properties according to the logic of the action
-        binding.fightBtn.setOnClickListener{
-            selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
-        }
+
         //If the battle shouldn't end
-//        if(!faintedAndEndBattleArray[0]) {
+        if(!faintedAndEndBattleArray[0]) {
+
+            binding.fightBtn.setOnClickListener{
+                selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
+                //call when select move
+                callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
+
+            }
+
+            binding.switchPokeBtn.setOnClickListener {
+                TrainerBattleLog.info{
+                    "playerTeamSize :${playerTeam.size}"
+                }
+                switch(playerTeam, teamPositionArray, fragmentManager)
+                //call when select poke
+//                callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
+                updateUI(playerActivePokemon,enemyActivePokemon)
+            }
+        }
 //            BattlePhase.BattleLog.info("Turn Begun")
 //
 //            //here Select a Move (Make buttons visible/invisible. Do not prompt a dialog.
@@ -145,16 +173,14 @@ class TrainerBattleActivity : AppCompatActivity() {
 //            //here Use an Item logic (make buttons visible/invisible)
 //
 //            //Switching button OnClickListener. here, callBattlePhase should be called as well
-            binding.switchPokeBtn.setOnClickListener {
-                switch(playerTeam, teamPositionArray, fragmentManager)
-            }
+
 
 //            //here Run logic
 //
 //            //Battle phase call. Also updates faintedAndEndBattleArray (this should be copied and moved in OnClickListeners)
 //            callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
 //
-//            //If the battle shouldn't end
+            //If the battle shouldn't end
 //            if(!faintedAndEndBattleArray[0]){
 //                //Force Switch for enemy team if their active pokemon faints
 //                if(faintedAndEndBattleArray[1] && !faintedAndEndBattleArray[2]){
@@ -255,5 +281,19 @@ class TrainerBattleActivity : AppCompatActivity() {
         }
 
         return rndPokeList
+    }
+    private fun updateUI(playerActivePokemon: ActivePokemon, enemyActivePokemon: ActivePokemon){
+        binding.pokemon1Name.text = playerActivePokemon.pokemon.name
+        var pPokemonLevel  = "level: " + playerActivePokemon.pokemon.level
+        binding.pokemon1Level.text = pPokemonLevel
+        var pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
+        binding.pokemon1Hp.text = pPokemon1Hp
+        binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
+        var ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
+        binding.pokemon2Level.text = ePokemonLevel
+        var ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
+        binding.pokemon2Hp.text = ePokemon2Hp
+        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+        binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
     }
 }
