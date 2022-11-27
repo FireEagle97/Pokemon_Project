@@ -89,20 +89,20 @@ class MainMenuActivity : AppCompatActivity() {
             intent.putExtra("trainerName", trainerName)
             startActivityForResult(intent, REQ_CODE)
         }
-        binding.trainerBattleBtn.setOnClickListener{
-            val intent = Intent(this, BattlePhaseActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.trainerBattleBtn.setOnClickListener{
+//            val intent = Intent(this, BattlePhaseActivity::class.java)
+//            startActivity(intent)
+//        }
 
         //Button for wild battles
-//        binding.wildBattleBtn.setOnClickListener{
-//            val intent = Intent(this, BattleActivity::class.java)
-//            intent.putExtra("team", team)
-//            intent.putExtra("collection", collection)
-//            intent.putExtra("trainerName", trainerName)
-//            intent.putExtra("inTrainerBattle", false)
-//            startActivityForResult(intent, REQ_CODE)
-//        }
+        binding.wildBattleBtn.setOnClickListener{
+            val intent = Intent(this, TrainerBattleActivity::class.java)
+            intent.putExtra("team", team)
+            intent.putExtra("collection", collection)
+            intent.putExtra("trainerName", trainerName)
+            intent.putExtra("inTrainerBattle", false)
+            startActivityForResult(intent, REQ_CODE)
+        }
 
         binding.trainerBattleBtn.setOnClickListener{
             val intent = Intent(this, TrainerBattleActivity::class.java)
