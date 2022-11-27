@@ -116,11 +116,16 @@ class TrainerBattleActivity : AppCompatActivity() {
         fragmentManager.setFragmentResultListener("movePosition", this){ requestKey, bundle ->
             //Get the position of the pokemon to be switched-in
             var movePosition = bundle.getInt("movePosition")
+            TrainerBattleLog.info {
+                "enemy Moves list size ${enemyActivePokemon.pokemon.moves.size}"
+            }
+            var enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
             TrainerBattleLog.info{
                 "The move Position : $movePosition"
             }
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
             playerActivePokemon = ActivePokemon(playerActivePokemon.pokemon, playerActivePokemon.pokemon.moves[movePosition],playerTeam.indexOf(playerActivePokemon.pokemon),true)
+            enemyActivePokemon = ActivePokemon(enemyActivePokemon.pokemon, enemyActivePokemon.pokemon.moves[enemyMovePosition], enemyTeam.indexOf(enemyActivePokemon.pokemon), false)
             TrainerBattleLog.info{
                 "the pokemon: ${playerActivePokemon.pokemon.name}\n"+
                 "the pokemon move: ${playerActivePokemon.chosenMove}"
@@ -128,6 +133,7 @@ class TrainerBattleActivity : AppCompatActivity() {
             callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
 //            playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
             TrainerBattleLog.info{"if enemy fainted in fight fragment: ${faintedAndEndBattleArray[1]}"}
+            TrainerBattleLog.info{"if player fainted in fight fragment: ${faintedAndEndBattleArray[2]}"}
             updateUI(playerActivePokemon,enemyActivePokemon)
 //            BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
             if(!faintedAndEndBattleArray[0]) {
@@ -165,10 +171,10 @@ class TrainerBattleActivity : AppCompatActivity() {
                     }
 
                     //Force Switch for player team if their active pokemon faints
-                    if(!faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
+                    if(faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
                         switch(playerTeam, teamPositionArray, fragmentManager)
                         updateUI(playerActivePokemon,enemyActivePokemon)
-                        BattlePhase.BattleLog.info("Opponent's ${playerActivePokemon.pokemon.name} switched in!")
+                        BattlePhase.BattleLog.info("player's ${playerActivePokemon.pokemon.name} switched in!")
                     }
                 }
                 BattlePhase.BattleLog.info("Turn Ended")
@@ -270,8 +276,8 @@ class TrainerBattleActivity : AppCompatActivity() {
             //assing the hp to max hp
 
         }
-        if(minLevel -5 < 0){
-            minLevel = 0
+        if(minLevel -5 <= 0){
+            minLevel = 1
         }else{
             minLevel -=5
         }
