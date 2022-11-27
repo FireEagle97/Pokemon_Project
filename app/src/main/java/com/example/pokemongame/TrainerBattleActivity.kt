@@ -44,9 +44,9 @@ class TrainerBattleActivity : AppCompatActivity() {
         //Initialize fragmentManager for various tasks
         val fragmentManager = supportFragmentManager
         //hold a move position
-        var movePositionArray: IntArray = intArrayOf(-1)
+        var movePositionArray: IntArray = intArrayOf(0)
         //Will hold the position of a yet-to-be switched-in pokemon in the player`s team
-        var teamPositionArray: IntArray = intArrayOf(-1)
+        var teamPositionArray: IntArray = intArrayOf(0)
         //Array to trigger a switch and the end of the battle
         var faintedAndEndBattleArray: Array<Boolean> = arrayOf(false, false, false)
 
@@ -104,7 +104,11 @@ class TrainerBattleActivity : AppCompatActivity() {
             var teamPosition = bundle.getInt("teamPosition")
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
             //playerActivePokemon var
+//            TrainerBattleLog.info{
+//                "intrainer battle: ${inTrainerBattle}\n"
+//            }
             playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
+            callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
             updateUI(playerActivePokemon,enemyActivePokemon)
             BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
         }
@@ -112,11 +116,69 @@ class TrainerBattleActivity : AppCompatActivity() {
         fragmentManager.setFragmentResultListener("movePosition", this){ requestKey, bundle ->
             //Get the position of the pokemon to be switched-in
             var movePosition = bundle.getInt("movePosition")
+            TrainerBattleLog.info{
+                "The move Position : $movePosition"
+            }
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
-            //playerActivePokemon var
+            playerActivePokemon = ActivePokemon(playerActivePokemon.pokemon, playerActivePokemon.pokemon.moves[movePosition],playerTeam.indexOf(playerActivePokemon.pokemon),true)
+            TrainerBattleLog.info{
+                "the pokemon: ${playerActivePokemon.pokemon.name}\n"+
+                "the pokemon move: ${playerActivePokemon.chosenMove}"
+            }
+            callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
 //            playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
+            TrainerBattleLog.info{"if enemy fainted in fight fragment: ${faintedAndEndBattleArray[1]}"}
             updateUI(playerActivePokemon,enemyActivePokemon)
-            BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+//            BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+            if(!faintedAndEndBattleArray[0]) {
+                BattlePhase.BattleLog.info("Turn Begun")
+
+                //here Select a Move (Make buttons visible/invisible. Do not prompt a dialog.
+                //I lost too many hours dealing with DialogFragments)
+                //For testing purposes, hardcoded the choice
+                //            playerActivePokemon.chosenMove = playerActivePokemon.pokemon.moves[0]
+                //            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[0]
+
+                //here Use an Item logic (make buttons visible/invisible)
+
+                //Switching button OnClickListener. here, callBattlePhase should be called as well
+
+//                TrainerBattleLog.info{"if enemy fainted: ${faintedAndEndBattleArray[1]}"}
+
+                //here Run logic
+
+                //Battle phase call. Also updates faintedAndEndBattleArray (this should be copied and moved in OnClickListeners)
+
+
+                //If the battle shouldn't end
+                if(!faintedAndEndBattleArray[0]){
+                    //Force Switch for enemy team if their active pokemon faints
+                    if(faintedAndEndBattleArray[1] && !faintedAndEndBattleArray[2]){
+                        for(pokemon in enemyTeam){
+                            if(pokemon.hp > 0){
+                                enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
+                                BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
+                                break
+                            }
+                        }
+                    }
+
+                    //Force Switch for player team if their active pokemon faints
+                    if(!faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
+                        switch(playerTeam, teamPositionArray, fragmentManager)
+                        BattlePhase.BattleLog.info("Opponent's ${playerActivePokemon.pokemon.name} switched in!")
+                    }
+                }
+                BattlePhase.BattleLog.info("Turn Ended")
+            } else {
+                BattlePhase.BattleLog.info("Battle Ended")
+                //Return to main menu
+                intent.putExtra("collection", collection as ArrayList<Pokemon>)
+                intent.putExtra("team", playerTeam as ArrayList<Pokemon>)
+                intent.putExtra("trainerName", trainerName)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
         }
 
 
@@ -138,80 +200,31 @@ class TrainerBattleActivity : AppCompatActivity() {
         //here The buttonProceed is a temporary way to manage the turn order. In reality, all buttons should have
         //OnClickListeners (except Run) that eventually call .playBattleTurn, but before doing so, they should
         //change either the playerActivePokemon or enemyActivePokemon's properties according to the logic of the action
-
         //If the battle shouldn't end
-        if(!faintedAndEndBattleArray[0]) {
-
-            binding.fightBtn.setOnClickListener{
-                selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
-                //call when select move
-                callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
-
+        binding.switchPokeBtn.setOnClickListener {
+            TrainerBattleLog.info{
+                "playerTeamSize :${playerTeam.size}"
             }
+            switch(playerTeam, teamPositionArray, fragmentManager)
+            TrainerBattleLog.info{"if enemy fainted inside switch click: ${faintedAndEndBattleArray[1]}"}
 
-            binding.switchPokeBtn.setOnClickListener {
-                TrainerBattleLog.info{
-                    "playerTeamSize :${playerTeam.size}"
-                }
-                switch(playerTeam, teamPositionArray, fragmentManager)
-                //call when select poke
+            //call when select poke
 //                callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
-                updateUI(playerActivePokemon,enemyActivePokemon)
-            }
+//                updateUI(playerActivePokemon,enemyActivePokemon)
         }
-//            BattlePhase.BattleLog.info("Turn Begun")
-//
-//            //here Select a Move (Make buttons visible/invisible. Do not prompt a dialog.
-//            //I lost too many hours dealing with DialogFragments)
-//            //For testing purposes, hardcoded the choice
-//            binding.fightBtn.setOnClickListener{
-//                selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
-//            }
-//            playerActivePokemon.chosenMove = playerActivePokemon.pokemon.moves[0]
-//            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[0]
-//
-//            //here Use an Item logic (make buttons visible/invisible)
-//
-//            //Switching button OnClickListener. here, callBattlePhase should be called as well
+        binding.fightBtn.setOnClickListener{
+            //on click open the fragment and do the calls inside the fragment
+            selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
+            //call when select move
+            faintedAndEndBattleArray = callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
+            TrainerBattleLog.info{"if enemy fainted in fightbtn: ${faintedAndEndBattleArray[1]}"}
 
 
-//            //here Run logic
-//
-//            //Battle phase call. Also updates faintedAndEndBattleArray (this should be copied and moved in OnClickListeners)
-//            callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
-//
-            //If the battle shouldn't end
-//            if(!faintedAndEndBattleArray[0]){
-//                //Force Switch for enemy team if their active pokemon faints
-//                if(faintedAndEndBattleArray[1] && !faintedAndEndBattleArray[2]){
-//                    for(pokemon in enemyTeam){
-//                        if(pokemon.hp > 0){
-//                            enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
-//                            BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
-//                            break
-//                        }
-//                    }
-//                }
-//
-//                //Force Switch for player team if their active pokemon faints
-//                if(faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
-//                    switch(playerTeam, teamPositionArray, fragmentManager)
-//                }
-//            }
-//            BattlePhase.BattleLog.info("Turn Ended")
-//        } else {
-//            BattlePhase.BattleLog.info("Battle Ended")
-//            //Return to main menu
-//            intent.putExtra("collection", collection as ArrayList<Pokemon>)
-//            intent.putExtra("team", playerTeam as ArrayList<Pokemon>)
-//            intent.putExtra("trainerName", trainerName)
-//            setResult(RESULT_OK, intent)
-//            finish()
-//        }
+        }
 
         super.onStart()
     }
-
+    //TO Do put create checkFaintedPokemon method
     //Prompt a DialogFragment and get the index of the incoming switching-in pokemon
     private fun switch(playerTeam: ArrayList<Pokemon>, teamPositionArray: IntArray, fragmentManager: FragmentManager){
         val bundle = Bundle()
@@ -220,6 +233,7 @@ class TrainerBattleActivity : AppCompatActivity() {
         val switchFragment = SwitchingFragment()
         switchFragment.arguments = bundle
         switchFragment.show(fragmentManager, "fragment")
+
     }
 
     private fun selectMove(movesList: ArrayList<Move>, movePositionArray: IntArray, fragmentManager: FragmentManager){
@@ -233,11 +247,12 @@ class TrainerBattleActivity : AppCompatActivity() {
 
     //Calls the battle phase and updated the faintedAndEndBattleArray
     private fun callBattlePhase(battlePhase: BattlePhase, playerActivePokemon: ActivePokemon, enemyActivePokemon: ActivePokemon,
-                                inTrainerBattle: Boolean, faintedAndEndBattleArray: Array<Boolean>){
+                                inTrainerBattle: Boolean, faintedAndEndBattleArray: Array<Boolean>) : Array<Boolean> {
         var incomingArray =  battlePhase.playBattlePhase(playerActivePokemon, enemyActivePokemon, inTrainerBattle, applicationContext)
         for(index in 0..2){
             faintedAndEndBattleArray[index] = incomingArray[index]
         }
+        return faintedAndEndBattleArray
     }
 
     //temp code to return a list of random Pokemon
@@ -274,10 +289,12 @@ class TrainerBattleActivity : AppCompatActivity() {
         }
         //passing moves , hp , experience
         for (pokemon in rndPokeList) {
-            val totalExperience = pokemon.level.toDouble().pow(3.toDouble())
-            Level().addExperience(pokemon,totalExperience,applicationContext)
+            Level().initializeLevels(pokemon,pokemon.level,applicationContext)
+//            val totalExperience = pokemon.level.toDouble().pow(3.toDouble())
+//            Level().addExperience(pokemon,totalExperience,applicationContext)
             pokemon.hp = pokemon.maxHp
-            MoveAssigner().assignNewMoves(pokemon,pokemon.level,applicationContext)
+//            MoveAssigner().assignNewMoves(pokemon,pokemon.level,applicationContext)
+            TrainerBattleLog.info{"initializing enemy pokemon"}
         }
 
         return rndPokeList

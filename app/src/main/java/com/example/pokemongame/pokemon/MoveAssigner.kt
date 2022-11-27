@@ -59,7 +59,8 @@ class MoveAssigner {
                 //Insert the moves in the pokemon
                 newMovesList.forEach{ move ->
                     pokemon.moves.add(move)
-                    MoveLog.info(pokemon.battleStats.species + " has learned " + move.name)
+                    MoveLog.info(pokemon.name + " has learned " + move.name)
+//                    MoveLog.info(pokemon.battleStats.species + " has learned " + move.name)
                 }
             } else {
 
