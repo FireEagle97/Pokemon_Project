@@ -158,6 +158,7 @@ class TrainerBattleActivity : AppCompatActivity() {
                             if(pokemon.hp > 0){
                                 enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
                                 BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
+                                updateUI(playerActivePokemon,enemyActivePokemon)
                                 break
                             }
                         }
@@ -166,6 +167,7 @@ class TrainerBattleActivity : AppCompatActivity() {
                     //Force Switch for player team if their active pokemon faints
                     if(!faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
                         switch(playerTeam, teamPositionArray, fragmentManager)
+                        updateUI(playerActivePokemon,enemyActivePokemon)
                         BattlePhase.BattleLog.info("Opponent's ${playerActivePokemon.pokemon.name} switched in!")
                     }
                 }
@@ -216,10 +218,6 @@ class TrainerBattleActivity : AppCompatActivity() {
             //on click open the fragment and do the calls inside the fragment
             selectMove(playerActivePokemon.pokemon.moves, movePositionArray,fragmentManager)
             //call when select move
-            faintedAndEndBattleArray = callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
-            TrainerBattleLog.info{"if enemy fainted in fightbtn: ${faintedAndEndBattleArray[1]}"}
-
-
         }
 
         super.onStart()
