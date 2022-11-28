@@ -262,7 +262,7 @@ class TrainerBattleActivity : AppCompatActivity() {
     //temp code to return a list of random Pokemon
     //will use it to generate the opponent team
     private fun generateOpponentTeam(playerTeam:ArrayList<Pokemon>, context: Context): ArrayList<Pokemon>{
-        val randPokemons = Random().nextInt(7);
+        val randPokemons = Random().nextInt(6);
         var minLevel = playerTeam[0].level
         var maxLevel = playerTeam[0].level
         playerTeam.forEachIndexed{index, pokemon ->
@@ -283,7 +283,7 @@ class TrainerBattleActivity : AppCompatActivity() {
         }
         maxLevel += 5
         //assign random moves
-        val speciesList : MutableList<String> = mutableListOf("bulbasaur", "charmander", "pidgey")
+        val speciesList : MutableList<String> = mutableListOf("bulbasaur", "charmander", "squirtle")
         val rndPokeList : ArrayList<Pokemon> = arrayListOf()
         for(i in 0..randPokemons){
             val rndSpecies = speciesList[Random().nextInt(speciesList.size)]
