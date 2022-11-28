@@ -46,26 +46,26 @@ class MainMenuActivity : AppCompatActivity() {
 //        Level().initializeLevels(pokemon,pokemon.level,applicationContext)
 //        pokemon.hp = pokemon.maxHp
 //        collection.add(pokemon)
-        val pokemon1 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
-        Level().initializeLevels(pokemon1,pokemon1.level,applicationContext)
-        pokemon1.hp = pokemon1.maxHp
-        val pokemon2 = PokemonCreator().createPokemon(4, "bulbasaur",applicationContext)
-        Level().initializeLevels(pokemon2,pokemon2.level,applicationContext)
-        pokemon2.hp = pokemon2.maxHp
-        val pokemon3 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
-        Level().initializeLevels(pokemon3,pokemon3.level,applicationContext)
-        pokemon2.hp = pokemon2.maxHp
-        val pokemon4 = PokemonCreator().createPokemon(3, "charmander",applicationContext)
-        Level().initializeLevels(pokemon4,pokemon4.level,applicationContext)
-        pokemon4.hp = pokemon4.maxHp
-        val pokemon5 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
-        Level().initializeLevels(pokemon5,pokemon5.level,applicationContext)
-        pokemon5.hp = pokemon5.maxHp
-        team.add(pokemon5)
-        team.add(pokemon4)
-        team.add(pokemon3)
-        team.add(pokemon2)
-        team.add(pokemon1)
+//        val pokemon1 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
+//        Level().initializeLevels(pokemon1,pokemon1.level,applicationContext)
+//        pokemon1.hp = pokemon1.maxHp
+//        val pokemon2 = PokemonCreator().createPokemon(4, "bulbasaur",applicationContext)
+//        Level().initializeLevels(pokemon2,pokemon2.level,applicationContext)
+//        pokemon2.hp = pokemon2.maxHp
+//        val pokemon3 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
+//        Level().initializeLevels(pokemon3,pokemon3.level,applicationContext)
+//        pokemon2.hp = pokemon2.maxHp
+//        val pokemon4 = PokemonCreator().createPokemon(3, "charmander",applicationContext)
+//        Level().initializeLevels(pokemon4,pokemon4.level,applicationContext)
+//        pokemon4.hp = pokemon4.maxHp
+//        val pokemon5 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
+//        Level().initializeLevels(pokemon5,pokemon5.level,applicationContext)
+//        pokemon5.hp = pokemon5.maxHp
+//        team.add(pokemon5)
+//        team.add(pokemon4)
+//        team.add(pokemon3)
+//        team.add(pokemon2)
+//        team.add(pokemon1)
 
 
         binding.pokeCenterBtn.setOnClickListener {

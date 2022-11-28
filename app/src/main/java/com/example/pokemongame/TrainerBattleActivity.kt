@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -27,6 +28,7 @@ class TrainerBattleActivity : AppCompatActivity() {
     private lateinit var playerTeam: ArrayList<Pokemon>
     private lateinit var trainerName: String
     private var inTrainerBattle: Boolean = false
+    private var numItemUses = 2
 
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(TrainerBattleActivity::class.java.name)
@@ -99,7 +101,13 @@ class TrainerBattleActivity : AppCompatActivity() {
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")
 //        ActivePokemon for the player
-        var playerActivePokemon = ActivePokemon(playerTeam[0], null, 0, true)
+        var index = getFirstHealthyPokemonIndex()
+        if(index == -1) {
+            index = 0
+            Toast.makeText(this, "Need to have a pokemon that's not knocked out", Toast.LENGTH_SHORT).show()
+            returnToMenu()
+        }
+        var playerActivePokemon = ActivePokemon(playerTeam[index], null, 0, true)
         //ActivePokemon for the enemy
         var enemyActivePokemon = ActivePokemon(enemyTeam[0], null, 0, false)
 
@@ -228,10 +236,16 @@ class TrainerBattleActivity : AppCompatActivity() {
         }
 
         binding.itemBtn.setOnClickListener(){
-            binding.potion.visibility = View.VISIBLE
-            if(!inTrainerBattle){
-                binding.capture.visibility = View.VISIBLE
+            if(numItemUses > 0) {
+                numItemUses--
+                binding.potion.visibility = View.VISIBLE
+                if (!inTrainerBattle) {
+                    binding.capture.visibility = View.VISIBLE
 
+                }
+            }
+            else{
+                Toast.makeText(this, "You have reached the maximum number of item uses", Toast.LENGTH_SHORT).show()
             }
         }
         binding.potion.setOnClickListener(){
@@ -246,6 +260,15 @@ class TrainerBattleActivity : AppCompatActivity() {
             hideItems()
         }
         binding.capture.setOnClickListener(){
+            var chanceToCapture = 1-(enemyActivePokemon.pokemon.hp / enemyActivePokemon.pokemon.maxHp)
+            if(chanceToCapture > Random().nextDouble()){
+                collection.add(enemyActivePokemon.pokemon)
+                Toast.makeText(this, enemyActivePokemon.pokemon.name + " has been captured and added to the team", Toast.LENGTH_SHORT).show()
+                returnToMenu()
+            }
+            else{
+                Toast.makeText(this, "could not capture pokemon, returning to battle", Toast.LENGTH_SHORT).show()
+            }
             hideItems()
         }
 
@@ -266,6 +289,14 @@ class TrainerBattleActivity : AppCompatActivity() {
     private fun hideItems() {
         binding.potion.visibility = View.GONE
         binding.capture.visibility = View.GONE
+    }
+    private fun getFirstHealthyPokemonIndex(): Int{
+        for(i in 0 until playerTeam.size){
+            if(playerTeam[i].hp > 0){
+                return i
+            }
+        }
+        return -1
     }
 
     //TO Do put create checkFaintedPokemon method
@@ -327,7 +358,7 @@ class TrainerBattleActivity : AppCompatActivity() {
         }
         maxLevel += 5
         //assign random moves
-        val speciesList : MutableList<String> = mutableListOf("bulbasaur", "charmander", "pidgey")
+        val speciesList : MutableList<String> = mutableListOf("bulbasaur", "charmander", "squirtle")
         val rndPokeList : ArrayList<Pokemon> = arrayListOf()
         for(i in 0..randPokemons){
             val rndSpecies = speciesList[Random().nextInt(speciesList.size)]
