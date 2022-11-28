@@ -86,6 +86,9 @@
         />
 
 
+
+
+
     <Button
         android:id="@+id/fightBtn"
         android:layout_width="wrap_content"
@@ -164,4 +167,6 @@
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
         />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

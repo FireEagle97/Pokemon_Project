@@ -3,9 +3,12 @@ package com.example.pokemongame
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.transition.Visibility
 import com.example.pokemongame.battle.ActivePokemon
 import com.example.pokemongame.battle.BattlePhase
 import com.example.pokemongame.battle.SelectMovesFragment
@@ -18,9 +21,14 @@ import kotlin.collections.ArrayList
 import kotlin.math.min
 import kotlin.math.pow
 
-private lateinit var binding: ActivityTrainerBattleBinding
 
 class TrainerBattleActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityTrainerBattleBinding
+    private lateinit var collection: ArrayList<Pokemon>
+    private lateinit var playerTeam: ArrayList<Pokemon>
+    private lateinit var trainerName: String
+    private var inTrainerBattle: Boolean = false
+    private var numItemUses = 2
 
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(TrainerBattleActivity::class.java.name)
@@ -35,9 +43,9 @@ class TrainerBattleActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         //Trainer name from intent
-        val trainerName = intent.getStringExtra("trainerName").toString()
+        trainerName = intent.getStringExtra("trainerName").toString()
         //Collection from intent (used for catching)
-        var collection = intent.getSerializableExtra("collection") as ArrayList<Pokemon>
+        collection = intent.getSerializableExtra("collection") as ArrayList<Pokemon>
 
         //Initialize Level class for utility
         val levelClass = Level()
@@ -52,7 +60,7 @@ class TrainerBattleActivity : AppCompatActivity() {
 
         //Determine if it's a trainer battle or wild encounter by receiving the incoming
         //intent holding the boolean (true if in trainer battle, false if not)
-        var inTrainerBattle = intent.getBooleanExtra("inTrainerBattle", false)
+        inTrainerBattle = intent.getBooleanExtra("inTrainerBattle", false)
 
         //here Generate enemy team (whether the enemy team is a wild team with one pokemon or a trainer's team
         //is determined by the boolean inTrainerBattle above)
@@ -67,7 +75,7 @@ class TrainerBattleActivity : AppCompatActivity() {
         //Testing block ended
 
         //Holds the player's team
-        var playerTeam =  intent.getSerializableExtra("team") as ArrayList<Pokemon>
+        playerTeam =  intent.getSerializableExtra("team") as ArrayList<Pokemon>
         //Holds the the enemy's team. here change it to generated enemy team above
         var enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
         //test enemyTeam
@@ -93,7 +101,13 @@ class TrainerBattleActivity : AppCompatActivity() {
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")
 //        ActivePokemon for the player
-        var playerActivePokemon = ActivePokemon(playerTeam[0], null, 0, true)
+        var index = getFirstHealthyPokemonIndex()
+        if(index == -1) {
+            index = 0
+            Toast.makeText(this, "Need to have a pokemon that's not knocked out", Toast.LENGTH_SHORT).show()
+            returnToMenu()
+        }
+        var playerActivePokemon = ActivePokemon(playerTeam[index], null, 0, true)
         //ActivePokemon for the enemy
         var enemyActivePokemon = ActivePokemon(enemyTeam[0], null, 0, false)
 
@@ -139,23 +153,6 @@ class TrainerBattleActivity : AppCompatActivity() {
             if(!faintedAndEndBattleArray[0]) {
                 BattlePhase.BattleLog.info("Turn Begun")
 
-                //here Select a Move (Make buttons visible/invisible. Do not prompt a dialog.
-                //I lost too many hours dealing with DialogFragments)
-                //For testing purposes, hardcoded the choice
-                //            playerActivePokemon.chosenMove = playerActivePokemon.pokemon.moves[0]
-                //            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[0]
-
-                //here Use an Item logic (make buttons visible/invisible)
-
-                //Switching button OnClickListener. here, callBattlePhase should be called as well
-
-//                TrainerBattleLog.info{"if enemy fainted: ${faintedAndEndBattleArray[1]}"}
-
-                //here Run logic
-
-                //Battle phase call. Also updates faintedAndEndBattleArray (this should be copied and moved in OnClickListeners)
-
-
                 //If the battle shouldn't end
                 if(!faintedAndEndBattleArray[0]){
                     //Force Switch for enemy team if their active pokemon faints
@@ -181,14 +178,9 @@ class TrainerBattleActivity : AppCompatActivity() {
             } else {
                 BattlePhase.BattleLog.info("Battle Ended")
                 //Return to main menu
-                intent.putExtra("collection", collection as ArrayList<Pokemon>)
-                intent.putExtra("team", playerTeam as ArrayList<Pokemon>)
-                intent.putExtra("trainerName", trainerName)
-                setResult(RESULT_OK, intent)
-                finish()
+                returnToMenu()
             }
         }
-
 
         //here Send out pokemon in index 0 for both teams in the UI
         binding.pokemon1Name.text = playerActivePokemon.pokemon.name
@@ -226,8 +218,70 @@ class TrainerBattleActivity : AppCompatActivity() {
             //call when select move
         }
 
+        binding.itemBtn.setOnClickListener(){
+            if(numItemUses > 0) {
+                binding.potion.visibility = View.VISIBLE
+                if (!inTrainerBattle) {
+                    binding.capture.visibility = View.VISIBLE
+
+                }
+            }
+            else{
+                Toast.makeText(this, "You have reached the maximum number of item uses", Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.potion.setOnClickListener(){
+            if(playerActivePokemon.pokemon.hp + 20 < playerActivePokemon.pokemon.maxHp){
+                playerActivePokemon.pokemon.hp += 20
+            }
+            else{
+                playerActivePokemon.pokemon.hp = playerActivePokemon.pokemon.maxHp
+            }
+            updateUI(playerActivePokemon,enemyActivePokemon)
+            hideItems()
+            numItemUses--
+        }
+        binding.capture.setOnClickListener(){
+            var chanceToCapture = 1-(enemyActivePokemon.pokemon.hp / enemyActivePokemon.pokemon.maxHp)
+            if(chanceToCapture > Random().nextDouble()){
+                collection.add(enemyActivePokemon.pokemon)
+                Toast.makeText(this, enemyActivePokemon.pokemon.name + " has been captured and added to the team", Toast.LENGTH_SHORT).show()
+                returnToMenu()
+            }
+            else{
+                Toast.makeText(this, "could not capture pokemon, returning to battle", Toast.LENGTH_SHORT).show()
+            }
+            hideItems()
+            numItemUses--
+        }
+
+
+        //returns to menu
+        binding.runBtn.setOnClickListener(){
+            returnToMenu();
+        }
         super.onStart()
     }
+    private fun returnToMenu(){
+        intent.putExtra("collection", collection as ArrayList<Pokemon>)
+        intent.putExtra("team", playerTeam as ArrayList<Pokemon>)
+        intent.putExtra("trainerName", trainerName)
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+    private fun hideItems() {
+        binding.potion.visibility = View.GONE
+        binding.capture.visibility = View.GONE
+    }
+    private fun getFirstHealthyPokemonIndex(): Int{
+        for(i in 0 until playerTeam.size){
+            if(playerTeam[i].hp > 0){
+                return i
+            }
+        }
+        return -1
+    }
+
     //TO Do put create checkFaintedPokemon method
     //Prompt a DialogFragment and get the index of the incoming switching-in pokemon
     private fun switch(playerTeam: ArrayList<Pokemon>, teamPositionArray: IntArray, fragmentManager: FragmentManager){
@@ -261,8 +315,13 @@ class TrainerBattleActivity : AppCompatActivity() {
 
     //temp code to return a list of random Pokemon
     //will use it to generate the opponent team
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun generateOpponentTeam(playerTeam:ArrayList<Pokemon>, context: Context): ArrayList<Pokemon>{
-        val randPokemons = Random().nextInt(6);
+
+        var randPokemons = 0 // if not in trainer battle.
+        if(inTrainerBattle){
+            randPokemons = Random().nextInt(6); // if in trainer battle.
+        }
         var minLevel = playerTeam[0].level
         var maxLevel = playerTeam[0].level
         playerTeam.forEachIndexed{index, pokemon ->

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -82,6 +83,33 @@
         app:layout_constraintTop_toBottomOf="@+id/pokemon1_level"
         />
 
+    <TextView
+        android:id="@+id/pokemon1_move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/move_used"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon1_hp"
+        />
+
+    <TextView
+        android:id="@+id/pokemon2_move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/move_used"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon2_hp"
+        />
 
     <Button
         android:id="@+id/fightBtn"
@@ -120,13 +148,14 @@
         android:layout_marginStart="50dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
-        android:text="@string/battle_run"
         android:textColor="@color/blue"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/fightBtn"
-        app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
+        android:text="@string/battle_run"
+        app:layout_constraintBottom_toTopOf="@id/fightBtn"
+        app:layout_constraintStart_toStartOf="parent"
+
         />
     <Button
         android:id="@+id/switchPokeBtn"
@@ -182,8 +211,27 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="150dp"
         />
+    <!-- temp buttons -->
 
-<!--    <Button-->
+    <Button
+        android:id="@+id/capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="capture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/potion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="use potion (+20hp)"
+        app:layout_constraintStart_toEndOf="@id/capture"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <!--    <Button-->
 <!--        android:id="@+id/button"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->

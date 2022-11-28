@@ -29,4 +29,8 @@
     //Battle strings
     <string name="switch_button">Switch</string>
     <string name="select">Select</string>
+    <string name="move_used">move used:</string>
+    <string name="learn_move">Do you want to learn a new Move?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
