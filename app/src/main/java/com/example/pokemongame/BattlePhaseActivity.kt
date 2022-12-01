@@ -256,6 +256,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //returns to menu
         binding.runBtn.setOnClickListener(){
 //            returnToMenu();
+            //for testing purposes
             showAddMoveDialog()
         }
         super.onStart()
@@ -382,6 +383,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
+        //for testing
         Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show()
     }
 
