@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Visibility
 import com.example.pokemongame.battle.ActivePokemon
@@ -22,7 +24,7 @@ import kotlin.math.min
 import kotlin.math.pow
 
 
-class TrainerBattleActivity : AppCompatActivity() {
+class TrainerBattleActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDialogListener {
     private lateinit var binding: ActivityTrainerBattleBinding
     private lateinit var collection: ArrayList<Pokemon>
     private lateinit var playerTeam: ArrayList<Pokemon>
@@ -126,7 +128,6 @@ class TrainerBattleActivity : AppCompatActivity() {
             updateUI(playerActivePokemon,enemyActivePokemon)
             BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
         }
-
         fragmentManager.setFragmentResultListener("movePosition", this){ requestKey, bundle ->
             //Get the position of the pokemon to be switched-in
             var movePosition = bundle.getInt("movePosition")
@@ -258,7 +259,8 @@ class TrainerBattleActivity : AppCompatActivity() {
 
         //returns to menu
         binding.runBtn.setOnClickListener(){
-            returnToMenu();
+//            returnToMenu();
+            showAddMoveDialog()
         }
         super.onStart()
     }
@@ -302,6 +304,7 @@ class TrainerBattleActivity : AppCompatActivity() {
         selectMoveFragment.arguments = bundle
         selectMoveFragment.show(fragmentManager, "fragment")
     }
+
 
     //Calls the battle phase and updated the faintedAndEndBattleArray
     private fun callBattlePhase(battlePhase: BattlePhase, playerActivePokemon: ActivePokemon, enemyActivePokemon: ActivePokemon,
@@ -376,4 +379,19 @@ class TrainerBattleActivity : AppCompatActivity() {
         binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
         binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
     }
+    private fun showAddMoveDialog() {
+        // Create an instance of the dialog fragment and show it
+        val dialog = AddMoveDialogFragment()
+        dialog.show(supportFragmentManager, "AddMoveDialogFragment")
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        // User touched the dialog's negative button
+    }
+
+
 }
