@@ -8,9 +8,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
-import com.example.pokemongame.pokemon.Level
 import com.example.pokemongame.pokemon.Pokemon
-import com.example.pokemongame.pokemon.PokemonCreator
 import com.example.pokemongame.team_collection.TeamActivity
 import java.util.logging.Logger
 
@@ -96,7 +94,7 @@ class MainMenuActivity : AppCompatActivity() {
 
         //Button for wild battles
         binding.wildBattleBtn.setOnClickListener{
-            val intent = Intent(this, TrainerBattleActivity::class.java)
+            val intent = Intent(this, BattlePhaseActivity::class.java)
             intent.putExtra("team", team)
             intent.putExtra("collection", collection)
             intent.putExtra("trainerName", trainerName)
@@ -105,7 +103,7 @@ class MainMenuActivity : AppCompatActivity() {
         }
 
         binding.trainerBattleBtn.setOnClickListener{
-            val intent = Intent(this, TrainerBattleActivity::class.java)
+            val intent = Intent(this, BattlePhaseActivity::class.java)
             intent.putExtra("team", team)
             intent.putExtra("collection", collection)
             intent.putExtra("trainerName", trainerName)

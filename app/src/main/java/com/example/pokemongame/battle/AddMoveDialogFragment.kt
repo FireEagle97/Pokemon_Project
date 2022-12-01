@@ -14,14 +14,11 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.example.pokemongame.databinding.AddMoveFragmentBinding
 
 
 class AddMoveDialogFragment : DialogFragment() {
 
     internal lateinit var listener : AddMoveDialogListener
-private lateinit var binding: AddMoveFragmentBinding
-     var learnMove: Boolean = false
 
     interface AddMoveDialogListener {
         fun onDialogPositiveClick(dialog: DialogFragment)
@@ -35,10 +32,8 @@ private lateinit var binding: AddMoveFragmentBinding
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
-            val addMoveLayout = layoutInflater.inflate(R.layout.add_move_fragment, null)
-//            val inflater = requireActivity().layoutInflater
-            builder.setView(addMoveLayout)
-
+                .setTitle("Learn a move")
+                .setMessage("Do you want to learn a new Move?")
                 .setPositiveButton(R.string.yes,
                     DialogInterface.OnClickListener { dialog, id ->
                         // Send the positive button event back to the host activity
@@ -49,8 +44,6 @@ private lateinit var binding: AddMoveFragmentBinding
                         // Send the negative button event back to the host activity
                         listener.onDialogNegativeClick(this)
                     })
-
-
             // Create the AlertDialog object and return it
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
@@ -64,7 +57,7 @@ private lateinit var binding: AddMoveFragmentBinding
         super.onAttach(context)
         // Verify that the host activity implements the callback interface
         try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
+            // Instantiate the AddMoveDialogListener so we can send events to the host
             listener = context as AddMoveDialogListener
         } catch (e: ClassCastException) {
             // The activity doesn't implement the interface, throw exception

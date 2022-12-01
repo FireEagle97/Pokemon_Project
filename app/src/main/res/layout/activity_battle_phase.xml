@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_weight="2">
-
+    android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/battle_ground_port"
-        />
+        tools:layout_editor_absoluteX="-89dp"
+        tools:layout_editor_absoluteY="206dp" />
 
     <TextView
         android:id="@+id/pokemon1_name"
@@ -85,8 +84,19 @@
         app:layout_constraintTop_toBottomOf="@+id/pokemon1_level"
         />
 
-
-
+    <TextView
+        android:id="@+id/pokemons_move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/move_used"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon1_hp"
+        />
 
 
     <Button
@@ -94,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="50dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
         android:text="@string/battle_fight"
@@ -104,7 +114,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
-      />
+        />
 
     <TextView
         android:id="@+id/pokemon2_hp"
@@ -123,16 +133,17 @@
         android:id="@+id/runBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="50dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
-        android:text="@string/battle_run"
         android:textColor="@color/blue"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/fightBtn"
-        app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
+        android:text="@string/battle_run"
+        app:layout_constraintBottom_toTopOf="@id/fightBtn"
+        app:layout_constraintStart_toStartOf="parent"
+
         />
     <Button
         android:id="@+id/switchPokeBtn"
@@ -154,8 +165,7 @@
         android:id="@+id/itemBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-
+        android:layout_marginStart="50dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
         android:text="@string/item"
@@ -168,5 +178,45 @@
         app:strokeWidth="2dp"
         />
 
+    <ImageView
+        android:id="@+id/pokemon1_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/question_mark"
+        app:layout_constraintBottom_toTopOf="@id/runBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="150dp"
+        />
+
+    <ImageView
+        android:id="@+id/pokemon2_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/question_mark"
+        app:layout_constraintBottom_toTopOf="@id/runBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="150dp"
+        />
+    <!-- temp buttons -->
+
+    <Button
+        android:id="@+id/capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="capture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/potion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="use potion (+20hp)"
+        app:layout_constraintStart_toEndOf="@id/capture"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
