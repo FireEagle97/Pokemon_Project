@@ -32,7 +32,8 @@
         <activity android:name=".MainMenuActivity">
 
         </activity>
-        <activity android:name=".BattlePhaseActivity">
+
+        <activity android:name=".BattleActivity">
 
         </activity>
 

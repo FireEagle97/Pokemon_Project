@@ -81,7 +81,7 @@ class PokemonCreator {
                 moves,
                 experience,
                 level,
-                hp
+                hp,
         )
     }
 }
