@@ -1,13 +1,16 @@
 package com.example.pokemongame.battle
 
 import android.content.Context
+import androidx.fragment.app.FragmentManager
 import com.example.pokemongame.pokemon.Level
 import com.example.pokemongame.pokemon.Move
 import com.example.pokemongame.pokemon.Pokemon
 import java.util.Random
 import java.util.logging.Logger
 
-class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>) {
+class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,
+                  val fragmentManager: FragmentManager
+) {
     companion object{
         val BattleLog: Logger = Logger.getLogger(BattlePhase::class.java.name)
     }
@@ -27,7 +30,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
         //First turn
         playSingularTurn(speedArray, true, inTrainerBattle, pokemonPlayer.indexInTeam,
-            pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
+            pokemonEnemy.indexInTeam, faintedAndEndBattleArray, fragmentManager, context)
         //If the opposing pokemon has fainted, skip its turn, else perform its turn
         if(faintedAndEndBattleArray[1]){
             //Check if the battle ended, if so, do not log this message
@@ -36,7 +39,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             }
         } else {
             //Second turn
-            playSingularTurn(speedArray, false, inTrainerBattle, pokemonPlayer.indexInTeam, pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
+            playSingularTurn(speedArray, false, inTrainerBattle, pokemonPlayer.indexInTeam, pokemonEnemy.indexInTeam, faintedAndEndBattleArray, fragmentManager, context)
         }
 
         return faintedAndEndBattleArray
@@ -45,7 +48,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
     //Plays a single trainer's turn
     private fun playSingularTurn(speedArray: Array<ActivePokemon>, firstTurn: Boolean, inTrainerBattle: Boolean,
                                  pokemonPlayerIndex: Int, pokemonEnemyIndex: Int,
-                                 faintedAndEndBattleArray: Array<Boolean>, context: Context){
+                                 faintedAndEndBattleArray: Array<Boolean>, fragmentManager: FragmentManager, context: Context){
         var index = if (firstTurn){
             0
         } else {
@@ -64,7 +67,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             if(faintCheck(speedArray, firstTurn)){
                 faintedAndEndBattleArray[1] = true
                 onFaint(speedArray, firstTurn, inTrainerBattle, pokemonPlayerIndex, pokemonEnemyIndex,
-                    faintedAndEndBattleArray, context)
+                    faintedAndEndBattleArray, fragmentManager, context)
             }
         } else {
             BattleLog.info("Trainer chose another action than fighting. Turn will be skipped")
@@ -179,11 +182,14 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
     //Awards experience, checks if someone won, else forces a switch
     private fun onFaint(speedArray: Array<ActivePokemon>, firstTurn: Boolean, inTrainerBattle: Boolean,
-                        pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, faintedAndEndBattleArray: Array<Boolean>, context: Context) {
+                        pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, faintedAndEndBattleArray: Array<Boolean>, fragmentManager: FragmentManager, context: Context) {
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
 
         //Fainted pokemon will always be in [1]
         BattleLog.info("${speedArray[1].pokemon.name} has fainted!")
+
+        //Find if fainted pokemon is in player team or not
+        faintedAndEndBattleArray[2] = speedArray[1].inPlayerTeam
 
         //Give exp to victor
         var gainedExperience: Double = 0.3 * speedArray[1].pokemon.experienceReward * speedArray[1].pokemon.level
@@ -191,7 +197,13 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             BattleLog.info("Double xp applied due to trainer battle!")
             gainedExperience *= 2.0
         }
-        Level().addExperience(speedArray[0].pokemon, gainedExperience, context)
+        if(faintedAndEndBattleArray[2]) {
+            //If fainted pokemon is in player's team, reward enemy pokemon by not calling the fragment manager
+            Level().addExperience(speedArray[0].pokemon, gainedExperience, context)
+        } else {
+            //If fainted pokemon is not in player's team, reward player pokemon by calling fragment manager
+            Level(fragmentManager).addExperience(speedArray[0].pokemon, gainedExperience, context)
+        }
 
         //Update teams due to xp gain
         updateTeam(pokemonPlayerIndex, pokemonEnemyIndex, speedArray)
@@ -208,9 +220,6 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             }
             swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
             faintedAndEndBattleArray[0] = true
-        } else {
-            //Find if fainted pokemon is in player team or not
-            faintedAndEndBattleArray[2] = speedArray[1].inPlayerTeam
         }
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
     }
