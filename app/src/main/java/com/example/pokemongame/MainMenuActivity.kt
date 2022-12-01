@@ -1,19 +1,24 @@
 package com.example.pokemongame
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
 import com.example.pokemongame.pokemon.Level
 import com.example.pokemongame.pokemon.Pokemon
 import com.example.pokemongame.pokemon.PokemonCreator
 import com.example.pokemongame.team_collection.TeamActivity
+import java.util.logging.Logger
+
 
 class MainMenuActivity : AppCompatActivity() {
     companion object {
         private const val LOG_TAG = "M_M_ACTIVITY_DEV_LOG"
+        val mainMenuLog : Logger = Logger.getLogger(MainMenuActivity::class.java.name)
         private const val REQ_CODE = 1234
     }
     private lateinit var binding: ActivityMainMenuBinding
@@ -21,6 +26,7 @@ class MainMenuActivity : AppCompatActivity() {
     private lateinit var trainerName: String
     private lateinit var collection: ArrayList<Pokemon>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
@@ -40,19 +46,38 @@ class MainMenuActivity : AppCompatActivity() {
 //        Level().initializeLevels(pokemon,pokemon.level,applicationContext)
 //        pokemon.hp = pokemon.maxHp
 //        collection.add(pokemon)
-
-
-
-
+        val pokemon1 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
+        Level().initializeLevels(pokemon1,pokemon1.level,applicationContext)
+        pokemon1.hp = pokemon1.maxHp
+        val pokemon2 = PokemonCreator().createPokemon(4, "bulbasaur",applicationContext)
+        Level().initializeLevels(pokemon2,pokemon2.level,applicationContext)
+        pokemon2.hp = pokemon2.maxHp
+        val pokemon3 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
+        Level().initializeLevels(pokemon3,pokemon3.level,applicationContext)
+        pokemon2.hp = pokemon2.maxHp
+        val pokemon4 = PokemonCreator().createPokemon(3, "charmander",applicationContext)
+        Level().initializeLevels(pokemon4,pokemon4.level,applicationContext)
+        pokemon4.hp = pokemon4.maxHp
+        val pokemon5 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
+        Level().initializeLevels(pokemon5,pokemon5.level,applicationContext)
+        pokemon5.hp = pokemon5.maxHp
+        team.add(pokemon5)
+        team.add(pokemon4)
+        team.add(pokemon3)
+        team.add(pokemon2)
+        team.add(pokemon1)
 
 
         binding.pokeCenterBtn.setOnClickListener {
-//            val intent = Intent(this, PokemonCenterActivity::class.java)
-//            startActivity(intent)
-            //call a method to reset pp to maxPP and hp to maxHp
+            for (pokemon in team) {
+                pokemon.hp = pokemon.maxHp
+                pokemon.moves.forEachIndexed { index, move ->
+                    move.pp = move.maxPP
+                }
+            }
             Toast.makeText(
                 applicationContext,
-                "Your pokemon team is ready to battle! ",
+                "Your pokemon team has been restored to full health! ",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -63,6 +88,10 @@ class MainMenuActivity : AppCompatActivity() {
             intent.putExtra("collection", collection)
             intent.putExtra("trainerName", trainerName)
             startActivityForResult(intent, REQ_CODE)
+        }
+        binding.trainerBattleBtn.setOnClickListener{
+            val intent = Intent(this, BattlePhaseActivity::class.java)
+            startActivity(intent)
         }
 
         //Button for wild battles

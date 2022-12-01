@@ -34,12 +34,23 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Poke
         val binding = holder.binding
         val pokemonInfo = pokemonList[position]
         // WILL NEED TO DECIDE HOW TO DISPLAY POKEMON (WHAT INFO)
-        binding.pokemonInfo.text = buildString {
-        append(pokemonInfo.name)
-        append(" ")
-        append(pokemonInfo.hp)
-    }
-        binding.pokemonInfo.setCompoundDrawablesWithIntrinsicBounds(0,0,getPokemonImageResourceId(pokemonInfo.battleStats.species),0,)
+        binding.pokemonName.text = pokemonInfo.name
+        binding.hp.text = buildString {
+            append(pokemonInfo.hp.toString())
+            append(" / ")
+            append(pokemonInfo.maxHp.toString())
+            append("HP")
+        }
+        binding.lvl.text = buildString {
+            append("lvl ")
+            append(pokemonInfo.level.toString())
+        }
+        binding.species.text =  buildString {
+            append("(")
+            append(pokemonInfo.battleStats.species.toString())
+            append(")")
+        }
+        binding.sprite.setImageResource(getPokemonImageResourceId(pokemonInfo.battleStats.species))
     }
 
 

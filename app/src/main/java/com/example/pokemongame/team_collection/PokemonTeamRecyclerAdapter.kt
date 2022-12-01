@@ -49,13 +49,25 @@ class PokemonTeamRecyclerAdapter(private val pokemonList: MutableList<Pokemon>, 
         //WILL NEED TO DECIDE WHAT DATA TO SHOW HERE
         val binding = holder.binding
         val pokemonInfo = pokemonList[position]
-        binding.pokemonInfo.text = buildString {
-        append(pokemonInfo.name)
-        append(" ")
-        append(pokemonInfo.hp)
+        binding.pokemonName.text = pokemonInfo.name
+        binding.hp.text = buildString {
+        append(pokemonInfo.hp.toString())
+        append(" / ")
+        append(pokemonInfo.maxHp.toString())
+        append("HP")
     }
-        binding.pokemonInfo.setCompoundDrawablesWithIntrinsicBounds(0,0,
-            getPokemonImageResourceId(pokemonInfo.battleStats.species),0,)
+        binding.lvl.text = buildString {
+        append("lvl ")
+        append(pokemonInfo.level.toString())
+    }
+        binding.species.text =  buildString {
+        append("(")
+        append(pokemonInfo.battleStats.species.toString())
+        append(")")
+    }
+
+        binding.sprite.setImageResource(getPokemonImageResourceId(pokemonInfo.battleStats.species))
+
 
 
 

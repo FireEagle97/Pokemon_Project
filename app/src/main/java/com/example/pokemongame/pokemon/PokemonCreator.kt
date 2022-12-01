@@ -34,18 +34,6 @@ class PokemonCreator {
         return gson.fromJson(battleStatsData, listBattleStatsType)
 
     }
-    //temp code to reset pp and hp to its max value
-    fun resetPokemons(context: Context) : List<Pokemon>{
-        val pokemon1 = createPokemon(2,"bulbasaur", context)
-        val pokemon2 = createPokemon(1,"charmander", context)
-        val pokemon3 = createPokemon(3, "chamander", context)
-        val pokemonList : List<Pokemon> = listOf(pokemon1,pokemon2,pokemon3)
-        for (pokemon in pokemonList) {
-            pokemon.hp = 0
-            pokemon.moves.forEachIndexed{ index, move -> move.pp = move.maxPP}
-        }
-        return pokemonList
-    }
     //temp code to return a list of random Pokemon
     //will use it to generate the opponent team
     fun generateOpponentTeam(context: Context): List<Pokemon>{
