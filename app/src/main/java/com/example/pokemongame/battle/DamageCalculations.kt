@@ -1,11 +1,8 @@
 package com.example.pokemongame.battle
 
 import android.content.Context
-import com.example.pokemongame.JSONReader
 import com.example.pokemongame.pokemon.Move
-import com.example.pokemongame.pokemon.MoveAssigner
 import com.example.pokemongame.pokemon.Pokemon
-import com.google.gson.Gson
 import java.util.logging.Logger
 import kotlin.math.floor
 
@@ -38,9 +35,11 @@ class DamageCalculations {
 
     private fun calculateTypeEffectiveness(attackerMove: Move, defenderPokemon: Pokemon, context: Context): Double{
         var multiplier: Double = 1.0
-        val gson = Gson()
-        var effectivenessJsonString = JSONReader().jSONReader(context, "type_relations/${attackerMove.type}.json")
-        var effectivenessRelations = gson.fromJson(effectivenessJsonString, Map::class.java)
+
+//        val gson = Gson()
+//        var effectivenessJsonString = JSONReader().jSONReader(context, "type_relations/${attackerMove.type}.json")
+//        var effectivenessRelations = gson.fromJson(effectivenessJsonString, Map::class.java)
+
 
         defenderPokemon.battleStats.types.forEach {
             if(effectivenessRelations[it] != null){
@@ -51,6 +50,7 @@ class DamageCalculations {
                 }
             }
         }
+
         //Log a battle message
         when(multiplier){
             0.0 -> DamageLog.info("It had no effect...")

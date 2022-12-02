@@ -2,15 +2,12 @@ package com.example.pokemongame.pokemon
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.example.pokemongame.AddMoveDialogFragment
-import com.example.pokemongame.JSONReader
+import com.example.pokemongame.utility.JSONReader
 import com.example.pokemongame.battle.SelectMovesFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.*
 import java.util.logging.Logger
 
 class MoveAssigner {

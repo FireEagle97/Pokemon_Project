@@ -1,4 +1,4 @@
-package com.example.pokemongame
+package com.example.pokemongame.utility
 
 import android.content.Context
 import java.io.IOException
