@@ -1,11 +1,19 @@
 package com.example.pokemongame.pokemon
 
 import android.content.Context
+import androidx.fragment.app.FragmentManager
 import kotlin.math.floor
 import java.util.logging.Logger
 import kotlin.math.pow
 
 class Level {
+    lateinit var moveAssigner: MoveAssigner
+    constructor(){
+        moveAssigner = MoveAssigner()
+    }
+    constructor(fragmentManager: FragmentManager){
+        moveAssigner = MoveAssigner(fragmentManager)
+    }
     companion object{
         val LevelLog: Logger = Logger.getLogger(Level::class.java.name)
     }
@@ -38,7 +46,7 @@ class Level {
     }
 
     //levels up a pokemon (raises its level, raises its stats, and calls assignNewMoves())
-    private fun levelUp(pokemon: Pokemon, context: Context){
+    fun levelUp(pokemon: Pokemon, context: Context){
         pokemon.level++
         LevelLog.info("${pokemon.name} has leveled up to level ${pokemon.level}!")
 
@@ -63,7 +71,7 @@ class Level {
         pokemon.speed = newSpeedStat.toInt()
 
         //Assign new moves (if any)
-        MoveAssigner().assignNewMoves(pokemon, pokemon.level, context)
+        moveAssigner.assignNewMoves(pokemon, pokemon.level, context)
 
         //Evolution code (not needed for milestone 1)
     }

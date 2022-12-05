@@ -12,7 +12,7 @@ import com.example.pokemongame.R
 import com.example.pokemongame.pokemon.Move
 
 
-class SelectMovesAdapter(private val moves: ArrayList<Move>, var movePosition: IntArray, val dialogFragment: DialogFragment): RecyclerView.Adapter<SelectMovesAdapter.ViewHolder>(){
+class SelectMovesAdapter(private val moves: ArrayList<Move>, var movePosition: IntArray, val dialogFragment: DialogFragment, val battle: Boolean): RecyclerView.Adapter<SelectMovesAdapter.ViewHolder>(){
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val moveName : TextView = view.findViewById(R.id.moveName)
         var movePP : TextView = view.findViewById(R.id.movePP)
@@ -27,16 +27,24 @@ class SelectMovesAdapter(private val moves: ArrayList<Move>, var movePosition: I
     }
 
     override fun onBindViewHolder(viewholder: ViewHolder, position: Int){
+        if(!battle){
+            viewholder.selectButton.text = "Replace"
+        }
         viewholder.moveName.text = moves[position].name
         viewholder.movePP.text = moves[position].pp.toString()
         //check if move can be selected
         viewholder.selectButton.setOnClickListener{
-            if(moves[position].pp > 0){
+            if(battle){
+                if(moves[position].pp > 0){
+                    getMovePosition(position)
+                    dialogFragment.dismiss()
+                }else {
+                    Toast.makeText(viewholder.itemView.context, "Your pokemon needs to rest to use this move", Toast.LENGTH_LONG).show()
+
+                }
+            } else {
                 getMovePosition(position)
                 dialogFragment.dismiss()
-            }else {
-                Toast.makeText(viewholder.itemView.context, "Your pokemon needs to rest to use this move", Toast.LENGTH_LONG).show()
-
             }
         }
 

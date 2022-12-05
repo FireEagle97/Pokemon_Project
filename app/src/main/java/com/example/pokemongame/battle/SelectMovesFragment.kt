@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemongame.R
 import com.example.pokemongame.pokemon.Move
 
-class SelectMovesFragment() : DialogFragment(){
+class SelectMovesFragment(val battle: Boolean) : DialogFragment(){
     lateinit var movesList: ArrayList<Move>
     lateinit var movePosition : IntArray
 
@@ -32,11 +32,15 @@ class SelectMovesFragment() : DialogFragment(){
         movePosition = requireArguments().getIntArray("movePosition") as IntArray
 
         //Assign the adapter with the returned objects
-        recyclerView.adapter = SelectMovesAdapter(movesList,movePosition,this)
+        recyclerView.adapter = SelectMovesAdapter(movesList,movePosition,this, battle)
         return view
     }
     override fun onDismiss(dialog: DialogInterface){
         super.onDismiss(dialog)
-        setFragmentResult("movePosition", bundleOf("movePosition" to movePosition[0]))
+        if(battle) {
+            setFragmentResult("movePosition", bundleOf("movePosition" to movePosition[0]))
+        } else {
+            setFragmentResult("newMovePosition", bundleOf("movePosition" to movePosition[0]))
+        }
     }
 }

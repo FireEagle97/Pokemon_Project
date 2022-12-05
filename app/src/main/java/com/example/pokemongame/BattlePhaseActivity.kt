@@ -20,13 +20,21 @@ import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
 
-class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDialogListener {
+class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDialogListener{
     private lateinit var binding: ActivityBattlePhaseBinding
     private lateinit var collection: ArrayList<Pokemon>
     private lateinit var playerTeam: ArrayList<Pokemon>
     private lateinit var trainerName: String
     private var inTrainerBattle: Boolean = false
     private var numItemUses = 2
+    //Initialize fragmentManager for various tasks
+    val fragmentManager = supportFragmentManager
+    //Initialize Level class for utility
+    val levelClass = Level(fragmentManager, )
+    //new Move holder for player
+    lateinit var newMove: Move
+    //pokemon that will learn a new move
+    lateinit var pokemonToLearnMove: Pokemon
 
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(BattlePhaseActivity::class.java.name)
@@ -45,10 +53,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //Collection from intent (used for catching)
         collection = intent.getSerializableExtra("collection") as ArrayList<Pokemon>
 
-        //Initialize Level class for utility
-        val levelClass = Level()
-        //Initialize fragmentManager for various tasks
-        val fragmentManager = supportFragmentManager
         //hold a move position
         var movePositionArray: IntArray = intArrayOf(0)
         //Will hold the position of a yet-to-be switched-in pokemon in the player`s team
@@ -94,7 +98,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 //
 //        }
         //Init Battle Phase with respective teams for utility and data consistency
-        var battlePhase = BattlePhase(playerTeam, enemyTeam)
+        var battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager)
 
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")
@@ -108,6 +112,27 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         var playerActivePokemon = ActivePokemon(playerTeam[index], null, 0, true)
         //ActivePokemon for the enemy
         var enemyActivePokemon = ActivePokemon(enemyTeam[0], null, 0, false)
+
+        //Fragment listener for new moves
+        fragmentManager.setFragmentResultListener("newMove", this){ requestKey, bundle ->
+            newMove = bundle.getSerializable("newMove") as Move
+            pokemonToLearnMove = bundle.getSerializable("pokemon") as Pokemon
+            var decision = bundle.getBoolean("decision")
+            //Testing block
+//            TrainerBattleLog.info("New move: ${newMove.toString()}")
+//            TrainerBattleLog.info("Pokemon: ${pokemonToLearnMove.toString()}")
+//            TrainerBattleLog.info("Bool: $decision")
+            //Testing block end
+            if(decision) {
+                MoveAssigner(fragmentManager).addMoveOrSummonFragment(pokemonToLearnMove, newMove)
+            }
+        }
+
+        fragmentManager.setFragmentResultListener("newMovePosition", this) { _,bundle ->
+            var movePosition = bundle.getInt("movePosition")
+            TrainerBattleLog.info(movePosition.toString())
+            MoveAssigner().replaceMove(pokemonToLearnMove, newMove, movePosition)
+        }
 
         //Upon the DialogFragment closing, turn the switched-in pokemon into an ActivePokemon stored in the playerActivePokemon var
         //Note: Since The teams get updated in the Battle_Phase class, we just need to copy a pokemon from our team
@@ -257,7 +282,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.runBtn.setOnClickListener(){
 //            returnToMenu();
             //for testing purposes
-            showAddMoveDialog()
+            //showAddMoveDialog()
+            //levelClass.levelUp(playerTeam[0], this)
         }
         super.onStart()
     }
@@ -297,7 +323,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         val bundle = Bundle()
         bundle.putSerializable("moves", movesList)
         bundle.putIntArray("movePosition", movePositionArray)
-        val selectMoveFragment = SelectMovesFragment()
+        val selectMoveFragment = SelectMovesFragment(true)
         selectMoveFragment.arguments = bundle
         selectMoveFragment.show(fragmentManager, "fragment")
     }
@@ -376,19 +402,20 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
         binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
     }
-    private fun showAddMoveDialog() {
-        // Create an instance of the dialog fragment and show it
-        val dialog = AddMoveDialogFragment()
-        dialog.show(supportFragmentManager, "AddMoveDialogFragment")
-    }
+//    private fun showAddMoveDialog() {
+//        // Create an instance of the dialog fragment and show it
+//        val dialog = AddMoveDialogFragment()
+//        dialog.show(supportFragmentManager, "AddMoveDialogFragment")
+//    }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
-        //for testing
-        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show()
+        //positive button
+        TrainerBattleLog.info("Trainer chose yes")
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
         // User touched the dialog's negative button
+        TrainerBattleLog.info("Trainer chose no")
     }
 
 

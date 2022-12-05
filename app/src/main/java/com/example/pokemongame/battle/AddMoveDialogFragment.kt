@@ -14,11 +14,16 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import com.example.pokemongame.pokemon.Move
+import com.example.pokemongame.pokemon.Pokemon
 
 
-class AddMoveDialogFragment : DialogFragment() {
+class AddMoveDialogFragment() : DialogFragment() {
 
     internal lateinit var listener : AddMoveDialogListener
+    lateinit var newMove: Move
+    lateinit var pokemon: Pokemon
+    var decision = false
 
     interface AddMoveDialogListener {
         fun onDialogPositiveClick(dialog: DialogFragment)
@@ -28,21 +33,24 @@ class AddMoveDialogFragment : DialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
+        newMove = arguments?.getSerializable("newMove") as Move
+        pokemon = arguments?.getSerializable("pokemon") as Pokemon
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
                 .setTitle("Learn a move")
-                .setMessage("Do you want to learn a new Move?")
+                .setMessage("Do you want to learn the move ${newMove.name}?")
                 .setPositiveButton(R.string.yes,
                     DialogInterface.OnClickListener { dialog, id ->
                         // Send the positive button event back to the host activity
-                        listener.onDialogPositiveClick(this)
+                        //listener.onDialogPositiveClick(this)
+                        decision = true
                     })
                 .setNegativeButton(R.string.no,
                     DialogInterface.OnClickListener { dialog, id ->
                         // Send the negative button event back to the host activity
-                        listener.onDialogNegativeClick(this)
+                        //listener.onDialogNegativeClick(this)
+                        decision = false
                     })
             // Create the AlertDialog object and return it
             builder.create()
@@ -51,7 +59,7 @@ class AddMoveDialogFragment : DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface){
         super.onDismiss(dialog)
-        setFragmentResult("learnMove", bundleOf("learnMove" to false))
+        setFragmentResult("newMove", bundleOf("newMove" to newMove, "pokemon" to pokemon, "decision" to decision))
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
