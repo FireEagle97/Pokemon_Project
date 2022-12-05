@@ -3,7 +3,10 @@ package com.example.pokemongame
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +55,11 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         trainerName = intent.getStringExtra("trainerName").toString()
         //Collection from intent (used for catching)
         collection = intent.getSerializableExtra("collection") as ArrayList<Pokemon>
+
+        //Textview to display battle messages
+        val battleText = binding.battleText
+        //RelativeLayout holding all buttons
+        val buttons = binding.buttons
 
         //hold a move position
         var movePositionArray: IntArray = intArrayOf(0)
@@ -113,8 +121,43 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //ActivePokemon for the enemy
         var enemyActivePokemon = ActivePokemon(enemyTeam[0], null, 0, false)
 
+        //here Send out pokemon in index 0 for both teams in the UI
+        binding.pokemon1Name.text = playerActivePokemon.pokemon.name
+        var pPokemonLevel  = "level: " + playerActivePokemon.pokemon.level
+        binding.pokemon1Level.text = pPokemonLevel
+        var pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
+        binding.pokemon1Hp.text = pPokemon1Hp
+        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+
+        //If we are in a trainer battle, print a "sent out" message, else print a "appeared" message
+        var adversary: String
+        if(inTrainerBattle){
+            adversary = "opponent's"
+            TrainerBattleLog.info("The $adversary ${enemyActivePokemon.pokemon.name} was sent out!")
+            battleText.text = "The $adversary ${enemyActivePokemon.pokemon.name} was sent out!"
+        } else {
+            adversary = "wild"
+            TrainerBattleLog.info("A $adversary ${enemyActivePokemon.pokemon.name} appeared!")
+            battleText.text = "A $adversary ${enemyActivePokemon.pokemon.name} appeared!"
+        }
+        battleText.visibility = VISIBLE
+        battleText.hint = "stop"
+        buttons.visibility = INVISIBLE
+
+        binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
+        var ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
+        binding.pokemon2Level.text = ePokemonLevel
+        var ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
+        binding.pokemon2Hp.text = ePokemon2Hp
+        binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
+        //Hide pokemon2's data
+        binding.pokemon2Name.visibility = INVISIBLE
+        binding.pokemon2Level.visibility = INVISIBLE
+        binding.pokemon2Hp.visibility = INVISIBLE
+        binding.pokemon2Img.visibility = INVISIBLE
+
         //Fragment listener for new moves
-        fragmentManager.setFragmentResultListener("newMove", this){ requestKey, bundle ->
+        fragmentManager.setFragmentResultListener("newMove", this){ _, bundle ->
             newMove = bundle.getSerializable("newMove") as Move
             pokemonToLearnMove = bundle.getSerializable("pokemon") as Pokemon
             var decision = bundle.getBoolean("decision")
@@ -149,27 +192,28 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             updateUI(playerActivePokemon,enemyActivePokemon)
             BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
         }
+
         fragmentManager.setFragmentResultListener("movePosition", this){ requestKey, bundle ->
             //Get the position of the pokemon to be switched-in
             var movePosition = bundle.getInt("movePosition")
-            TrainerBattleLog.info {
-                "enemy Moves list size ${enemyActivePokemon.pokemon.moves.size}"
-            }
+//            TrainerBattleLog.info {
+//                "enemy Moves list size ${enemyActivePokemon.pokemon.moves.size}"
+//            }
             var enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
-            TrainerBattleLog.info{
-                "The move Position : $movePosition"
-            }
+//            TrainerBattleLog.info{
+//                "The move Position : $movePosition"
+//            }
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
             playerActivePokemon = ActivePokemon(playerActivePokemon.pokemon, playerActivePokemon.pokemon.moves[movePosition],playerTeam.indexOf(playerActivePokemon.pokemon),true)
             enemyActivePokemon = ActivePokemon(enemyActivePokemon.pokemon, enemyActivePokemon.pokemon.moves[enemyMovePosition], enemyTeam.indexOf(enemyActivePokemon.pokemon), false)
-            TrainerBattleLog.info{
-                "the pokemon: ${playerActivePokemon.pokemon.name}\n"+
-                "the pokemon move: ${playerActivePokemon.chosenMove}"
-            }
+//            TrainerBattleLog.info{
+//                "the pokemon: ${playerActivePokemon.pokemon.name}\n"+
+//                "the pokemon move: ${playerActivePokemon.chosenMove}"
+//            }
             callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
 //            playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
-            TrainerBattleLog.info{"if enemy fainted in fight fragment: ${faintedAndEndBattleArray[1]}"}
-            TrainerBattleLog.info{"if player fainted in fight fragment: ${faintedAndEndBattleArray[2]}"}
+//            TrainerBattleLog.info{"if enemy fainted in fight fragment: ${faintedAndEndBattleArray[1]}"}
+//            TrainerBattleLog.info{"if player fainted in fight fragment: ${faintedAndEndBattleArray[2]}"}
             updateUI(playerActivePokemon,enemyActivePokemon)
 //            BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
             if(!faintedAndEndBattleArray[0]) {
@@ -189,11 +233,11 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                         }
                     }
 
-                    //Force Switch for player team if their active pokemon faints
+                    //Force Switch player team if their active pokemon faints
                     if(faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
                         switch(playerTeam, teamPositionArray, fragmentManager)
                         updateUI(playerActivePokemon,enemyActivePokemon)
-                        BattlePhase.BattleLog.info("player's ${playerActivePokemon.pokemon.name} switched in!")
+                        BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
                     }
                 }
                 BattlePhase.BattleLog.info("Turn Ended")
@@ -204,46 +248,26 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             }
         }
 
-        //here Send out pokemon in index 0 for both teams in the UI
-        binding.pokemon1Name.text = playerActivePokemon.pokemon.name
-        var pPokemonLevel  = "level: " + playerActivePokemon.pokemon.level
-        binding.pokemon1Level.text = pPokemonLevel
-        var pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
-        binding.pokemon1Hp.text = pPokemon1Hp
-        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
-
-        //If we are in a trainer battle, print a "sent out" message, else print a "appeared" message
-        var adversary: String
-        if(inTrainerBattle){
-            adversary = "opponent's"
-            TrainerBattleLog.info("The $adversary ${enemyActivePokemon.pokemon.name} was sent out!")
-        } else {
-            adversary = "wild"
-            TrainerBattleLog.info("A $adversary ${enemyActivePokemon.pokemon.name} appeared!")
-        }
-
-        binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
-        var ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
-        binding.pokemon2Level.text = ePokemonLevel
-        var ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
-        binding.pokemon2Hp.text = ePokemon2Hp
-        binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
-
-
         //here The buttonProceed is a temporary way to manage the turn order. In reality, all buttons should have
         //OnClickListeners (except Run) that eventually call .playBattleTurn, but before doing so, they should
         //change either the playerActivePokemon or enemyActivePokemon's properties according to the logic of the action
         //If the battle shouldn't end
         binding.switchPokeBtn.setOnClickListener {
-            TrainerBattleLog.info{
-                "playerTeamSize :${playerTeam.size}"
+            var oneRemaining = false
+            var counter = 0
+            for(pokemon in playerTeam){
+                if (pokemon.hp == 0){
+                    counter++
+                }
             }
-            switch(playerTeam, teamPositionArray, fragmentManager)
-            TrainerBattleLog.info{"if enemy fainted inside switch click: ${faintedAndEndBattleArray[1]}"}
-
-            //call when select poke
-//                callBattlePhase(battlePhase, playerActivePokemon, enemyActivePokemon, inTrainerBattle, faintedAndEndBattleArray)
-//                updateUI(playerActivePokemon,enemyActivePokemon)
+            if(counter == playerTeam.count()-1){
+                oneRemaining = true
+            }
+            if(playerTeam.size == 1 || oneRemaining){
+                Toast.makeText(applicationContext, "You cannot switch with one pokemon left!", Toast.LENGTH_SHORT).show()
+            } else {
+                switch(playerTeam, teamPositionArray, fragmentManager)
+            }
         }
         binding.fightBtn.setOnClickListener{
             //on click open the fragment and do the calls inside the fragment
@@ -251,7 +275,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             //call when select move
         }
 
-        binding.itemBtn.setOnClickListener(){
+        binding.itemBtn.setOnClickListener{
             if(numItemUses > 0) {
                 binding.potion.visibility = View.VISIBLE
                 if (!inTrainerBattle) {
@@ -263,18 +287,19 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                 Toast.makeText(this, "You have reached the maximum number of item uses", Toast.LENGTH_SHORT).show()
             }
         }
-        binding.potion.setOnClickListener(){
+        binding.potion.setOnClickListener{
             if(playerActivePokemon.pokemon.hp + 20 < playerActivePokemon.pokemon.maxHp){
                 playerActivePokemon.pokemon.hp += 20
             }
             else{
                 playerActivePokemon.pokemon.hp = playerActivePokemon.pokemon.maxHp
             }
+            TrainerBattleLog.info("$trainerName used a potion!")
             updateUI(playerActivePokemon,enemyActivePokemon)
             hideItems()
             numItemUses--
         }
-        binding.capture.setOnClickListener(){
+        binding.capture.setOnClickListener{
             var chanceToCapture = 1-(enemyActivePokemon.pokemon.hp / enemyActivePokemon.pokemon.maxHp)
             if(chanceToCapture > Random().nextDouble()){
                 collection.add(enemyActivePokemon.pokemon)
@@ -290,7 +315,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
 
         //returns to menu
-        binding.runBtn.setOnClickListener(){
+        binding.runBtn.setOnClickListener{
 //            returnToMenu();
             //for testing purposes
             //showAddMoveDialog()
@@ -429,5 +454,22 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         TrainerBattleLog.info("Trainer chose no")
     }
 
-
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        binding.battleText.visibility = INVISIBLE
+        if(binding.battleText.hint == "stop"){
+            //buttons visibility
+            binding.buttons.visibility = VISIBLE
+            //enemy pokemon visibility
+            binding.pokemon2Name.visibility = VISIBLE
+            binding.pokemon2Level.visibility = VISIBLE
+            binding.pokemon2Hp.visibility = VISIBLE
+            binding.pokemon2Img.visibility = VISIBLE
+            //player pokemon visibility
+            binding.pokemon1Name.visibility = VISIBLE
+            binding.pokemon1Level.visibility = VISIBLE
+            binding.pokemon1Hp.visibility = VISIBLE
+            binding.pokemon1Img.visibility = VISIBLE
+        }
+        return super.onTouchEvent(event)
+    }
 }
