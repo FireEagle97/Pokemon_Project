@@ -3,6 +3,15 @@ package com.example.pokemongame.battle
 import android.content.Context
 import com.example.pokemongame.pokemon.Move
 import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.utility.Connector
+import com.example.pokemongame.utility.PokeApiEndpoint
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import simplifyTypeRelations
+import java.net.URL
 import java.util.logging.Logger
 import kotlin.math.floor
 
@@ -27,39 +36,52 @@ class DamageCalculations {
         }
 
         //Type effectiveness
-        val multiplier : Double = calculateTypeEffectiveness(attackerMove, defenderPokemon, context)
+        val multiplier : Double = calculateTypeEffectiveness(attackerMove, defenderPokemon)
         damage = floor(damage * multiplier)
+        DamageLog.info("Total damage: $damage")
 
         return damage.toInt()
     }
 
-    private fun calculateTypeEffectiveness(attackerMove: Move, defenderPokemon: Pokemon, context: Context): Double{
+    private fun calculateTypeEffectiveness(attackerMove: Move, defenderPokemon: Pokemon): Double =
+        runBlocking {
         var multiplier: Double = 1.0
 
-//        val gson = Gson()
-//        var effectivenessJsonString = JSONReader().jSONReader(context, "type_relations/${attackerMove.type}.json")
-//        var effectivenessRelations = gson.fromJson(effectivenessJsonString, Map::class.java)
+        val gson = Gson()
+        val scope = CoroutineScope(Dispatchers.IO)
+        val job = scope.launch {
+                //Get the data
+                val url: URL = URL("${PokeApiEndpoint.TYPE.url}/${attackerMove.type}")
+                val data = Connector().connect(url) as String
+                //Simplify it
+                val attackerMoveEffectivenessString = simplifyTypeRelations(data)
+                //Transform it into a map
+                val attackerMoveEffectiveness =
+                    gson.fromJson(attackerMoveEffectivenessString, Map::class.java)
 
-
-        defenderPokemon.battleStats.types.forEach {
-            if(effectivenessRelations[it] != null){
-                when(effectivenessRelations[it]){
-                    "no_effect" -> multiplier = 0.0
-                    "not_very_effective" -> multiplier /= 2
-                    "super_effective" -> multiplier *= 2
+                //If the defender's type is found in the type relations of the attacking move, perform these operations
+                defenderPokemon.battleStats.types.forEach {
+                    if (attackerMoveEffectiveness[it] != null) {
+                        when (attackerMoveEffectiveness[it]) {
+                            "no_effect" -> multiplier = 0.0
+                            "not_very_effective" -> multiplier /= 2
+                            "super_effective" -> multiplier *= 2
+                        }
+                    }
                 }
+            //Log a battle message
+            when (multiplier) {
+                0.0 -> DamageLog.info("It had no effect...")
+                0.25 -> DamageLog.info("It's barely effective...")
+                0.50 -> DamageLog.info("It's not very effective...")
+                1.0 -> DamageLog.info("It's effective!")
+                2.0 -> DamageLog.info("It's super effective!")
+                4.0 -> DamageLog.info("It's hyper effective!")
             }
-        }
 
-        //Log a battle message
-        when(multiplier){
-            0.0 -> DamageLog.info("It had no effect...")
-            0.25 -> DamageLog.info("It's barely effective...")
-            0.50 -> DamageLog.info("It's not very effective...")
-            2.0 -> DamageLog.info("It's super effective!")
-            4.0 -> DamageLog.info("It's hyper effective!")
         }
-        return multiplier
+        job.join()
+            return@runBlocking multiplier
     }
 
     private fun calculateInitialDamage(attackerLevel: Int, attackerStat: Int, attackerMove: Move, defenderStat: Int): Double {

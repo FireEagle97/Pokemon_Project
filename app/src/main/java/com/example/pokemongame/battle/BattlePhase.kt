@@ -7,6 +7,7 @@ import com.example.pokemongame.pokemon.Move
 import com.example.pokemongame.pokemon.Pokemon
 import java.util.Random
 import java.util.logging.Logger
+import kotlin.math.floor
 
 class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,
                   val fragmentManager: FragmentManager
@@ -117,8 +118,8 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             BattleLog.info("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!")
 
             //Check if the move does damage
-            BattleLog.info("Old HP of defending pokemon: ${speedArray[1].pokemon.hp}")
             if(speedArray[0].chosenMove!!.power > 0){
+                BattleLog.info("Old HP of defending pokemon: ${speedArray[1].pokemon.hp}")
                 speedArray[1].pokemon.hp -= DamageCalculations().calculateDamage(speedArray[0].pokemon,
                     speedArray[0].chosenMove!!, speedArray[1].pokemon, context)
                 //Set HP to 0 if it would bring it into the negatives instead
@@ -129,7 +130,8 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
             //If the move heals, it heals
             } else if(speedArray[0].chosenMove!!.heal > 0){
-                speedArray[0].pokemon.hp += speedArray[0].chosenMove!!.heal
+                BattleLog.info("Old HP of active pokemon: ${speedArray[0].pokemon.hp}")
+                speedArray[0].pokemon.hp += floor((speedArray[0].pokemon.maxHp.toDouble() / 100.0) * speedArray[0].chosenMove!!.heal.toDouble()).toInt()
                 //Set HP to maxHP if the healing would bring the hp beyond it
                 if(speedArray[0].pokemon.hp > speedArray[0].pokemon.maxHp){
                     speedArray[0].pokemon.hp = speedArray[0].pokemon.maxHp
