@@ -97,6 +97,7 @@ class MoveAssigner {
                             val dialog = AddMoveDialogFragment()
                             dialog.arguments = bundle
                             newMovesList.clear()
+                            dialog.isCancelable = false
                             dialog.show(fragmentManager!!, "AddMoveDialogFragment")
                         } else {
                             MoveLog.info("Trainer AI will always choose yes")
@@ -152,6 +153,7 @@ class MoveAssigner {
             bundle.putIntArray("movePosition", intArrayOf(0))
             val selectMoveFragment = SelectMovesFragment(false)
             selectMoveFragment.arguments = bundle
+            selectMoveFragment.isCancelable = false
             selectMoveFragment.show(fragmentManager!!, "fragment")
         } else {
             //Learn new move

@@ -283,7 +283,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 //            returnToMenu();
             //for testing purposes
             //showAddMoveDialog()
-            levelClass.levelUp(playerTeam[0], this)
+            //levelClass.levelUp(playerTeam[0], this)
         }
         super.onStart()
     }
