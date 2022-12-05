@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -103,14 +104,13 @@
         android:id="@+id/fightBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:layout_marginStart="50dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
         android:text="@string/battle_fight"
         android:textColor="@color/blue"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/runBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
@@ -134,6 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
         android:textColor="@color/blue"
@@ -141,15 +142,16 @@
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
         android:text="@string/battle_run"
-        app:layout_constraintBottom_toTopOf="@id/fightBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
         />
+
     <Button
         android:id="@+id/switchPokeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
@@ -157,15 +159,14 @@
         android:textColor="@color/blue"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/runBtn"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:strokeColor="@color/blue"
-        app:strokeWidth="2dp"
-        />
+        app:strokeWidth="2dp" />
     <Button
         android:id="@+id/itemBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/opensansbold"
         android:text="@string/item"
@@ -173,7 +174,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/switchPokeBtn"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/fightBtn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:strokeColor="@color/blue"
         app:strokeWidth="2dp"
         />
@@ -218,5 +219,24 @@
         app:layout_constraintStart_toEndOf="@id/capture"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/battleLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/battle_log_border"
+        android:fontFamily="@font/opensansbold"
+        android:text="@string/battle_fight"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:visibility="visible"
+        android:lines="4"
+        app:layout_constraintTop_toTopOf="@+id/fightBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/runBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

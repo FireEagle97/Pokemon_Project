@@ -210,12 +210,23 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Level.text = pPokemonLevel
         var pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
         binding.pokemon1Hp.text = pPokemon1Hp
+        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+
+        //If we are in a trainer battle, print a "sent out" message, else print a "appeared" message
+        var adversary: String
+        if(inTrainerBattle){
+            adversary = "opponent's"
+            TrainerBattleLog.info("The $adversary ${enemyActivePokemon.pokemon.name} was sent out!")
+        } else {
+            adversary = "wild"
+            TrainerBattleLog.info("A $adversary ${enemyActivePokemon.pokemon.name} appeared!")
+        }
+
         binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
         var ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
         binding.pokemon2Level.text = ePokemonLevel
         var ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
         binding.pokemon2Hp.text = ePokemon2Hp
-        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
         binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
 
 
