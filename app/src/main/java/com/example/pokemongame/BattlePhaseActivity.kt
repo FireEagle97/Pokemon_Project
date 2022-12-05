@@ -47,6 +47,10 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
     lateinit var enemyActivePokemon: ActivePokemon
 
+    var battleTextValue: Array<String> = arrayOf("")
+
+    var pace: Array<Boolean> = arrayOf(false)
+
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(BattlePhaseActivity::class.java.name)
     }
@@ -64,11 +68,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //Collection from intent (used for catching)
         collection = intent.getSerializableExtra("collection") as ArrayList<Pokemon>
 
-        //Textview to display battle messages
-        val battleText = binding.battleText
-        //RelativeLayout holding all buttons
-        val buttons = binding.buttons
-
         //hold a move position
         var movePositionArray: IntArray = intArrayOf(0)
         //Initialize teamPositionArray
@@ -83,38 +82,14 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //here Generate enemy team (whether the enemy team is a wild team with one pokemon or a trainer's team
         //is determined by the boolean inTrainerBattle above)
 
-        //Testing block
-//        val bulbasaur = PokemonCreator().createPokemon(2, "bulbasaur", applicationContext)
-//        val charmander2 = PokemonCreator().createPokemon(2,"charmander",applicationContext, "charmander2")
-//        levelClass.initializeLevels(bulbasaur, bulbasaur.level, applicationContext)
-//        levelClass.initializeLevels(charmander2, charmander2.level, applicationContext)
-//        bulbasaur.hp = bulbasaur.maxHp
-//        charmander2.hp = charmander2.maxHp
-        //Testing block ended
 
         //Holds the player's team
         playerTeam =  intent.getSerializableExtra("team") as ArrayList<Pokemon>
         //Holds the the enemy's team. It is changed to a generated enemy team above
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
-        //test enemyTeam
-//        TrainerBattleLog.info{
-//            "enemyTeam size:${enemyTeam.size}\n"+
-//            "pokemon1Level : ${enemyTeam[0].level}\n"+
-//                    "defense: ${enemyTeam[0].defense}\n" +
-//                    "speed: ${enemyTeam[0].speed}\n" +
-//                    "attack: ${enemyTeam[0].attack}\n" +
-//                    "specialDefense: ${enemyTeam[0].specialDefense}\n"+
-//                    "specialAttack: ${enemyTeam[0].specialAttack}\n"+
-//                    "baseStatMaxHp: ${enemyTeam[0].maxHp}\n"+
-//                    "experience: ${enemyTeam[0].experience}\n"+
-//                    "Hp: ${enemyTeam[0].hp}\n"+
-//                    "Level: ${enemyTeam[0].level}\n"+
-//                    "moves: ${enemyTeam[0].moves}\n"+
-//                    "name: ${enemyTeam[0].name}\n"
-//
-//        }
+
         //Init Battle Phase with respective teams for utility and data consistency
-        val battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager)
+        val battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager, battleTextValue, pace, this)
 
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")
@@ -139,18 +114,17 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
         //If we are in a trainer battle, print a "sent out" message, else print a "appeared" message
         val adversary: String
+        var initialText: String = ""
         if(inTrainerBattle){
             adversary = "opponent's"
             TrainerBattleLog.info("The $adversary ${enemyActivePokemon.pokemon.name} was sent out!")
-            battleText.text = "The $adversary ${enemyActivePokemon.pokemon.name} was sent out!"
+            initialText = "The $adversary ${enemyActivePokemon.pokemon.name} was sent out!"
         } else {
             adversary = "wild"
             TrainerBattleLog.info("A $adversary ${enemyActivePokemon.pokemon.name} appeared!")
-            battleText.text = "A $adversary ${enemyActivePokemon.pokemon.name} appeared!"
+            initialText = "A $adversary ${enemyActivePokemon.pokemon.name} appeared!"
         }
-        battleText.visibility = VISIBLE
-        battleText.hint = "stop"
-        buttons.visibility = INVISIBLE
+        showBattleText(initialText,"stop")
 
         binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
         var ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
@@ -169,11 +143,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             newMove = bundle.getSerializable("newMove") as Move
             pokemonToLearnMove = bundle.getSerializable("pokemon") as Pokemon
             val decision = bundle.getBoolean("decision")
-            //Testing block
-//            TrainerBattleLog.info("New move: ${newMove.toString()}")
-//            TrainerBattleLog.info("Pokemon: ${pokemonToLearnMove.toString()}")
-//            TrainerBattleLog.info("Bool: $decision")
-            //Testing block end
+
             if(decision) {
                 MoveAssigner(fragmentManager).addMoveOrSummonFragment(pokemonToLearnMove, newMove)
             }
@@ -201,6 +171,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
         }
 
+        //Choose a move
         fragmentManager.setFragmentResultListener("movePosition", this){ requestKey, bundle ->
             //Get the position of the pokemon to be switched-in
             val movePosition = bundle.getInt("movePosition")
@@ -347,17 +318,17 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     //Calls the battle phase and updated the faintedAndEndBattleArray
     private fun callBattlePhase(battlePhase: BattlePhase,
                                 inTrainerBattle: Boolean, faintedAndEndBattleArray: Array<Boolean>) : Array<Boolean> {
+
+        BattlePhase.BattleLog.info("Turn Begun")
+
         val incomingArray =  battlePhase.playBattlePhase(playerActivePokemon, enemyActivePokemon, inTrainerBattle, applicationContext)
         for(index in 0..2){
             faintedAndEndBattleArray[index] = incomingArray[index]
         }
 
-        if(!faintedAndEndBattleArray[0]) {
-            BattlePhase.BattleLog.info("Turn Begun")
-
             //If the battle shouldn't end
             if(!faintedAndEndBattleArray[0]){
-                //Force Switch for enemy team if their active pokemon faints
+                //Force Switch enemy team if their active pokemon faints
                 if(faintedAndEndBattleArray[1] && !faintedAndEndBattleArray[2]){
                     for(pokemon in enemyTeam){
                         if(pokemon.hp > 0){
@@ -375,14 +346,12 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                     updateUI(playerActivePokemon,enemyActivePokemon)
                     BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
                 }
-            }
-            BattlePhase.BattleLog.info("Turn Ended")
-        } else {
+            } else {
             BattlePhase.BattleLog.info("Battle Ended")
             //Return to main menu
             returnToMenu()
         }
-
+        BattlePhase.BattleLog.info("Turn Ended")
         return faintedAndEndBattleArray
     }
 
@@ -426,10 +395,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //passing moves , hp , experience
         for (pokemon in rndPokeList) {
             Level().initializeLevels(pokemon,pokemon.level,applicationContext)
-//            val totalExperience = pokemon.level.toDouble().pow(3.toDouble())
-//            Level().addExperience(pokemon,totalExperience,applicationContext)
             pokemon.hp = pokemon.maxHp
-//            MoveAssigner().assignNewMoves(pokemon,pokemon.level,applicationContext)
             TrainerBattleLog.info{"initializing enemy pokemon"}
         }
 
@@ -449,11 +415,15 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
         binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
     }
-//    private fun showAddMoveDialog() {
-//        // Create an instance of the dialog fragment and show it
-//        val dialog = AddMoveDialogFragment()
-//        dialog.show(supportFragmentManager, "AddMoveDialogFragment")
-//    }
+
+    fun showBattleText(text: String, hint: String){
+        val buttons = binding.buttons
+        val battleText = binding.battleText
+        battleText.visibility = VISIBLE
+        battleText.hint = hint
+        battleText.text = text
+        buttons.visibility = INVISIBLE
+    }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
         //positive button
@@ -480,6 +450,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             binding.pokemon1Level.visibility = VISIBLE
             binding.pokemon1Hp.visibility = VISIBLE
             binding.pokemon1Img.visibility = VISIBLE
+        } else {
+            pace[0] = true
         }
         return super.onTouchEvent(event)
     }

@@ -2,6 +2,7 @@ package com.example.pokemongame.battle
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
+import com.example.pokemongame.BattlePhaseActivity
 import com.example.pokemongame.pokemon.Level
 import com.example.pokemongame.pokemon.Move
 import com.example.pokemongame.pokemon.Pokemon
@@ -10,7 +11,8 @@ import java.util.logging.Logger
 import kotlin.math.floor
 
 class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,
-                  val fragmentManager: FragmentManager
+                  val fragmentManager: FragmentManager, val battleTextValue: Array<String>,
+                  val pace: Array<Boolean>, val activity: BattlePhaseActivity
 ) {
     companion object{
         val BattleLog: Logger = Logger.getLogger(BattlePhase::class.java.name)
@@ -116,6 +118,8 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
         //Check if move hits
         if(accuracyCheck(speedArray[0].chosenMove!!)){
             BattleLog.info("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!")
+            activity.showBattleText("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!","")
+            pace[0] = false
 
             //Check if the move does damage
             if(speedArray[0].chosenMove!!.power > 0){
