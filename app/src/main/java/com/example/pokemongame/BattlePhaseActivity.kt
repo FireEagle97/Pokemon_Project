@@ -42,12 +42,14 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     lateinit var enemyTeam: ArrayList<Pokemon>
     //Will hold the position of a yet-to-be switched-in pokemon in the player`s team
     lateinit var teamPositionArray: IntArray
-
+    //Will hold the player's active pokemon
     lateinit var playerActivePokemon: ActivePokemon
-
+    //Will hold the opponent's active pokemon
     lateinit var enemyActivePokemon: ActivePokemon
-
+    //Holds all text to be displayed in the in-game battle log
     var battleTextList: MutableList<String> = mutableListOf()
+    //Boolean that determines if the battle is over (to return to main menu)
+    var endBattle: Boolean = false
 
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(BattlePhaseActivity::class.java.name)
@@ -318,6 +320,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                                 inTrainerBattle: Boolean, faintedAndEndBattleArray: Array<Boolean>) : Array<Boolean> {
 
         BattlePhase.BattleLog.info("Turn Begun")
+        showBattleText("Turn Begun")
 
         val incomingArray =  battlePhase.playBattlePhase(playerActivePokemon, enemyActivePokemon, inTrainerBattle, applicationContext)
         for(index in 0..2){
@@ -332,6 +335,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                         if(pokemon.hp > 0){
                             enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
                             BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
+                            addEntryToBattleText("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
                             updateUI(playerActivePokemon,enemyActivePokemon)
                             break
                         }
@@ -343,11 +347,11 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                     switch(playerTeam, teamPositionArray, fragmentManager)
                     updateUI(playerActivePokemon,enemyActivePokemon)
                     BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+                    addEntryToBattleText("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
                 }
             } else {
-            BattlePhase.BattleLog.info("Battle Ended")
-            //Return to main menu
-            returnToMenu()
+                //Flip end battle boolean
+                endBattle = true
         }
         BattlePhase.BattleLog.info("Turn Ended")
         return faintedAndEndBattleArray
@@ -437,25 +441,31 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        //While loop here
-        if(battleTextList.isNotEmpty()){
-            binding.battleText.visibility = VISIBLE
-            showBattleText(battleTextList[0])
-            battleTextList.removeFirst()
-        } else {
-            binding.battleText.visibility = INVISIBLE
-            //buttons visibility
-            binding.buttons.visibility = VISIBLE
-            //enemy pokemon visibility
-            binding.pokemon2Name.visibility = VISIBLE
-            binding.pokemon2Level.visibility = VISIBLE
-            binding.pokemon2Hp.visibility = VISIBLE
-            binding.pokemon2Img.visibility = VISIBLE
-            //player pokemon visibility
-            binding.pokemon1Name.visibility = VISIBLE
-            binding.pokemon1Level.visibility = VISIBLE
-            binding.pokemon1Hp.visibility = VISIBLE
-            binding.pokemon1Img.visibility = VISIBLE
+        //If we press the screen...
+        if(event!!.action == MotionEvent.ACTION_DOWN) {
+            //If the log trail isn't empty, show it and hide the buttons. If it isn't empty, show the buttons
+            if (battleTextList.isNotEmpty()) {
+                val text = battleTextList.removeFirst()
+                showBattleText(text)
+            } else {
+                if(endBattle){
+                    //Return to main menu
+                    returnToMenu()
+                }
+                binding.battleText.visibility = INVISIBLE
+                //buttons visibility
+                binding.buttons.visibility = VISIBLE
+                //enemy pokemon visibility
+                binding.pokemon2Name.visibility = VISIBLE
+                binding.pokemon2Level.visibility = VISIBLE
+                binding.pokemon2Hp.visibility = VISIBLE
+                binding.pokemon2Img.visibility = VISIBLE
+                //player pokemon visibility
+                binding.pokemon1Name.visibility = VISIBLE
+                binding.pokemon1Level.visibility = VISIBLE
+                binding.pokemon1Hp.visibility = VISIBLE
+                binding.pokemon1Img.visibility = VISIBLE
+            }
         }
         return super.onTouchEvent(event)
     }
