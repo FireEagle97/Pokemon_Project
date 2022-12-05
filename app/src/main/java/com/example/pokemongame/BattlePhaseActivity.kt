@@ -47,9 +47,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
     lateinit var enemyActivePokemon: ActivePokemon
 
-    var battleTextValue: Array<String> = arrayOf("")
-
-    var pace: Array<Boolean> = arrayOf(false)
+    var battleTextList: MutableList<String> = mutableListOf()
 
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(BattlePhaseActivity::class.java.name)
@@ -89,7 +87,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
 
         //Init Battle Phase with respective teams for utility and data consistency
-        val battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager, battleTextValue, pace, this)
+        val battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager, battleTextList,this)
 
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")
@@ -124,7 +122,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             TrainerBattleLog.info("A $adversary ${enemyActivePokemon.pokemon.name} appeared!")
             initialText = "A $adversary ${enemyActivePokemon.pokemon.name} appeared!"
         }
-        showBattleText(initialText,"stop")
+        showBattleText(initialText)
 
         binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
         var ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
@@ -416,13 +414,16 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
     }
 
-    fun showBattleText(text: String, hint: String){
+    fun showBattleText(text: String){
         val buttons = binding.buttons
         val battleText = binding.battleText
         battleText.visibility = VISIBLE
-        battleText.hint = hint
         battleText.text = text
         buttons.visibility = INVISIBLE
+    }
+
+    fun addEntryToBattleText(text: String){
+        battleTextList.add(text)
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
@@ -436,8 +437,13 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        binding.battleText.visibility = INVISIBLE
-        if(binding.battleText.hint == "stop"){
+        //While loop here
+        if(battleTextList.isNotEmpty()){
+            binding.battleText.visibility = VISIBLE
+            showBattleText(battleTextList[0])
+            battleTextList.removeFirst()
+        } else {
+            binding.battleText.visibility = INVISIBLE
             //buttons visibility
             binding.buttons.visibility = VISIBLE
             //enemy pokemon visibility
@@ -450,8 +456,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             binding.pokemon1Level.visibility = VISIBLE
             binding.pokemon1Hp.visibility = VISIBLE
             binding.pokemon1Img.visibility = VISIBLE
-        } else {
-            pace[0] = true
         }
         return super.onTouchEvent(event)
     }

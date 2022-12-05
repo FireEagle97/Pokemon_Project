@@ -52,7 +52,7 @@ class DamageCalculations {
         val job = scope.launch {
                 //Get the data
                 val url: URL = URL("${PokeApiEndpoint.TYPE.url}/${attackerMove.type}")
-                val data = Connector().connect(url) as String
+                var data = Connector().connect(url) as String
                 //Simplify it
                 val attackerMoveEffectivenessString = simplifyTypeRelations(data)
                 //Transform it into a map

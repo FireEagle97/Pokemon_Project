@@ -24,12 +24,11 @@ class Connector {
                line = reader.readLine()
            }
            //JSON string
-           var jsonData = stringBuilder.toString()
-           return@withContext jsonData
-       } catch(e: Exception) {
-            println(e.printStackTrace())
+           return@withContext stringBuilder.toString()
+       } catch (e: Exception) {
+           println(e.printStackTrace())
        } finally {
-            urlConnection.disconnect()
+           urlConnection.disconnect()
        }
     }
 }

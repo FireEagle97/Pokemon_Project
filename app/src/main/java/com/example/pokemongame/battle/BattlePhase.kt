@@ -11,8 +11,8 @@ import java.util.logging.Logger
 import kotlin.math.floor
 
 class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,
-                  val fragmentManager: FragmentManager, val battleTextValue: Array<String>,
-                  val pace: Array<Boolean>, val activity: BattlePhaseActivity
+                  val fragmentManager: FragmentManager, val battleTextValue: MutableList<String>,
+                  val activity: BattlePhaseActivity
 ) {
     companion object{
         val BattleLog: Logger = Logger.getLogger(BattlePhase::class.java.name)
@@ -118,8 +118,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
         //Check if move hits
         if(accuracyCheck(speedArray[0].chosenMove!!)){
             BattleLog.info("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!")
-            activity.showBattleText("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!","")
-            pace[0] = false
+            activity.addEntryToBattleText("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!")
 
             //Check if the move does damage
             if(speedArray[0].chosenMove!!.power > 0){
