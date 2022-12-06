@@ -11,8 +11,7 @@ import java.util.logging.Logger
 import kotlin.math.floor
 
 class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,
-                  val fragmentManager: FragmentManager, val battleTextValue: MutableList<String>,
-                  val activity: BattlePhaseActivity
+                  val fragmentManager: FragmentManager, val activity: BattlePhaseActivity, val trainerName: String
 ) {
     companion object{
         val BattleLog: Logger = Logger.getLogger(BattlePhase::class.java.name)
@@ -119,11 +118,19 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
         //Check if move hits
         if(accuracyCheck(speedArray[0].chosenMove!!)){
-            BattleLog.info("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!")
-            activity.addEntryToBattleText("${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}!")
+
+            var message = if(speedArray[0].inPlayerTeam) {
+                "$trainerName's ${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}"
+            } else {
+                "The opponent's ${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}"
+            }
 
             //Check if the move does damage
             if(speedArray[0].chosenMove!!.power > 0){
+                //Update the message to include an exclamation mark, which will be used to determine the logic of the activity
+                message += "!"
+                activity.addEntryToBattleText(message)
+
                 BattleLog.info("Old HP of defending pokemon: ${speedArray[1].pokemon.hp}")
                 speedArray[1].pokemon.hp -= DamageCalculations(activity).calculateDamage(speedArray[0].pokemon,
                     speedArray[0].chosenMove!!, speedArray[1].pokemon, context)
@@ -133,20 +140,32 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
                 }
                 BattleLog.info("New HP of defending pokemon: ${speedArray[1].pokemon.hp}")
 
+            } else {
+                activity.addEntryToBattleText(message)
+            }
+
+
             //If the move heals, it heals
-            } else if(speedArray[0].chosenMove!!.heal > 0){
+            if(speedArray[0].chosenMove!!.heal > 0){
                 BattleLog.info("Old HP of active pokemon: ${speedArray[0].pokemon.hp}")
                 speedArray[0].pokemon.hp += floor((speedArray[0].pokemon.maxHp.toDouble() / 100.0) * speedArray[0].chosenMove!!.heal.toDouble()).toInt()
                 //Set HP to maxHP if the healing would bring the hp beyond it
                 if(speedArray[0].pokemon.hp > speedArray[0].pokemon.maxHp){
                     speedArray[0].pokemon.hp = speedArray[0].pokemon.maxHp
                 }
-                BattleLog.info("${speedArray[0].pokemon.name} healed itself!")
-                activity.addEntryToBattleText("${speedArray[0].pokemon.name} healed itself!")
+
+                if(speedArray[0].inPlayerTeam) {
+                    activity.addEntryToBattleText("$trainerName's ${speedArray[0].pokemon.name} healed itself!")
+                } else {
+                    activity.addEntryToBattleText("The opponent's ${speedArray[0].pokemon.name} healed itself!")
+                }
+
                 BattleLog.info("New HP of healed pokemon: ${speedArray[0].pokemon.hp}")
 
             //If it doesn't do either, it does nothing
-            } else {
+            }
+
+            if(speedArray[0].chosenMove!!.heal == 0 && speedArray[0].chosenMove!!.power == 0){
                 BattleLog.info("Moves that have no power or no heal values do nothing")
                 activity.addEntryToBattleText("Moves that have no power or no heal values do nothing")
             }
