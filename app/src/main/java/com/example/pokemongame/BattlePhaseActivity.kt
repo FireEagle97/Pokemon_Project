@@ -234,15 +234,20 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             hideItems()
         }
         binding.capture.setOnClickListener{
+            playerActivePokemon.chosenMove = null
             val chanceToCapture = 1-(enemyActivePokemon.pokemon.hp / enemyActivePokemon.pokemon.maxHp)
             if(chanceToCapture > Random().nextDouble()){
                 collection.add(enemyActivePokemon.pokemon)
-                Toast.makeText(this, enemyActivePokemon.pokemon.name + " has been captured and added to the team", Toast.LENGTH_SHORT).show()
-                returnToMenu()
+                TrainerBattleLog.info("$trainerName successfully captured the enemy's pokemon!")
+                addEntryToBattleText("$trainerName successfully captured the enemy's pokemon!")
+                
+                endBattle = true
             }
             else{
-                Toast.makeText(this, "could not capture pokemon, returning to battle", Toast.LENGTH_SHORT).show()
+                TrainerBattleLog.info("$trainerName did not manage to capture the enemy's pokemon!")
+                addEntryToBattleText("$trainerName did not manage to capture the enemy's pokemon!")
             }
+            callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
             hideItems()
         }
 
