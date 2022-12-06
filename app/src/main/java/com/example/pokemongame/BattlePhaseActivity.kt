@@ -50,7 +50,10 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     var battleTextList: MutableList<String> = mutableListOf()
     //Boolean that determines if the battle is over (to return to main menu)
     var endBattle: Boolean = false
-
+    //Boolean used to force the user to switch
+    var forcePlayerSwitch = false
+    //Boolean used to force the enemy to switch
+    var forceEnemySwitch = false
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(BattlePhaseActivity::class.java.name)
     }
@@ -273,6 +276,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
         super.onStart()
     }
+
     private fun returnToMenu(){
         intent.putExtra("collection", collection)
         intent.putExtra("team", playerTeam)
@@ -331,23 +335,12 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             if(!faintedAndEndBattleArray[0]){
                 //Force Switch enemy team if their active pokemon faints
                 if(faintedAndEndBattleArray[1] && !faintedAndEndBattleArray[2]){
-                    for(pokemon in enemyTeam){
-                        if(pokemon.hp > 0){
-                            enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
-                            BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
-                            addEntryToBattleText("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
-                            updateUI(playerActivePokemon,enemyActivePokemon)
-                            break
-                        }
-                    }
+                    forceEnemySwitch = true
                 }
 
                 //Force Switch player team if their active pokemon faints
                 if(faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
-                    switch(playerTeam, teamPositionArray, fragmentManager)
-                    updateUI(playerActivePokemon,enemyActivePokemon)
-                    BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
-                    addEntryToBattleText("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+                    forcePlayerSwitch = true
                 }
             } else {
                 //Flip end battle boolean
@@ -465,6 +458,26 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                 binding.pokemon1Level.visibility = VISIBLE
                 binding.pokemon1Hp.visibility = VISIBLE
                 binding.pokemon1Img.visibility = VISIBLE
+
+                if(forceEnemySwitch){
+                    forceEnemySwitch = false
+                    for(pokemon in enemyTeam){
+                        if(pokemon.hp > 0){
+                            enemyActivePokemon = ActivePokemon(enemyTeam[enemyTeam.indexOf(pokemon)], null, enemyTeam.indexOf(pokemon), false)
+                            BattlePhase.BattleLog.info("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
+                            showBattleText("Opponent's ${enemyActivePokemon.pokemon.name} switched in!")
+                            updateUI(playerActivePokemon,enemyActivePokemon)
+                            break
+                        }
+                    }
+                }
+                if(forcePlayerSwitch){
+                    forcePlayerSwitch = false
+                    switch(playerTeam, teamPositionArray, fragmentManager)
+                    updateUI(playerActivePokemon,enemyActivePokemon)
+                    BattlePhase.BattleLog.info("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+                    showBattleText("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+                }
             }
         }
         return super.onTouchEvent(event)
