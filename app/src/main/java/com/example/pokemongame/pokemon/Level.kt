@@ -1,6 +1,7 @@
 package com.example.pokemongame.pokemon
 
 import android.content.Context
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import kotlin.math.floor
 import java.util.logging.Logger
@@ -8,11 +9,16 @@ import kotlin.math.pow
 
 class Level {
     lateinit var moveAssigner: MoveAssigner
+    //Boolean to determine if the pokemon came from the player
+    var fromPlayer: Boolean = false
+    //Boolean to determine if the call to level up came from initializeLevels (to not show all Toasts)
+    var cameFromInitializeLevels: Boolean = false
     constructor(){
         moveAssigner = MoveAssigner()
     }
     constructor(fragmentManager: FragmentManager){
         moveAssigner = MoveAssigner(fragmentManager)
+        fromPlayer = true
     }
     companion object{
         val LevelLog: Logger = Logger.getLogger(Level::class.java.name)
@@ -23,6 +29,7 @@ class Level {
     //level it up
     fun initializeLevels(pokemon: Pokemon, level: Int, context: Context){
         pokemon.level = 0
+        cameFromInitializeLevels = true
         val totalExperience = level.toDouble().pow(3.toDouble())
         addExperience(pokemon, totalExperience, context)
     }
@@ -49,6 +56,9 @@ class Level {
     fun levelUp(pokemon: Pokemon, context: Context){
         pokemon.level++
         LevelLog.info("${pokemon.name} has leveled up to level ${pokemon.level}!")
+        if(fromPlayer && !cameFromInitializeLevels){
+            Toast.makeText(context,"${pokemon.name} has leveled up to level ${pokemon.level}!", Toast.LENGTH_SHORT).show()
+        }
 
         //Stat changes (MaxHP has a different formula than the others)
         val newMaxHPStat = floor((((pokemon.battleStats.baseStateMaxHp + 10) * pokemon.level) / 50).toDouble()) + pokemon.level + 10
@@ -73,6 +83,7 @@ class Level {
         //Assign new moves (if any)
         moveAssigner.assignNewMoves(pokemon, pokemon.level, context)
 
-        //Evolution code (not needed for milestone 1)
+        //Reset cameFromInitializeLevels
+        cameFromInitializeLevels = false
     }
 }

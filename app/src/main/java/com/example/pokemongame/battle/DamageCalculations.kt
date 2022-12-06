@@ -50,12 +50,16 @@ class DamageCalculations(val activity: BattlePhaseActivity) {
 
         val gson = Gson()
         val scope = CoroutineScope(Dispatchers.IO)
+            var attackerMoveEffectivenessString: String = ""
         val job = scope.launch {
                 //Get the data
                 val url: URL = URL("${PokeApiEndpoint.TYPE.url}/${attackerMove.type}")
                 var data = Connector().connect(url) as String
                 //Simplify it
-                val attackerMoveEffectivenessString = simplifyTypeRelations(data)
+                attackerMoveEffectivenessString = simplifyTypeRelations(data)
+        }
+            job.join()
+
                 //Transform it into a map
                 val attackerMoveEffectiveness =
                     gson.fromJson(attackerMoveEffectivenessString, Map::class.java)
@@ -81,8 +85,6 @@ class DamageCalculations(val activity: BattlePhaseActivity) {
                 4.0 -> message = "It's hyper effective!"
             }
             activity.addStringToBattleTextList(message)
-        }
-        job.join()
             return@runBlocking multiplier
     }
 
