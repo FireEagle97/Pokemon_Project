@@ -228,22 +228,23 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             playerActivePokemon.chosenMove = null
             callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
             TrainerBattleLog.info("$trainerName healed their pokemon by using a potion!")
-            addEntryToBattleText("$trainerName healed their pokemon by using a potion!")
+            addStringToBattleTextList("$trainerName healed their pokemon by using a potion!", true, true, false)
             hideItems()
         }
         binding.capture.setOnClickListener{
             playerActivePokemon.chosenMove = null
-            val chanceToCapture = 1-(enemyActivePokemon.pokemon.hp / enemyActivePokemon.pokemon.maxHp)
+            enemyActivePokemon.chosenMove = null
+            val chanceToCapture = (1.0- (enemyActivePokemon.pokemon.hp.toDouble() / enemyActivePokemon.pokemon.maxHp.toDouble()))
             if(chanceToCapture > Random().nextDouble()){
                 collection.add(enemyActivePokemon.pokemon)
-                TrainerBattleLog.info("$trainerName successfully captured the enemy's pokemon!")
-                addEntryToBattleText("$trainerName successfully captured the enemy's pokemon!")
+                TrainerBattleLog.info("$trainerName  successfully captured the enemy's pokemon!")
+                addStringToBattleTextList("$trainerName successfully captured the enemy's pokemon!")
                 
                 endBattle = true
             }
             else{
                 TrainerBattleLog.info("$trainerName did not manage to capture the enemy's pokemon!")
-                addEntryToBattleText("$trainerName did not manage to capture the enemy's pokemon!")
+                addStringToBattleTextList("$trainerName did not manage to capture the enemy's pokemon!")
             }
             callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
             hideItems()
@@ -251,8 +252,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
         //returns to menu
         binding.runBtn.setOnClickListener{
-            //addBattleText here
-            endBattle = true
+            returnToMenu()
+
         }
         super.onStart()
     }
