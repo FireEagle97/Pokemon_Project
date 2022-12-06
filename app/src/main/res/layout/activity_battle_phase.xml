@@ -195,18 +195,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="capture"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_alignParentStart="true"
             android:visibility="gone"/>
 
         <Button
             android:id="@+id/potion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="use potion (+20hp)"
-            app:layout_constraintStart_toEndOf="@id/capture"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            android:text="use potion"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <TextView

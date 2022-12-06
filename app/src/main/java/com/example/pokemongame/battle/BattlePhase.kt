@@ -11,7 +11,8 @@ import java.util.logging.Logger
 import kotlin.math.floor
 
 class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,
-                  val fragmentManager: FragmentManager, val activity: BattlePhaseActivity, val trainerName: String
+                  val fragmentManager: FragmentManager, val activity: BattlePhaseActivity,
+                  val trainerName: String, val gainedExperience: Array<Double>
 ) {
     companion object{
         val BattleLog: Logger = Logger.getLogger(BattlePhase::class.java.name)
@@ -222,22 +223,14 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
         faintedAndEndBattleArray[2] = speedArray[1].inPlayerTeam
 
         //Give exp to victor
-        var gainedExperience: Double = 0.3 * speedArray[1].pokemon.experienceReward * speedArray[1].pokemon.level
+        gainedExperience[0] = 0.0
+        gainedExperience[0] = 0.3 * speedArray[1].pokemon.experienceReward * speedArray[1].pokemon.level
         if(inTrainerBattle){
             BattleLog.info("Double xp applied due to trainer battle!")
             activity.addEntryToBattleText("Double xp applied due to trainer battle!")
-            gainedExperience *= 2.0
-        }
-        if(faintedAndEndBattleArray[2]) {
-            //If fainted pokemon is in player's team, reward enemy pokemon by not calling the fragment manager
-            Level().addExperience(speedArray[0].pokemon, gainedExperience, context)
-        } else {
-            //If fainted pokemon is not in player's team, reward player pokemon by calling fragment manager
-            Level(fragmentManager).addExperience(speedArray[0].pokemon, gainedExperience, context)
+            gainedExperience[0] *= 2.0
         }
 
-        //Update teams due to xp gain
-        updateTeam(pokemonPlayerIndex, pokemonEnemyIndex, speedArray)
 
         //Check if a victory condition is achieved for either party. If not, force a switch through the BattleActivity
         val playerTeamFainted = checkIfTeamAllFainted(playerTeam)

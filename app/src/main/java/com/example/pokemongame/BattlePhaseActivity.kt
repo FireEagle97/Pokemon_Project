@@ -54,6 +54,10 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     var forcePlayerSwitch = false
     //Boolean used to force the enemy to switch
     var forceEnemySwitch = false
+    //Array to trigger a switch and the end of the battle
+    var faintedAndEndBattleArray: Array<Boolean> = arrayOf(false, false, false)
+    //Double array to hold the experience gained by the pokemon that hasn't fainted
+    var gainedExperience: Array<Double> = arrayOf(0.0)
 
     companion object{
         val TrainerBattleLog: Logger = Logger.getLogger(BattlePhaseActivity::class.java.name)
@@ -76,8 +80,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         var movePositionArray: IntArray = intArrayOf(0)
         //Initialize teamPositionArray
         teamPositionArray = intArrayOf(0)
-        //Array to trigger a switch and the end of the battle
-        var faintedAndEndBattleArray: Array<Boolean> = arrayOf(false, false, false)
 
         //Determine if it's a trainer battle or wild encounter by receiving the incoming
         //intent holding the boolean (true if in trainer battle, false if not)
@@ -89,7 +91,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
 
         //Init Battle Phase with respective teams for utility and data consistency
-        val battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager,this, trainerName)
+        val battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager,this, trainerName, gainedExperience)
 
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")
@@ -253,8 +255,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
         //returns to menu
         binding.runBtn.setOnClickListener{
-//            returnToMenu();
-            //levelClass.levelUp(playerTeam[0], this)
+            //addBattleText here
+            endBattle = true
         }
         super.onStart()
     }
@@ -447,10 +449,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                     }
                 }
             } else {
-                if(endBattle){
-                    //Return to main menu
-                    returnToMenu()
-                }
                 binding.battleText.visibility = INVISIBLE
                 //buttons visibility
                 binding.buttons.visibility = VISIBLE
@@ -464,6 +462,21 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                 binding.pokemon1Level.visibility = VISIBLE
                 binding.pokemon1Hp.visibility = VISIBLE
                 binding.pokemon1Img.visibility = VISIBLE
+
+                if(faintedAndEndBattleArray[1]){
+                    if(faintedAndEndBattleArray[2]) {
+                        //If fainted pokemon is in player's team, reward enemy pokemon by not calling the fragment manager
+                        Level().addExperience(enemyActivePokemon.pokemon, gainedExperience[0], this)
+                    } else {
+                        //If fainted pokemon is not in player's team, reward player pokemon by calling fragment manager
+                        Level(fragmentManager).addExperience(playerActivePokemon.pokemon, gainedExperience[0], this)
+                    }
+                }
+
+                if(endBattle){
+                    //Return to main menu
+                    returnToMenu()
+                }
 
                 if(forceEnemySwitch){
                     forceEnemySwitch = false
