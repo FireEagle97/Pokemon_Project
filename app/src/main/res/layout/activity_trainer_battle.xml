@@ -10,8 +10,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/battle_ground_port"
-        tools:layout_editor_absoluteX="-89dp"
-        tools:layout_editor_absoluteY="206dp" />
+        />
 
     <TextView
         android:id="@+id/pokemon1_name"
@@ -85,19 +84,32 @@
         />
 
     <TextView
-        android:id="@+id/pokemons_move"
+        android:id="@+id/pokemon1_move"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/move_used"
         android:textSize="20sp"
         android:textColor="@color/blue"
         android:fontFamily="@font/opensansbold"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pokemon1_hp"
         />
 
+    <TextView
+        android:id="@+id/pokemon2_move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/move_used"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon2_hp"
+        />
 
     <Button
         android:id="@+id/fightBtn"
@@ -206,25 +218,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="capture"
-        android:textSize="14sp"
-        android:backgroundTint="@color/blue"
-        app:layout_constraintBottom_toTopOf="@id/runBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="30dp"
-        android:visibility="visible"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/potion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/blue"
         android:text="use potion (+20hp)"
-        android:textSize="14sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/runBtn"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/capture"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <!--    <Button-->
+<!--        android:id="@+id/button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="180dp"-->
+<!--        android:text="@string/switch_button"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/button_proceed"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="119dp"-->
+<!--        android:text="Proceed"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,7 @@ data class Pokemon(
     var specialDefense: Int,
     var speed: Int,
     var name: String,
-    var moves: MutableList<Move>,
+    var moves: ArrayList<Move>,
     var experience: Double,
     var level: Int,
     var hp: Int

@@ -26,6 +26,15 @@
     <string name="must_enter_trainer_name">Must enter trainer name!</string>
     <string name="save">save</string>
     <string name="trainer_name">Enter your name</string>
+
+    //Battle strings
+    <string name="switch_button">Switch</string>
+    <string name="select">Select</string>
+    <string name="move_used">move used:</string>
+    <string name="learn_move">Do you want to learn a new Move?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <string name="image_of_the_pokemon">image_of_the_pokemon</string>
     <string name="move_up">move up</string>
     <string name="move_down">move down</string>
@@ -34,7 +43,4 @@
     <string name="collection">COLLECTION</string>
     <string name="team">TEAM</string>
 
-
-    //Battle strings
-    <string name="switch_button">Switch</string>
 </resources>

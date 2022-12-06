@@ -1,6 +1,7 @@
 package com.example.pokemongame.battle
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
@@ -32,9 +33,10 @@ class SwitchingFragment(): DialogFragment() {
         teamPosition = requireArguments().getIntArray("teamPosition") as IntArray
 
         //Assign the adapter with the gotten objects
-        recyclerView.adapter = SwitchAdapter(pokemonTeam, teamPosition,this)
+        recyclerView.adapter = SwitchAdapter(pokemonTeam, teamPosition, this)
         return view
     }
+
 
     //Set the fragment result as the teamPosition[0]'s value (that changed in the recyclerview)
     override fun onDismiss(dialog: DialogInterface) {

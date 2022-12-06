@@ -1,13 +1,25 @@
 package com.example.pokemongame.pokemon
 
 import android.content.Context
-import com.example.pokemongame.JSONReader
+import android.os.Bundle
+import androidx.fragment.app.FragmentManager
+import com.example.pokemongame.AddMoveDialogFragment
+import com.example.pokemongame.utility.JSONReader
+import com.example.pokemongame.battle.SelectMovesFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.*
 import java.util.logging.Logger
 
 class MoveAssigner {
+    var fragmentManager : FragmentManager?
+    var playerPokemon = false
+    constructor(){
+        fragmentManager = null
+    }
+    constructor(fragmentManagerNew: FragmentManager){
+        fragmentManager = fragmentManagerNew
+        playerPokemon = true
+    }
     companion object{
         val MoveLog: Logger = Logger.getLogger(MoveAssigner::class.java.name)
     }
@@ -59,7 +71,8 @@ class MoveAssigner {
                 //Insert the moves in the pokemon
                 newMovesList.forEach{ move ->
                     pokemon.moves.add(move)
-                    MoveLog.info(pokemon.battleStats.species + " has learned " + move.name)
+                    MoveLog.info(pokemon.name + " has learned " + move.name)
+//                    MoveLog.info(pokemon.battleStats.species + " has learned " + move.name)
                 }
             } else {
 
@@ -72,14 +85,22 @@ class MoveAssigner {
                         //Flip the boolean
                         noNewMoves = false
 
-                        //Ask if the user wants the pokemon to learn that move. Will need to be changed here later on
-                        val userChoice = true;
-                        MoveLog.info("Do you want to learn ${moveEntry.move}?")
-                        if(userChoice){
-                            MoveLog.info("Trainer chose yes")
+                        //Get all new moves
+                        getNewMoves(moveEntry.move, newMovesList, gson, context)
 
-                            //Get all new moves
-                            getNewMoves(moveEntry.move, newMovesList, gson, context)
+                        //Ask if the user wants the pokemon to learn that move.
+                        //If the pokemon is from a player, prompt them. If they aren't, do not
+                        if(playerPokemon) {
+                            val bundle = Bundle()
+                            bundle.putSerializable("newMove", newMovesList[0])
+                            bundle.putSerializable("pokemon", pokemon)
+                            val dialog = AddMoveDialogFragment()
+                            dialog.arguments = bundle
+                            newMovesList.clear()
+                            dialog.isCancelable = false
+                            dialog.show(fragmentManager!!, "AddMoveDialogFragment")
+                        } else {
+                            MoveLog.info("Trainer AI will always choose yes")
 
                             //Replace a move if pokemon already has 4 moves
                             if (pokemon.moves.count() == 4) {
@@ -88,7 +109,7 @@ class MoveAssigner {
                                         "2. ${pokemon.moves[1].name}\n" +
                                         "3. ${pokemon.moves[2].name}\n" +
                                         "4. ${pokemon.moves[3].name}\n")
-                                //testing purposes. Should be replaced here by an app section
+                                //testing purposes, 1 is always chosen
                                 val userInput = "1"
                                 val input = userInput.toInt()
                                 if(input in 1..4){
@@ -104,8 +125,6 @@ class MoveAssigner {
                                 MoveLog.info(pokemon.battleStats.species + " has learned " + newMovesList[0].name)
                                 newMovesList.removeFirst()
                             }
-                        } else{
-                            MoveLog.info("Trainer chose no")
                         }
                     }
                 }
@@ -126,4 +145,32 @@ class MoveAssigner {
         list.add(move)
     }
 
+    fun addMoveOrSummonFragment(pokemon: Pokemon, newMove: Move){
+        //Replace a move if pokemon already has 4 moves
+        if (pokemon.moves.count() == 4) {
+            val bundle = Bundle()
+            bundle.putSerializable("moves", pokemon.moves)
+            bundle.putIntArray("movePosition", intArrayOf(0))
+            val selectMoveFragment = SelectMovesFragment(false)
+            selectMoveFragment.arguments = bundle
+            selectMoveFragment.isCancelable = false
+            selectMoveFragment.show(fragmentManager!!, "fragment")
+        } else {
+            //Learn new move
+            pokemon.moves.add(newMove)
+            MoveLog.info(pokemon.battleStats.species + " has learned " + newMove.name)
+        }
+    }
+
+    fun replaceMove(pokemon: Pokemon, newMove: Move, position: Int){
+        MoveLog.info("Pokemon already has 4 moves, which move would you like to replace?\n" +
+                "1. ${pokemon.moves[0].name}\n" +
+                "2. ${pokemon.moves[1].name}\n" +
+                "3. ${pokemon.moves[2].name}\n" +
+                "4. ${pokemon.moves[3].name}\n")
+
+        val oldMove = pokemon.moves[position].name
+        pokemon.moves[position] = newMove
+        MoveLog.info("$oldMove has been replaced by ${pokemon.moves[position].name}")
+    }
 }
