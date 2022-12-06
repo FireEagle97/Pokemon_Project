@@ -80,7 +80,7 @@ class DamageCalculations(val activity: BattlePhaseActivity) {
                 2.0 -> message = "It's super effective!"
                 4.0 -> message = "It's hyper effective!"
             }
-            activity.addEntryToBattleText(message)
+            activity.addStringToBattleTextList(message)
         }
         job.join()
             return@runBlocking multiplier
