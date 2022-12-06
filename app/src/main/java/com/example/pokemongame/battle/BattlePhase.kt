@@ -39,7 +39,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             //Check if the battle ended, if so, do not log this message
             if(!faintedAndEndBattleArray[0]) {
                 BattleLog.info("A pokemon has fainted before it could take its turn. Skipping turn...")
-                activity.addEntryToBattleText("A pokemon has fainted before it could take its turn. Skipping turn...")
+                activity.addStringToBattleTextList("A pokemon has fainted before it could take its turn. Skipping turn...")
             }
         } else {
             //Second turn
@@ -75,7 +75,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             }
         } else {
             BattleLog.info("Trainer chose another action than fighting. Turn will be skipped")
-            activity.addEntryToBattleText("Trainer chose another action than fighting. Turn will be skipped")
+            activity.addStringToBattleTextList("Trainer chose another action than fighting. Turn will be skipped")
         }
     }
 
@@ -119,18 +119,18 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
         //Check if move hits
         if(accuracyCheck(speedArray[0].chosenMove!!)){
-
-            var message = if(speedArray[0].inPlayerTeam) {
-                "$trainerName's ${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}"
+            var battleMessage: BattleText
+            battleMessage = if(speedArray[0].inPlayerTeam) {
+                BattleText("$trainerName's ${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}", false, false, false)
             } else {
-                "The opponent's ${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}"
+                BattleText("Opponent's ${speedArray[0].pokemon.name} used ${speedArray[0].chosenMove!!.name}", false, false, true)
             }
 
             //Check if the move does damage
             if(speedArray[0].chosenMove!!.power > 0){
-                //Update the message to include an exclamation mark, which will be used to determine the logic of the activity
-                message += "!"
-                activity.addEntryToBattleText(message)
+                //Update the message
+                battleMessage.updatesHP = true
+                activity.addBattleTextToBattleTextList(battleMessage)
 
                 BattleLog.info("Old HP of defending pokemon: ${speedArray[1].pokemon.hp}")
                 speedArray[1].pokemon.hp -= DamageCalculations(activity).calculateDamage(speedArray[0].pokemon,
@@ -142,7 +142,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
                 BattleLog.info("New HP of defending pokemon: ${speedArray[1].pokemon.hp}")
 
             } else {
-                activity.addEntryToBattleText(message)
+                activity.addBattleTextToBattleTextList(battleMessage)
             }
 
 
@@ -156,11 +156,14 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
                 }
 
                 if(speedArray[0].inPlayerTeam) {
-                    activity.addEntryToBattleText("$trainerName's ${speedArray[0].pokemon.name} healed itself!")
-                } else {
-                    activity.addEntryToBattleText("The opponent's ${speedArray[0].pokemon.name} healed itself!")
-                }
+                    battleMessage.message = "$trainerName's ${speedArray[0].pokemon.name} healed itself!"
 
+                } else {
+                    battleMessage.message = "Opponent's ${speedArray[0].pokemon.name} healed itself!"
+                }
+                battleMessage.updatesHP = true
+                battleMessage.doesHeal = true
+                activity.addBattleTextToBattleTextList(battleMessage)
                 BattleLog.info("New HP of healed pokemon: ${speedArray[0].pokemon.hp}")
 
             //If it doesn't do either, it does nothing
@@ -168,11 +171,11 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
             if(speedArray[0].chosenMove!!.heal == 0 && speedArray[0].chosenMove!!.power == 0){
                 BattleLog.info("Moves that have no power or no heal values do nothing")
-                activity.addEntryToBattleText("Moves that have no power or no heal values do nothing")
+                activity.addStringToBattleTextList("Moves that have no power or no heal values do nothing")
             }
         } else{
             BattleLog.info("${speedArray[0].pokemon.name}'s ${speedArray[0].chosenMove!!.name} missed!")
-            activity.addEntryToBattleText("${speedArray[0].pokemon.name}'s ${speedArray[0].chosenMove!!.name} missed!")
+            activity.addStringToBattleTextList("${speedArray[0].pokemon.name}'s ${speedArray[0].chosenMove!!.name} missed!")
         }
         //If its the second turn, switch their positions again to keep the original order
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
@@ -217,7 +220,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
         //Fainted pokemon will always be in [1]
         BattleLog.info("${speedArray[1].pokemon.name} has fainted!")
-        activity.addEntryToBattleText("${speedArray[1].pokemon.name} has fainted!")
+        activity.addStringToBattleTextList("${speedArray[1].pokemon.name} has fainted!")
 
         //Find if fainted pokemon is in player team or not
         faintedAndEndBattleArray[2] = speedArray[1].inPlayerTeam
@@ -227,7 +230,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
         gainedExperience[0] = 0.3 * speedArray[1].pokemon.experienceReward * speedArray[1].pokemon.level
         if(inTrainerBattle){
             BattleLog.info("Double xp applied due to trainer battle!")
-            activity.addEntryToBattleText("Double xp applied due to trainer battle!")
+            activity.addStringToBattleTextList("Double xp applied due to trainer battle!")
             gainedExperience[0] *= 2.0
         }
 
@@ -238,11 +241,11 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
         if(playerTeamFainted || enemyTeamFainted){
             if(enemyTeamFainted){
                 BattleLog.info("You won!")
-                activity.addEntryToBattleText("You won!")
+                activity.addStringToBattleTextList("You won!")
             }
             else if(checkIfTeamAllFainted(playerTeam)) {
                 BattleLog.info("You lost...")
-                activity.addEntryToBattleText("You lost...")
+                activity.addStringToBattleTextList("You lost...")
             }
             swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
             faintedAndEndBattleArray[0] = true

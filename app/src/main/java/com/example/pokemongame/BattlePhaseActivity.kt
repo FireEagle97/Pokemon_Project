@@ -12,10 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.example.pokemongame.battle.ActivePokemon
-import com.example.pokemongame.battle.BattlePhase
-import com.example.pokemongame.battle.SelectMovesFragment
-import com.example.pokemongame.battle.SwitchingFragment
+import com.example.pokemongame.battle.*
 import com.example.pokemongame.databinding.ActivityBattlePhaseBinding
 import com.example.pokemongame.pokemon.*
 import java.util.*
@@ -46,7 +43,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     //Will hold the opponent's active pokemon
     lateinit var enemyActivePokemon: ActivePokemon
     //Holds all text to be displayed in the in-game battle log
-    var battleTextList: MutableList<String> = mutableListOf()
+    var battleTextList: MutableList<BattleText> = mutableListOf()
     //Boolean that determines if the battle is over (to return to main menu)
     var endBattle: Boolean = false
     //Boolean used to force the user to switch
@@ -89,6 +86,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //Testing. Add a poke to the player's team
         var charm = PokemonCreator().createPokemon(5, "charmander", this, "Charm")
         Level().initializeLevels(charm, charm.level, this)
+        charm.hp = charm.maxHp
         playerTeam.add(charm)
         //Holds the the enemy's team. It is changed to a generated enemy team above
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
@@ -121,9 +119,9 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         val adversary: String
         var initialText: String = ""
         if(inTrainerBattle){
-            adversary = "opponent's"
-            TrainerBattleLog.info("The $adversary ${enemyActivePokemon.pokemon.name} was sent out!")
-            initialText = "The $adversary ${enemyActivePokemon.pokemon.name} was sent out!"
+            adversary = "Opponent's"
+            TrainerBattleLog.info("$adversary ${enemyActivePokemon.pokemon.name} was sent out!")
+            initialText = "$adversary ${enemyActivePokemon.pokemon.name} was sent out!"
         } else {
             adversary = "wild"
             TrainerBattleLog.info("A $adversary ${enemyActivePokemon.pokemon.name} appeared!")
@@ -351,7 +349,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             if(playerTeam[index].level > maxLevel){
                 maxLevel = playerTeam[index].level
             }
-            //assing the hp to max hp
+            //passing the hp to max hp
 
         }
         if(minLevel -5 <= 0){
@@ -401,8 +399,13 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         buttons.visibility = INVISIBLE
     }
 
-    fun addEntryToBattleText(text: String){
-        battleTextList.add(text)
+    fun addStringToBattleTextList(text: String, updatesHP: Boolean? = null,
+                             doesHeal: Boolean? = null, isOpponent: Boolean? = null){
+        battleTextList.add(BattleText(text, updatesHP, doesHeal, isOpponent))
+    }
+
+    fun addBattleTextToBattleTextList(battleText: BattleText){
+        battleTextList.add(battleText)
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
@@ -422,11 +425,11 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             //If the log trail isn't empty, show it and hide the buttons. If it isn't empty, show the buttons
             if (battleTextList.isNotEmpty()) {
                 val text = battleTextList.removeFirst()
-                showBattleText(text)
+                showBattleText(text.message)
                 //If a battle move was performed, update the HP of the involved pokemon early
-                if("!" in text) {
-                    if("healed" in text) {
-                        if ("The opponent's" in text) {
+                if(text.updatesHP == true) {
+                    if(text.doesHeal == true) {
+                        if (text.isOpponent == true) {
                             val newHpEnemy =
                                 "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
                             binding.pokemon2Hp.text = newHpEnemy
@@ -436,7 +439,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                             binding.pokemon1Hp.text = newHpPlayer
                         }
                     } else {
-                        if ("The opponent's" in text) {
+                        if (text.isOpponent == true) {
                             val newHpPlayer =
                                 "Hp: " + playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
                             binding.pokemon1Hp.text = newHpPlayer
