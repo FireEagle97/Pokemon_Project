@@ -76,7 +76,7 @@ class DamageCalculations(val activity: BattlePhaseActivity) {
                 0.0 -> message = "It had no effect..."
                 0.25 -> message = "It's barely effective..."
                 0.50 -> message = "It's not very effective..."
-                1.0 -> message = "It's effective!"
+                1.0 -> message = "It's effective"
                 2.0 -> message = "It's super effective!"
                 4.0 -> message = "It's hyper effective!"
             }

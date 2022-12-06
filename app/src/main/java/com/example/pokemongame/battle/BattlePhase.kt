@@ -38,7 +38,6 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
         if(faintedAndEndBattleArray[1]){
             //Check if the battle ended, if so, do not log this message
             if(!faintedAndEndBattleArray[0]) {
-                BattleLog.info("A pokemon has fainted before it could take its turn. Skipping turn...")
                 activity.addStringToBattleTextList("A pokemon has fainted before it could take its turn. Skipping turn...")
             }
         } else {
@@ -74,8 +73,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
                     faintedAndEndBattleArray, fragmentManager, context)
             }
         } else {
-            BattleLog.info("Trainer chose another action than fighting. Turn will be skipped")
-            activity.addStringToBattleTextList("Trainer chose another action than fighting. Turn will be skipped")
+            activity.addStringToBattleTextList("Trainer didn't FIGHT, battle turn will be skipped...")
         }
     }
 
