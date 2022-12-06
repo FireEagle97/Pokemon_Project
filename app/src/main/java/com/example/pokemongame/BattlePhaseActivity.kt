@@ -26,7 +26,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     private lateinit var playerTeam: ArrayList<Pokemon>
     private lateinit var trainerName: String
     private var inTrainerBattle: Boolean = false
-    private var numItemUses = 2
     //Initialize fragmentManager for various tasks
     val fragmentManager = supportFragmentManager
     //Initialize Level class for utility to level up the PLAYER's pokemon
@@ -227,16 +226,12 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
 
         binding.itemBtn.setOnClickListener{
-            if(numItemUses > 0) {
+
                 binding.potion.visibility = VISIBLE
                 if (!inTrainerBattle) {
                     binding.capture.visibility = VISIBLE
 
                 }
-            }
-            else{
-                Toast.makeText(this, "You have reached the maximum number of item uses", Toast.LENGTH_SHORT).show()
-            }
         }
         binding.potion.setOnClickListener{
             if(playerActivePokemon.pokemon.hp + 20 < playerActivePokemon.pokemon.maxHp){
@@ -245,29 +240,40 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             else{
                 playerActivePokemon.pokemon.hp = playerActivePokemon.pokemon.maxHp
             }
-            TrainerBattleLog.info("$trainerName used a potion!")
-            updateUI(playerActivePokemon,enemyActivePokemon)
+            val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
+            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
+            playerActivePokemon.chosenMove = null
+            callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
+            TrainerBattleLog.info("$trainerName healed their pokemon by using a potion!")
+            addStringToBattleTextList("$trainerName healed their pokemon by using a potion!", true, true, false)
             hideItems()
-            numItemUses--
         }
         binding.capture.setOnClickListener{
-            val chanceToCapture = 1-(enemyActivePokemon.pokemon.hp / enemyActivePokemon.pokemon.maxHp)
+            playerActivePokemon.chosenMove = null
+            enemyActivePokemon.chosenMove = null
+            val chanceToCapture = (1.0- (enemyActivePokemon.pokemon.hp.toDouble() / enemyActivePokemon.pokemon.maxHp.toDouble()))
             if(chanceToCapture > Random().nextDouble()){
                 collection.add(enemyActivePokemon.pokemon)
-                Toast.makeText(this, enemyActivePokemon.pokemon.name + " has been captured and added to the team", Toast.LENGTH_SHORT).show()
-                returnToMenu()
+                TrainerBattleLog.info("$trainerName  successfully captured the enemy's pokemon!")
+                addStringToBattleTextList("$trainerName successfully captured the enemy's pokemon!")
+                
+                endBattle = true
             }
             else{
-                Toast.makeText(this, "could not capture pokemon, returning to battle", Toast.LENGTH_SHORT).show()
+                TrainerBattleLog.info("$trainerName did not manage to capture the enemy's pokemon!")
+                addStringToBattleTextList("$trainerName did not manage to capture the enemy's pokemon!")
+                callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
+
             }
+            val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
+            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             hideItems()
-            numItemUses--
         }
 
         //returns to menu
         binding.runBtn.setOnClickListener{
-            //addBattleText here
-            endBattle = true
+            returnToMenu()
+
         }
         super.onStart()
     }

@@ -120,6 +120,28 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="150dp"
         />
+    <ImageView
+        android:src="@drawable/pokeball"
+        app:layout_constraintStart_toStartOf="@id/pokemon1_img"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon1_img"
+        app:layout_constraintBottom_toTopOf="@+id/buttons"
+        android:id="@+id/capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="capture"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:src="@drawable/potion"
+        android:id="@+id/potion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="use potion"
+        app:layout_constraintStart_toStartOf="@id/pokemon2_img"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon2_img"
+        app:layout_constraintBottom_toTopOf="@+id/buttons"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/buttons"
@@ -189,22 +211,6 @@
             android:layout_below="@id/itemBtn"
             app:strokeColor="@color/blue"
             app:strokeWidth="2dp" />
-
-        <Button
-            android:id="@+id/capture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="capture"
-            android:layout_alignParentStart="true"
-            android:visibility="gone"/>
-
-        <Button
-            android:id="@+id/potion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="use potion"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone" />
     </RelativeLayout>
 
     <TextView
