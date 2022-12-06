@@ -240,6 +240,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             else{
                 playerActivePokemon.pokemon.hp = playerActivePokemon.pokemon.maxHp
             }
+            val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
+            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             playerActivePokemon.chosenMove = null
             callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
             TrainerBattleLog.info("$trainerName healed their pokemon by using a potion!")
@@ -260,8 +262,11 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             else{
                 TrainerBattleLog.info("$trainerName did not manage to capture the enemy's pokemon!")
                 addStringToBattleTextList("$trainerName did not manage to capture the enemy's pokemon!")
+                callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
+
             }
-            callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
+            val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
+            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             hideItems()
         }
 
