@@ -46,8 +46,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     var battleTextList: MutableList<BattleText> = mutableListOf()
     //Boolean that determines if the battle is over (to return to main menu)
     var endBattle: Boolean = false
-    //Boolean used to force the user to switch
-    var forcePlayerSwitch = false
+    //Array of Boolean used to force the user to switch
+    var forcePlayerSwitch: Array<Boolean> = arrayOf(false)
     //Boolean used to force the enemy to switch
     var forceEnemySwitch = false
     //Array to trigger a switch and the end of the battle
@@ -141,7 +141,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon2Hp.visibility = INVISIBLE
         binding.pokemon2Img.visibility = INVISIBLE
 
-        //Fragment listener for new moves
+        //Fragment listener for new moves prompt
         fragmentManager.setFragmentResultListener("newMove", this){ _, bundle ->
             newMove = bundle.getSerializable("newMove") as Move
             pokemonToLearnMove = bundle.getSerializable("pokemon") as Pokemon
@@ -152,13 +152,14 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             }
         }
 
+        //Fragment listener for move replacement
         fragmentManager.setFragmentResultListener("newMovePosition", this) { _,bundle ->
             val movePosition = bundle.getInt("movePosition")
             TrainerBattleLog.info(movePosition.toString())
             MoveAssigner().replaceMove(pokemonToLearnMove, newMove, movePosition)
         }
 
-        //Upon the DialogFragment closing, turn the switched-in pokemon into an ActivePokemon stored in the playerActivePokemon var
+        //Upon the Switch DialogFragment closing, turn the switched-in pokemon into an ActivePokemon
         //Note: Since The teams get updated in the Battle_Phase class, we just need to copy a pokemon from our team
         fragmentManager.setFragmentResultListener("teamPosition", this){ requestKey, bundle ->
             //Get the position of the pokemon to be switched-in
@@ -166,8 +167,22 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
             showBattleText("$trainerName's ${playerActivePokemon.pokemon.name} was withdrawn!")
             playerActivePokemon = ActivePokemon(playerTeam[teamPosition],null, teamPosition,true)
-            callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
+
+            binding.pokemon1Name.text = playerActivePokemon.pokemon.name
+            val pPokemonLevel  = "level: " + playerActivePokemon.pokemon.level
+            binding.pokemon1Level.text = pPokemonLevel
+            val pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
+            binding.pokemon1Hp.text = pPokemon1Hp
+            binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+            if(!forcePlayerSwitch[0]) {
+                //Choose a random move for the enemy
+                val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
+                enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
+                callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
+            }
+            forcePlayerSwitch[0] = false
             showBattleText("$trainerName's ${playerActivePokemon.pokemon.name} switched in!")
+
         }
 
         //Choose a move
@@ -178,8 +193,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
 
             //Copy the pokemon and Transform the copied pokemon into an ActivePokemon with a null chosenMove and store it in
-            playerActivePokemon = ActivePokemon(playerActivePokemon.pokemon, playerActivePokemon.pokemon.moves[movePosition],playerTeam.indexOf(playerActivePokemon.pokemon),true)
-            enemyActivePokemon = ActivePokemon(enemyActivePokemon.pokemon, enemyActivePokemon.pokemon.moves[enemyMovePosition], enemyTeam.indexOf(enemyActivePokemon.pokemon), false)
+            playerActivePokemon.chosenMove = playerActivePokemon.pokemon.moves[movePosition]
+            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
 
             callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
 
@@ -321,7 +336,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
                 //Force Switch player team if their active pokemon faints
                 if(faintedAndEndBattleArray[1] && faintedAndEndBattleArray[2]){
-                    forcePlayerSwitch = true
+                    forcePlayerSwitch[0] = true
                 }
             } else {
                 //Flip end battle boolean
@@ -383,12 +398,13 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Level.text = pPokemonLevel
         val pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
         binding.pokemon1Hp.text = pPokemon1Hp
+        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+
         binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
         val ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
         binding.pokemon2Level.text = ePokemonLevel
         val ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
         binding.pokemon2Hp.text = ePokemon2Hp
-        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
         binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
     }
 
@@ -493,8 +509,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                         }
                     }
                 }
-                if(forcePlayerSwitch){
-                    forcePlayerSwitch = false
+                if(forcePlayerSwitch[0]){
                     switch(playerTeam, teamPositionArray, fragmentManager)
                 }
                 updateUI(playerActivePokemon,enemyActivePokemon)

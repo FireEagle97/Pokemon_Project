@@ -219,6 +219,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
+        android:padding="10dp"
         android:background="@drawable/battle_log_border"
         android:fontFamily="@font/opensansbold"
         android:text="@string/battle_fight"
