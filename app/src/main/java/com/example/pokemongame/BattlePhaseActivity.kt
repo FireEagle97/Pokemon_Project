@@ -29,7 +29,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     private lateinit var playerTeam: ArrayList<Pokemon>
     private lateinit var trainerName: String
     private var inTrainerBattle: Boolean = false
-    private var numItemUses = 2
     //Initialize fragmentManager for various tasks
     val fragmentManager = supportFragmentManager
     //Initialize Level class for utility to level up the PLAYER's pokemon
@@ -214,16 +213,12 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
 
         binding.itemBtn.setOnClickListener{
-            if(numItemUses > 0) {
+
                 binding.potion.visibility = VISIBLE
                 if (!inTrainerBattle) {
                     binding.capture.visibility = VISIBLE
 
                 }
-            }
-            else{
-                Toast.makeText(this, "You have reached the maximum number of item uses", Toast.LENGTH_SHORT).show()
-            }
         }
         binding.potion.setOnClickListener{
             if(playerActivePokemon.pokemon.hp + 20 < playerActivePokemon.pokemon.maxHp){
@@ -232,10 +227,11 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             else{
                 playerActivePokemon.pokemon.hp = playerActivePokemon.pokemon.maxHp
             }
-            TrainerBattleLog.info("$trainerName used a potion!")
-            updateUI(playerActivePokemon,enemyActivePokemon)
+            playerActivePokemon.chosenMove = null
+            callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
+            TrainerBattleLog.info("$trainerName healed their pokemon by using a potion!")
+            addEntryToBattleText("$trainerName healed their pokemon by using a potion!")
             hideItems()
-            numItemUses--
         }
         binding.capture.setOnClickListener{
             val chanceToCapture = 1-(enemyActivePokemon.pokemon.hp / enemyActivePokemon.pokemon.maxHp)
@@ -248,7 +244,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                 Toast.makeText(this, "could not capture pokemon, returning to battle", Toast.LENGTH_SHORT).show()
             }
             hideItems()
-            numItemUses--
         }
 
         //returns to menu
