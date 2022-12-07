@@ -243,19 +243,21 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
             enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             playerActivePokemon.chosenMove = null
-            callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
             TrainerBattleLog.info("$trainerName healed their pokemon by using a potion!")
             addStringToBattleTextList("$trainerName healed their pokemon by using a potion!", true, true, false)
+            callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
             hideItems()
         }
+
         binding.capture.setOnClickListener{
             playerActivePokemon.chosenMove = null
-            enemyActivePokemon.chosenMove = null
+            val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
+            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             val chanceToCapture = (1.0- (enemyActivePokemon.pokemon.hp.toDouble() / enemyActivePokemon.pokemon.maxHp.toDouble()))
             if(chanceToCapture > Random().nextDouble()){
                 collection.add(enemyActivePokemon.pokemon)
                 TrainerBattleLog.info("$trainerName  successfully captured the enemy's pokemon!")
-                addStringToBattleTextList("$trainerName successfully captured the enemy's pokemon!")
+                showBattleText("$trainerName successfully captured the enemy's pokemon!")
                 
                 endBattle = true
             }
@@ -265,8 +267,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                 callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
 
             }
-            val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
-            enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             hideItems()
         }
 
