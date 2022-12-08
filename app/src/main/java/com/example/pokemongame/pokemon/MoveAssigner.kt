@@ -35,7 +35,7 @@ class MoveAssigner {
 
     //All logs can be replaced with more useful stuff like a TextField
     //Assigns a new move to a pokemon if a new move can be learned and if the user chooses so
-    fun assignNewMoves(pokemon: Pokemon, level: Int, context: Context){
+    fun assignNewMoves(pokemon: Pokemon, level: Int){
         val pokemonSpecies = pokemon.battleStats.species
         val gson = Gson()
 
@@ -67,7 +67,7 @@ class MoveAssigner {
                     for (i in level downTo 0) {
                         for (element in moveList) {
                             if (descendingLevel == element.level) {
-                                getNewMove(element.move, newMovesList, gson, context)
+                                getNewMove(element.move, newMovesList, gson)
                             }
                         }
                         descendingLevel--
@@ -91,7 +91,7 @@ class MoveAssigner {
                         noNewMoves = false
 
                         //Get a new move
-                        getNewMove(moveEntry.move, newMovesList, gson, context)
+                        getNewMove(moveEntry.move, newMovesList, gson)
 
                         //Ask if the user wants the pokemon to learn that move.
                         //If the pokemon is from a player, prompt them. If they aren't, do not
@@ -137,7 +137,7 @@ class MoveAssigner {
     }
 
     private suspend fun getNewMove(moveName: String, list: MutableList<Move>,
-                                    gson: Gson, context: Context) = withContext(Dispatchers.IO) {
+                                    gson: Gson) = withContext(Dispatchers.IO) {
         var moveDataString: String = ""
         val job = launch {
             //Get the data
