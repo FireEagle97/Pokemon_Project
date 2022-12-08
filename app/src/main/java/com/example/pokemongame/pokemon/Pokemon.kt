@@ -5,9 +5,12 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.pokemongame.R
 
+//(foreignKeys = [ForeignKey(entity = BattleStats::class, parentColumns = arrayOf("species"), childColumns = arrayOf(
+//    "species"
+//), onDelete = CASCADE)])
 @Entity
 data class Pokemon(
-    @Ignore var battleStats: BattleStats, //will get it from BattleStats
+    @Ignore var battleStats: BattleStats,
     var experienceReward: Int,
     var attack: Int,
     var defense: Int,
@@ -27,6 +30,22 @@ data class Pokemon(
 ): java.io.Serializable{
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
+    constructor( experienceReward: Int,
+                        attack: Int,
+                        defense: Int,
+                        maxHp: Int,
+                        specialAttack: Int,
+                        specialDefense: Int,
+                        speed: Int,
+                        name: String,
+                        moves: ArrayList<Move>,
+                        experience: Double,
+                        level: Int,
+                        hp: Int,
+                        frontUrl: String = "", //WILL NEED TO PUT THOSE HERE
+                        backUrl: String = "",
+                        inTeam: Boolean = false,
+                        ordering: Int = 0) : this(BattleStats("",0,0,0,0,0,0,0,listOf("")),experienceReward, attack, defense, maxHp, specialAttack, specialDefense, speed, name, moves, experience, level, hp, frontUrl)
 }
 //given pokemon species finds its resource files (hard coded)
 fun getPokemonImageResourceId(species: String): Int =
