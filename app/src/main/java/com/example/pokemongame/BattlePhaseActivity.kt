@@ -1,6 +1,7 @@
 package com.example.pokemongame
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
@@ -12,9 +13,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.example.pokemongame.battle.*
 import com.example.pokemongame.databinding.ActivityBattlePhaseBinding
 import com.example.pokemongame.pokemon.*
+import com.example.pokemongame.utility.Connector
+import kotlinx.coroutines.*
+import java.net.URL
 import java.util.*
 import java.util.logging.Logger
 import kotlin.collections.ArrayList
@@ -84,10 +89,13 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //Holds the player's team
         playerTeam =  intent.getSerializableExtra("team") as ArrayList<Pokemon>
         //Testing. Add a poke to the player's team
-        var charm = PokemonCreator().createPokemon(5, "charmander", this, "Charm")
-        Level().initializeLevels(charm, charm.level, this)
-        charm.hp = charm.maxHp
-        playerTeam.add(charm)
+        var charm = PokemonCreator().createPokemon(5, "charmander", "Charm")
+        if (charm != null) {
+            Level().initializeLevels(charm, charm.level, this)
+            charm.hp = charm.maxHp
+            playerTeam.add(charm)
+        }
+
         //Holds the the enemy's team. It is changed to a generated enemy team above
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
 
@@ -113,7 +121,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Level.text = pPokemonLevel
         var pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
         binding.pokemon1Hp.text = pPokemon1Hp
-        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+        binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon))
+//        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.frontSprite))
 
         //If we are in a trainer battle, print a "sent out" message, else print a "appeared" message
         val adversary: String
@@ -134,7 +143,8 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon2Level.text = ePokemonLevel
         var ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
         binding.pokemon2Hp.text = ePokemon2Hp
-        binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
+        var playerImage : Bitmap? = getPokemonBitMap(enemyActivePokemon)
+        binding.pokemon2Img.setImageBitmap(getPokemonBitMap(enemyActivePokemon))
         //Hide pokemon2's data
         binding.pokemon2Name.visibility = INVISIBLE
         binding.pokemon2Level.visibility = INVISIBLE
@@ -173,7 +183,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             binding.pokemon1Level.text = pPokemonLevel
             val pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
             binding.pokemon1Hp.text = pPokemon1Hp
-            binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+            binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon))
             if(!forcePlayerSwitch[0]) {
                 //Choose a random move for the enemy
                 val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
@@ -352,7 +362,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     //temp code to return a list of random Pokemon
     //will use it to generate the opponent team
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun generateOpponentTeam(playerTeam:ArrayList<Pokemon>, context: Context): ArrayList<Pokemon>{
+    private fun generateOpponentTeam(playerTeam:ArrayList<Pokemon>, context: Context): ArrayList<Pokemon> {
 
         var randPokemons = 0 // if not in trainer battle.
         if(inTrainerBattle){
@@ -384,7 +394,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             val rndSpecies = speciesList[Random().nextInt(speciesList.size)]
             val rndLevel = (minLevel..maxLevel).shuffled().last()
 
-            rndPokeList.add(PokemonCreator().createPokemon(rndLevel,rndSpecies, context))
+            rndPokeList.add(PokemonCreator().createPokemon(rndLevel,rndSpecies))
         }
         //passing moves , hp , experience
         for (pokemon in rndPokeList) {
@@ -402,14 +412,14 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Level.text = pPokemonLevel
         val pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
         binding.pokemon1Hp.text = pPokemon1Hp
-        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.battleStats.species))
+        binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon))
 
         binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
         val ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
         binding.pokemon2Level.text = ePokemonLevel
         val ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
         binding.pokemon2Hp.text = ePokemon2Hp
-        binding.pokemon2Img.setImageResource(getPokemonImageResourceId(enemyActivePokemon.pokemon.battleStats.species))
+        binding.pokemon2Img.setImageBitmap(getPokemonBitMap(enemyActivePokemon))
     }
 
     fun showBattleText(text: String){
@@ -521,5 +531,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
         return super.onTouchEvent(event)
     }
+
 
 }
