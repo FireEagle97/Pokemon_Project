@@ -1,6 +1,7 @@
 package com.example.pokemongame.battle
 
 import android.content.Context
+import com.example.pokemongame.BattlePhaseActivity
 import com.example.pokemongame.pokemon.Move
 import com.example.pokemongame.pokemon.Pokemon
 import com.example.pokemongame.utility.Connector
@@ -15,7 +16,7 @@ import java.net.URL
 import java.util.logging.Logger
 import kotlin.math.floor
 
-class DamageCalculations {
+class DamageCalculations(val activity: BattlePhaseActivity) {
     companion object{
         val DamageLog: Logger = Logger.getLogger(DamageCalculations::class.java.name)
     }
@@ -52,7 +53,7 @@ class DamageCalculations {
         val job = scope.launch {
                 //Get the data
                 val url: URL = URL("${PokeApiEndpoint.TYPE.url}/${attackerMove.type}")
-                val data = Connector().connect(url) as String
+                var data = Connector().connect(url) as String
                 //Simplify it
                 val attackerMoveEffectivenessString = simplifyTypeRelations(data)
                 //Transform it into a map
@@ -70,15 +71,16 @@ class DamageCalculations {
                     }
                 }
             //Log a battle message
+            var message: String = ""
             when (multiplier) {
-                0.0 -> DamageLog.info("It had no effect...")
-                0.25 -> DamageLog.info("It's barely effective...")
-                0.50 -> DamageLog.info("It's not very effective...")
-                1.0 -> DamageLog.info("It's effective!")
-                2.0 -> DamageLog.info("It's super effective!")
-                4.0 -> DamageLog.info("It's hyper effective!")
+                0.0 -> message = "It had no effect..."
+                0.25 -> message = "It's barely effective..."
+                0.50 -> message = "It's not very effective..."
+                1.0 -> message = "It's effective"
+                2.0 -> message = "It's super effective!"
+                4.0 -> message = "It's hyper effective!"
             }
-
+            activity.addStringToBattleTextList(message)
         }
         job.join()
             return@runBlocking multiplier
