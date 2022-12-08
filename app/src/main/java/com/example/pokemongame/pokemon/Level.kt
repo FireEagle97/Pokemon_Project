@@ -81,7 +81,7 @@ class Level {
         pokemon.speed = newSpeedStat.toInt()
 
         //Assign new moves (if any)
-        moveAssigner.assignNewMoves(pokemon, pokemon.level, context)
+        moveAssigner.assignNewMoves(pokemon, pokemon.level)
 
         //Reset cameFromInitializeLevels
         cameFromInitializeLevels = false
