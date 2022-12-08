@@ -246,7 +246,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             TrainerBattleLog.info("$trainerName healed their pokemon by using a potion!")
             addStringToBattleTextList("$trainerName healed their pokemon by using a potion!", true, true, false)
             callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
-            hideItems()
         }
 
         binding.capture.setOnClickListener{
@@ -267,7 +266,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                 callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
 
             }
-            hideItems()
         }
 
         //returns to menu
@@ -398,6 +396,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         return rndPokeList
     }
     private fun updateUI(playerActivePokemon: ActivePokemon, enemyActivePokemon: ActivePokemon){
+        hideItems()
         binding.pokemon1Name.text = playerActivePokemon.pokemon.name
         val pPokemonLevel  = "level: " + playerActivePokemon.pokemon.level
         binding.pokemon1Level.text = pPokemonLevel
