@@ -1,10 +1,11 @@
 package com.example.pokemongame.pokemon
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity
 data class BattleStats(
-            val species: String,
+            @PrimaryKey val species: String,
             var baseExperienceReward : Int,
             var baseStateAttack : Int,
             var baseStatDefense : Int,
