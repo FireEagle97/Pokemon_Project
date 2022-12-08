@@ -1,5 +1,8 @@
 package com.example.pokemongame.pokemon
 
+import androidx.room.Entity
+
+@Entity
 data class BattleStats(
             val species: String,
             var baseExperienceReward : Int,

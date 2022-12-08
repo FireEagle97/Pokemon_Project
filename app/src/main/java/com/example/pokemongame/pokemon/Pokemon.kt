@@ -15,7 +15,10 @@ data class Pokemon(
     var moves: ArrayList<Move>,
     var experience: Double,
     var level: Int,
-    var hp: Int
+    var hp: Int,
+    var frontUrl: String = "", //WILL NEED TO PUT THOSE HERE
+    var backUrl: String = "",
+    var inTeam: Boolean = false
 ): java.io.Serializable
 //given pokemon species finds its resource files (hard coded)
 fun getPokemonImageResourceId(species: String): Int =
