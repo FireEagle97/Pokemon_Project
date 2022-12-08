@@ -6,9 +6,16 @@ import androidx.fragment.app.FragmentManager
 import com.example.pokemongame.AddMoveDialogFragment
 import com.example.pokemongame.utility.JSONReader
 import com.example.pokemongame.battle.SelectMovesFragment
+import com.example.pokemongame.utility.Connector
+import com.example.pokemongame.utility.PokeApiEndpoint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
+import simplifyMove
+import simplifyMoves
+import java.net.URL
 import java.util.logging.Logger
+import kotlin.random.Random
 
 class MoveAssigner {
     var fragmentManager : FragmentManager?
@@ -23,29 +30,30 @@ class MoveAssigner {
     companion object{
         val MoveLog: Logger = Logger.getLogger(MoveAssigner::class.java.name)
     }
+
+    val random = Random
+
     //All logs can be replaced with more useful stuff like a TextField
     //Assigns a new move to a pokemon if a new move can be learned and if the user chooses so
     fun assignNewMoves(pokemon: Pokemon, level: Int, context: Context){
         val pokemonSpecies = pokemon.battleStats.species
+        val gson = Gson()
 
-        //get the file list from the move_lists folder
-        val fileList = context.assets.list("move_lists")!!
+        runBlocking {
+            val scope = CoroutineScope(Dispatchers.IO)
+            var moveList: List<MoveLevel> = mutableListOf()
+            val job = scope.launch{
+                //Get the data
+                val url: URL = URL("${PokeApiEndpoint.POKEMON.url}/${pokemon.battleStats.species}")
+                val data = Connector().connect(url) as String
+                //Simplify it
+                val moveListString = simplifyMoves(data)
 
-        //Check if the file exists. If it does, get its name and proceed. If it doesn't, give an error message
-        if("$pokemonSpecies.json" in fileList){
-            val fileName = "move_lists/$pokemonSpecies.json"
-
-            //Get jsonString with JSONReader
-            val moveLevelJsonString = JSONReader().jSONReader(context, fileName)
-
-            val gson = Gson()
-            //val listMoveType = object: TypeToken<List<Move>>() {}.type
-            //val moveList: List<Move> = gson.fromJson(jsonString, listMoveType)
-            val listMoveType = object: TypeToken<List<MoveLevel>>() {}.type
-            val moveList: List<MoveLevel> = gson.fromJson(moveLevelJsonString, listMoveType)
-
-            //Log the list for testing
-            //moveList.forEachIndexed{index, move -> MoveLog.info("$index:\n$move")}
+                //Transform it into a List of MoveLevels
+                val listMoveType = object: TypeToken<List<MoveLevel>>() {}.type
+                moveList = gson.fromJson(moveListString, listMoveType)
+            }
+            job.join()
 
             //List of string to hold the moves we want
             val newMovesList = mutableListOf<Move>()
@@ -59,20 +67,17 @@ class MoveAssigner {
                     for (i in level downTo 0) {
                         for (element in moveList) {
                             if (descendingLevel == element.level) {
-                                getNewMoves(element.move, newMovesList, gson, context)
+                                getNewMove(element.move, newMovesList, gson, context)
                             }
                         }
                         descendingLevel--
                     }
                 }
-                //log testing
-                //newMovesList.forEach{move -> MoveLog.info(move.name)}
 
                 //Insert the moves in the pokemon
                 newMovesList.forEach{ move ->
                     pokemon.moves.add(move)
                     MoveLog.info(pokemon.name + " has learned " + move.name)
-//                    MoveLog.info(pokemon.battleStats.species + " has learned " + move.name)
                 }
             } else {
 
@@ -85,8 +90,8 @@ class MoveAssigner {
                         //Flip the boolean
                         noNewMoves = false
 
-                        //Get all new moves
-                        getNewMoves(moveEntry.move, newMovesList, gson, context)
+                        //Get a new move
+                        getNewMove(moveEntry.move, newMovesList, gson, context)
 
                         //Ask if the user wants the pokemon to learn that move.
                         //If the pokemon is from a player, prompt them. If they aren't, do not
@@ -104,14 +109,9 @@ class MoveAssigner {
 
                             //Replace a move if pokemon already has 4 moves
                             if (pokemon.moves.count() == 4) {
-                                MoveLog.info("Pokemon already has 4 moves, which move would you like to replace?\n" +
-                                        "1. ${pokemon.moves[0].name}\n" +
-                                        "2. ${pokemon.moves[1].name}\n" +
-                                        "3. ${pokemon.moves[2].name}\n" +
-                                        "4. ${pokemon.moves[3].name}\n")
-                                //testing purposes, 1 is always chosen
-                                val userInput = "1"
-                                val input = userInput.toInt()
+
+                                //1 is always chosen for AI
+                                val input = random.nextInt(5)
                                 if(input in 1..4){
                                     val oldMove = pokemon.moves[input-1].name
                                     pokemon.moves[input-1] = newMovesList[0]
@@ -133,20 +133,28 @@ class MoveAssigner {
                     MoveLog.info("$pokemonSpecies doesn't learn a new move at level $level")
                 }
             }
-        } else {
-            MoveLog.info("Pokemon data doesn't exist or isn't accessible!")
         }
     }
 
-    private fun getNewMoves(moveName: String, list: MutableList<Move>, gson: Gson, context: Context) {
-        var moveJsonString = JSONReader().jSONReader(context, "moves/$moveName.json")
-        var move = gson.fromJson(moveJsonString, Move::class.java)
+    private suspend fun getNewMove(moveName: String, list: MutableList<Move>,
+                                    gson: Gson, context: Context) = withContext(Dispatchers.IO) {
+        var moveDataString: String = ""
+        val job = launch {
+            //Get the data
+            val url: URL = URL("${PokeApiEndpoint.MOVE.url}/${moveName}")
+            val data = Connector().connect(url) as String
+            //Simplify it
+            moveDataString = simplifyMove(data)
+        }
+        job.join()
+
+        val move: Move = gson.fromJson(moveDataString, Move::class.java)
         move.pp = move.maxPP
         list.add(move)
     }
 
     fun addMoveOrSummonFragment(pokemon: Pokemon, newMove: Move){
-        //Replace a move if pokemon already has 4 moves
+        //Replace a move if pokemon already has 4 moves by summoning a DialogFragment
         if (pokemon.moves.count() == 4) {
             val bundle = Bundle()
             bundle.putSerializable("moves", pokemon.moves)
@@ -163,12 +171,6 @@ class MoveAssigner {
     }
 
     fun replaceMove(pokemon: Pokemon, newMove: Move, position: Int){
-        MoveLog.info("Pokemon already has 4 moves, which move would you like to replace?\n" +
-                "1. ${pokemon.moves[0].name}\n" +
-                "2. ${pokemon.moves[1].name}\n" +
-                "3. ${pokemon.moves[2].name}\n" +
-                "4. ${pokemon.moves[3].name}\n")
-
         val oldMove = pokemon.moves[position].name
         pokemon.moves[position] = newMove
         MoveLog.info("$oldMove has been replaced by ${pokemon.moves[position].name}")
