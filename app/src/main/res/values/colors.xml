@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="transparent">#7F000000</color>
     <color name = "transparent_darker"> #9F000000</color>
+    <color name="transparent_white"> #f2f2f2</color>
     <color name="white">#FFFFFF</color>
     <color name="yellow">#e6e600</color>
     <color name="blue">#0000b3</color>
