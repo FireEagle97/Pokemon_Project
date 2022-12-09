@@ -28,7 +28,7 @@ class Level {
     //stats to augment and for it to learn new moves. We set the pokemon's level to 0 and progressively
     //level it up
     fun initializeLevels(pokemon: Pokemon, level: Int, context: Context){
-        pokemon.level = 0
+        pokemon.level -= 1
         cameFromInitializeLevels = true
         val totalExperience = level.toDouble().pow(3.toDouble())
         addExperience(pokemon, totalExperience, context)

@@ -11,93 +11,103 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/battle_ground_port"
-        tools:layout_editor_absoluteX="-89dp"
-        tools:layout_editor_absoluteY="206dp" />
+     />
 
-    <TextView
-        android:id="@+id/pokemon1_name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pokemon1name"
-        android:textSize="20sp"
-        android:textColor="@color/blue"
-        android:fontFamily="@font/opensansbold"
-        android:layout_marginStart="20dp"
+        android:background="@drawable/pokemon_battle_info_border"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/pokemon2_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensansbold"
+            android:text="@string/pokemon1name"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/pokemon2_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/opensansbold"
+            android:text="@string/pokemon2level"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pokemon2_name" />
+
+        <TextView
+            android:id="@+id/pokemon2_hp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/opensansbold"
+            android:text="@string/pokemon2hp"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pokemon2_level" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        android:background="@drawable/pokemon_battle_info_border">
 
-    <TextView
-        android:id="@+id/pokemon2_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pokemon1name"
-        android:textSize="20sp"
-        android:textColor="@color/blue"
-        android:fontFamily="@font/opensansbold"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <TextView
+            android:id="@+id/pokemon1_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensansbold"
+            android:text="@string/pokemon1name"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/pokemon1_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/opensansbold"
+            android:text="@string/pokemon1level"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pokemon1_name" />
 
-    <TextView
-        android:id="@+id/pokemon1_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pokemon1level"
-        android:textSize="20sp"
-        android:textColor="@color/blue"
-        android:fontFamily="@font/opensansbold"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pokemon1_name"
-        />
+        <TextView
+            android:id="@+id/pokemon1_hp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/opensansbold"
+            android:text="@string/pokemon1hp"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pokemon1_level" />
 
-    <TextView
-        android:id="@+id/pokemon2_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pokemon2level"
-        android:textSize="20sp"
-        android:textColor="@color/blue"
-        android:fontFamily="@font/opensansbold"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pokemon2_name"
-        />
-
-    <TextView
-        android:id="@+id/pokemon1_hp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pokemon1hp"
-        android:textSize="20sp"
-        android:textColor="@color/blue"
-        android:fontFamily="@font/opensansbold"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pokemon1_level"
-        />
-
-    <TextView
-        android:id="@+id/pokemon2_hp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pokemon2hp"
-        android:textSize="20sp"
-        android:textColor="@color/blue"
-        android:fontFamily="@font/opensansbold"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pokemon2_level"
-        />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/pokemon1_img"
@@ -107,7 +117,7 @@
         app:layout_constraintBottom_toTopOf="@id/buttons"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="50dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintDimensionRatio="1:1"
         />
 
