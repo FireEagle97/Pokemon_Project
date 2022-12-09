@@ -40,7 +40,8 @@ class MainMenuActivity : AppCompatActivity() {
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "name"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
 
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)

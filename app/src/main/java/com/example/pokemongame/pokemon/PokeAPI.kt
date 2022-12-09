@@ -94,7 +94,7 @@ class PokeAPI {
                 json["name"].asString
             )
             addProperty(
-                "base_exp_reward",
+                "baseExperienceReward",
                 json["base_experience"].asInt
             )
             json["stats"].asJsonArray.associate {
@@ -103,13 +103,16 @@ class PokeAPI {
                 }
             }.forEach {
                 val statName = when (it.key) {
-                    "hp" -> "maxHp"
-                    "special-defense" -> "special_defense"
-                    "special-attack" -> "special_attack"
+                    "hp" -> "MaxHp"
+                    "attack" -> "Attack"
+                    "defense" -> "Defense"
+                    "special-defense" -> "SpecialDefense"
+                    "special-attack" -> "SpecialAttack"
+                    "speed" -> "Speed"
                     else -> it.key
                 }
 
-                this.addProperty("base_$statName", it.value)
+                this.addProperty("baseStat$statName", it.value)
             }
             add(
                 "types",
@@ -122,7 +125,7 @@ class PokeAPI {
 
         }
         val battleStatsType = object : TypeToken<BattleStats>() {}.type
-
+        val battleStats = gsonObj.fromJson<BattleStats>(simplified, battleStatsType)
         return gsonObj.fromJson(simplified, battleStatsType)
     }
 

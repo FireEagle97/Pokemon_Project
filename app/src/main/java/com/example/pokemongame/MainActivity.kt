@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "name"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     //Intro screen
