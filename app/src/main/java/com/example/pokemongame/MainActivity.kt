@@ -1,7 +1,9 @@
 package com.example.pokemongame
 
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
@@ -13,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.logging.Logger
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "name"
@@ -41,18 +45,19 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         binding.start.setOnClickListener() {
             var teamAndCollection = ArrayList<List<Pokemon>>()
+            var name = ""
             runBlocking {
                 if (checkDBNotEmpty()) {
                     teamAndCollection = getTeamAndCollection()
+                    name = getNameFromDB()
 //                    intent = Intent(this, MainMenuActivity::class.java)
-
                 }
             }
             if(teamAndCollection.size > 0){
                 intent = Intent(this, MainMenuActivity::class.java)
                 intent.putExtra("team", teamAndCollection[0] as ArrayList<Pokemon>)
                 intent.putExtra("collection", teamAndCollection[1] as ArrayList<Pokemon>)
-                intent.putExtra("trainerName", "TO REPLACE")
+                intent.putExtra("trainerName",name)
             }
             else{
                 intent = Intent(this, RegisterActivity::class.java)
@@ -65,7 +70,12 @@ class MainActivity : AppCompatActivity() {
         return@withContext (db.PokemonDao().getTeam().isNotEmpty())
     }
 
-    private suspend fun getTeamAndCollection(): ArrayList<List<Pokemon>> = withContext(Dispatchers.IO) {
-        return@withContext getTeamAndCol(db)
+    private suspend fun getNameFromDB(): String = withContext(Dispatchers.IO) {
+        return@withContext (db.TrainerNameDao().getTrainerName())
     }
-}
+
+
+        private suspend fun getTeamAndCollection(): ArrayList<List<Pokemon>> = withContext(Dispatchers.IO) {
+            return@withContext getTeamAndCol(db)
+        }
+    }

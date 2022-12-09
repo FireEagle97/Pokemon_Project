@@ -31,6 +31,18 @@ interface BattleStatsDao {
     fun insert(battleStats: BattleStats)
 }
 
+@Entity
+data class TrainerName(@PrimaryKey val name: String)
+
+@Dao
+interface TrainerNameDao {
+    @Query("SELECT * FROM TrainerName LIMIT 1")
+    fun getTrainerName():String
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(trainerName: TrainerName)
+}
+
 object Converters {
     @TypeConverter
     fun fromString(value: String?): List<String> {
@@ -54,11 +66,12 @@ object Converters {
     }
 }
 
-@Database(entities = [Pokemon ::class, BattleStats ::class], version = 1)
+@Database(entities = [Pokemon ::class, BattleStats ::class, TrainerName ::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun PokemonDao(): PokemonDao
     abstract fun BattleStatsDao(): BattleStatsDao
+    abstract fun TrainerNameDao(): TrainerNameDao
 }
 
 fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db:AppDatabase){

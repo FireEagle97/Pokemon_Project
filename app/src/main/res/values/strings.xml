@@ -43,4 +43,6 @@
     <string name="collection">COLLECTION</string>
     <string name="team">TEAM</string>
 
+    <string name="userName">NEW NAME FROM SHARED PREFERENCES</string>
+
 </resources>
