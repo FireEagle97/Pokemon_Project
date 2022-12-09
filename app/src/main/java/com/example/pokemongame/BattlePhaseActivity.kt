@@ -553,7 +553,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             val job = scope.launch {
 
                 var imageBitMap = PokeAPI().imageLoader(pokemonImg)
-                imageBitMap = Bitmap.createScaledBitmap(imageBitMap!!,600,600,true)
+                imageBitMap = Bitmap.createScaledBitmap(imageBitMap!!,550,550,true)
                 pokemonImage = imageBitMap
             }
             job.join()

@@ -11,8 +11,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/battle_ground_port"
-        tools:layout_editor_absoluteX="-89dp"
-        tools:layout_editor_absoluteY="206dp" />
+     />
 
     <TextView
         android:id="@+id/pokemon1_name"
@@ -107,7 +106,7 @@
         app:layout_constraintBottom_toTopOf="@id/buttons"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="50dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintDimensionRatio="1:1"
         />
 
