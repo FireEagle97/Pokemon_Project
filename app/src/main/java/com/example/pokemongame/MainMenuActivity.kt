@@ -37,12 +37,7 @@ class MainMenuActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "name"
-        ).fallbackToDestructiveMigration()
-            .build()
-
+        db = AppDatabase.getDatabase(applicationContext)
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         team =
@@ -104,14 +99,6 @@ class MainMenuActivity : AppCompatActivity() {
         binding.saveBtn!!.setOnClickListener {
             lifecycleScope.launch {
                 save()
-                //saving username to shared preferences
-                val sharedPref =
-                    getPreferences(Context.MODE_PRIVATE) ?: return@launch
-                with (sharedPref.edit()) {
-                    putString(getString(R.string.userName),
-                        trainerName)
-                    apply()
-                }
                 Toast.makeText(applicationContext, "Saved game state to the database", Toast.LENGTH_SHORT).show()
 
             }

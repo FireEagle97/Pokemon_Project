@@ -1,5 +1,6 @@
 package com.example.pokemongame.pokemon
 
+import android.content.Context
 import androidx.room.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -72,7 +73,30 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun PokemonDao(): PokemonDao
     abstract fun BattleStatsDao(): BattleStatsDao
     abstract fun TrainerNameDao(): TrainerNameDao
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+        fun getDatabase(context: Context): AppDatabase {
+            // if the INSTANCE IS NOT NULL , then return it,
+            // if it is, then create the database
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "PokemonDatabase"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = instance
+                //return instance
+                instance
+            }
+
+        }
+    }
+
 }
+
 
 fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db:AppDatabase){
     for(i in 0 until team.size){
