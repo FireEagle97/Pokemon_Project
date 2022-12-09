@@ -36,7 +36,7 @@ class MoveAssigner {
     //All logs can be replaced with more useful stuff like a TextField
     //Assigns a new move to a pokemon if a new move can be learned and if the user chooses so
     fun assignNewMoves(pokemon: Pokemon, level: Int){
-        val pokemonSpecies = pokemon.battleStats.species
+        val pokemonSpecies = pokemon.battleStats!!.species
         val gson = Gson()
 
         runBlocking {
@@ -44,7 +44,7 @@ class MoveAssigner {
             var moveList: List<MoveLevel> = mutableListOf()
             val job = scope.launch{
                 //Get the data
-                val url: URL = URL("${PokeApiEndpoint.POKEMON.url}/${pokemon.battleStats.species}")
+                val url: URL = URL("${PokeApiEndpoint.POKEMON.url}/${pokemon.battleStats!!.species}")
                 val data = Connector().connect(url) as String
                 //Simplify it
                 val moveListString = simplifyMoves(data)
@@ -122,7 +122,7 @@ class MoveAssigner {
                             } else {
                                 //Learn new move
                                 pokemon.moves.add(newMovesList[0])
-                                MoveLog.info(pokemon.battleStats.species + " has learned " + newMovesList[0].name)
+                                MoveLog.info(pokemon.battleStats!!.species + " has learned " + newMovesList[0].name)
                                 newMovesList.removeFirst()
                             }
                         }
@@ -167,7 +167,7 @@ class MoveAssigner {
         } else {
             //Learn new move
             pokemon.moves.add(newMove)
-            MoveLog.info(pokemon.battleStats.species + " has learned " + newMove.name)
+            MoveLog.info(pokemon.battleStats!!.species + " has learned " + newMove.name)
         }
     }
 

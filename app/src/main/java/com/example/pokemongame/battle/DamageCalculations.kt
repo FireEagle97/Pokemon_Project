@@ -31,7 +31,7 @@ class DamageCalculations(val activity: BattlePhaseActivity) {
         }
 
         //Calculate STAB bonus
-        if(attackerMove.type in attackerPokemon.battleStats.types){
+        if(attackerMove.type in attackerPokemon.battleStats!!.types){
             DamageLog.info("STAB bonus applied!")
             damage *= 1.5
         }
@@ -65,7 +65,7 @@ class DamageCalculations(val activity: BattlePhaseActivity) {
                     gson.fromJson(attackerMoveEffectivenessString, Map::class.java)
 
                 //If the defender's type is found in the type relations of the attacking move, perform these operations
-                defenderPokemon.battleStats.types.forEach {
+                defenderPokemon.battleStats!!.types.forEach {
                     if (attackerMoveEffectiveness[it] != null) {
                         when (attackerMoveEffectiveness[it]) {
                             "no_effect" -> multiplier = 0.0

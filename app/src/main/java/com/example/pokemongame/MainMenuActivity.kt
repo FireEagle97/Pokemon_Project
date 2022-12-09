@@ -1,15 +1,22 @@
 package com.example.pokemongame
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
-import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.pokemon.*
 import com.example.pokemongame.team_collection.TeamActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.logging.Logger
 
 
@@ -23,10 +30,18 @@ class MainMenuActivity : AppCompatActivity() {
     private lateinit var team: ArrayList<Pokemon>
     private lateinit var trainerName: String
     private lateinit var collection: ArrayList<Pokemon>
+    private lateinit var db: AppDatabase
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "name"
+        ).build()
+
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         team =
@@ -37,34 +52,8 @@ class MainMenuActivity : AppCompatActivity() {
             intent.getSerializableExtra("collection") as ArrayList<Pokemon>
         } else {
             ArrayList<Pokemon>()
-           // if not passed, create empty one
+            // if not passed, create empty one
         }
-        //in here for testing purposes, just to see that colelction also works
-//        val pokemon = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
-//        Level().initializeLevels(pokemon,pokemon.level,applicationContext)
-//        pokemon.hp = pokemon.maxHp
-//        collection.add(pokemon)
-//        val pokemon1 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
-//        Level().initializeLevels(pokemon1,pokemon1.level,applicationContext)
-//        pokemon1.hp = pokemon1.maxHp
-//        val pokemon2 = PokemonCreator().createPokemon(4, "bulbasaur",applicationContext)
-//        Level().initializeLevels(pokemon2,pokemon2.level,applicationContext)
-//        pokemon2.hp = pokemon2.maxHp
-//        val pokemon3 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
-//        Level().initializeLevels(pokemon3,pokemon3.level,applicationContext)
-//        pokemon2.hp = pokemon2.maxHp
-//        val pokemon4 = PokemonCreator().createPokemon(3, "charmander",applicationContext)
-//        Level().initializeLevels(pokemon4,pokemon4.level,applicationContext)
-//        pokemon4.hp = pokemon4.maxHp
-//        val pokemon5 = PokemonCreator().createPokemon(3, "squirtle",applicationContext)
-//        Level().initializeLevels(pokemon5,pokemon5.level,applicationContext)
-//        pokemon5.hp = pokemon5.maxHp
-//        team.add(pokemon5)
-//        team.add(pokemon4)
-//        team.add(pokemon3)
-//        team.add(pokemon2)
-//        team.add(pokemon1)
-
 
         binding.pokeCenterBtn.setOnClickListener {
             for (pokemon in team) {
@@ -93,7 +82,7 @@ class MainMenuActivity : AppCompatActivity() {
 //        }
 
         //Button for wild battles
-        binding.wildBattleBtn.setOnClickListener{
+        binding.wildBattleBtn.setOnClickListener {
             val intent = Intent(this, BattlePhaseActivity::class.java)
             intent.putExtra("team", team)
             intent.putExtra("collection", collection)
@@ -102,7 +91,7 @@ class MainMenuActivity : AppCompatActivity() {
             startActivityForResult(intent, REQ_CODE)
         }
 
-        binding.trainerBattleBtn.setOnClickListener{
+        binding.trainerBattleBtn.setOnClickListener {
             val intent = Intent(this, BattlePhaseActivity::class.java)
             intent.putExtra("team", team)
             intent.putExtra("collection", collection)
@@ -110,6 +99,34 @@ class MainMenuActivity : AppCompatActivity() {
             intent.putExtra("inTrainerBattle", true)
             startActivityForResult(intent, REQ_CODE)
         }
+
+        binding.saveBtn!!.setOnClickListener {
+            lifecycleScope.launch {
+                save()
+                //saving username to shared preferences
+                val sharedPref =
+                    getPreferences(Context.MODE_PRIVATE) ?: return@launch
+                with (sharedPref.edit()) {
+                    putString(getString(R.string.userName),
+                        trainerName)
+                    apply()
+                }
+                Toast.makeText(applicationContext, "Saved game state to the database", Toast.LENGTH_SHORT).show()
+
+            }
+
+        }
+    }
+
+    private suspend fun save() = withContext(Dispatchers.IO) {
+
+        saveToDB(team, collection, db)
+        db.TrainerNameDao().insert(TrainerName(trainerName))
+        val teamAndCollection = getTeamAndCol(db)
+        //resetting to database values to prevent from repeatedly saving same value.
+        team = teamAndCollection[0] as ArrayList<Pokemon>
+        collection = teamAndCollection[1] as ArrayList<Pokemon>
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

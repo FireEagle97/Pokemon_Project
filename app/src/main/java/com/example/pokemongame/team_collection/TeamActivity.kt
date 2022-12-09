@@ -51,7 +51,7 @@ class TeamActivity: AppCompatActivity() {
             binding.save.setOnClickListener(){
                 intent.putExtra("collection", collection as ArrayList<Pokemon>)
                 intent.putExtra("team", team as ArrayList<Pokemon>)
-                intent.putExtra("trainerName", "NEW NAME")
+                intent.putExtra("trainerName", trainerName)
                 setResult(RESULT_OK, intent)
                 finish()
             }

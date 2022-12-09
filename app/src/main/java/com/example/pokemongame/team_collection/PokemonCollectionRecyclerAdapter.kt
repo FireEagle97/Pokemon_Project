@@ -48,9 +48,11 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Poke
         }
         binding.species.text =  buildString {
             append("(")
-            append(pokemonInfo.battleStats.species.toString())
+            append(pokemonInfo.battleStats!!.species.toString())
             append(")")
         }
+//        binding.sprite.setImageResource(getPokemonImageResourceId(pokemonInfo.battleStats!!.species))
+
         binding.sprite.setImageBitmap(BattlePhaseActivity().getPokemonBitMap(pokemonInfo.frontSprite))
     }
 

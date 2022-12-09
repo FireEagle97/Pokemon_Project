@@ -1,17 +1,11 @@
 package com.example.pokemongame.pokemon
 
-import android.content.Context
 import com.example.pokemongame.utility.PokeApiEndpoint
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.IOException
 import java.util.logging.Logger
-import androidx.lifecycle.lifecycleScope
 import com.example.pokemongame.utility.Connector
 import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 import java.net.URL
-import java.util.Random
 
 class PokemonCreator {
     companion object{
@@ -42,13 +36,13 @@ class PokemonCreator {
                 sprites = PokeAPI().getPokemonSprite(data)
             }
             job.join()
-            baseExperienceReward  = battleStats!!.base_exp_reward
-            baseStatAttack = battleStats!!.base_attack
-            baseStatDefense  = battleStats!!.base_defense
-            baseStatMaxHp  = battleStats!!.base_maxHp
-            baseStatSpecialAttack = battleStats!!.base_special_attack
-            baseStatSpecialDefense = battleStats!!.base_special_defense
-            baseStatSpeed  = battleStats!!.base_speed
+            baseExperienceReward  = battleStats!!.baseExperienceReward
+            baseStatAttack = battleStats!!.baseStateAttack
+            baseStatDefense  = battleStats!!.baseStatDefense
+            baseStatMaxHp  = battleStats!!.baseStateMaxHp
+            baseStatSpecialAttack = battleStats!!.baseStatSpecialAttack
+            baseStatSpecialDefense = battleStats!!.baseStatSpecialDefense
+            baseStatSpeed  = battleStats!!.baseStatSpeed
 
         }
         return Pokemon(
@@ -65,8 +59,9 @@ class PokemonCreator {
             experience,
             level,
             hp,
+            species,
             sprites["front_sprite"].asString,
-            sprites["back_sprite"].asString
+            sprites["back_sprite"].asString,
         )
     }
 }

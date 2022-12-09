@@ -1,14 +1,18 @@
 package com.example.pokemongame.pokemon
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class BattleStats(
-            val species: String,
-            var base_exp_reward : Int,
-            var base_attack : Int,
-            var base_defense : Int,
-            var base_maxHp : Int,
-            var base_special_attack : Int,
-            var base_special_defense : Int,
-            var base_speed : Int,
+            @PrimaryKey val species: String,
+            var baseExperienceReward : Int,
+            var baseStateAttack : Int,
+            var baseStatDefense : Int,
+            var baseStateMaxHp : Int,
+            var baseStatSpecialAttack : Int,
+            var baseStatSpecialDefense : Int,
+            var baseStatSpeed : Int,
             var types : List<String>,
 
 
