@@ -252,6 +252,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             else{
                 playerActivePokemon.pokemon.hp = playerActivePokemon.pokemon.maxHp
             }
+            hideItems()
             val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
             enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             playerActivePokemon.chosenMove = null
@@ -265,6 +266,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
             enemyActivePokemon.chosenMove = enemyActivePokemon.pokemon.moves[enemyMovePosition]
             val chanceToCapture = (1.0- (enemyActivePokemon.pokemon.hp.toDouble() / enemyActivePokemon.pokemon.maxHp.toDouble()))
+            hideItems()
             if(chanceToCapture > Random().nextDouble()){
                 collection.add(enemyActivePokemon.pokemon)
                 TrainerBattleLog.info("$trainerName  successfully captured the enemy's pokemon!")
