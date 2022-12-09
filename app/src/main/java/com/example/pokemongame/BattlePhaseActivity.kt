@@ -94,7 +94,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         playerTeam =  intent.getSerializableExtra("team") as ArrayList<Pokemon>
 
         //Holds the the enemy's team. It is changed to a generated enemy team above
-        enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
+        enemyTeam = generateOpponentTeam(playerTeam)
 
         //Init Battle Phase with respective teams for utility and data consistency
         val battlePhase = BattlePhase(playerTeam, enemyTeam,this, trainerName, gainedExperience)
@@ -360,7 +360,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     //temp code to return a list of random Pokemon
     //will use it to generate the opponent team
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun generateOpponentTeam(playerTeam:ArrayList<Pokemon>, context: Context): ArrayList<Pokemon> {
+    private fun generateOpponentTeam(playerTeam:ArrayList<Pokemon>): ArrayList<Pokemon> {
 
         var randPokemons = 0 // if not in trainer battle.
         if(inTrainerBattle){
@@ -405,7 +405,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             val rndSpecies = speciesList[Random().nextInt(speciesList.size)]
             val rndLevel = (minLevel..maxLevel).shuffled().last()
 
-            rndPokeList.add(PokemonCreator().createPokemon(rndLevel,rndSpecies))
+            rndPokeList.add(PokemonCreator().createPokemon(rndLevel,rndSpecies, applicationContext))
         }
         //Coroutine to initialize the pokemon's data asap while not blocking the main thread
         val scope = CoroutineScope(Dispatchers.IO)

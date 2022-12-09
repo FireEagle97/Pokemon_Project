@@ -54,6 +54,7 @@ class RegisterActivity : AppCompatActivity() {
                 val pokemon = PokemonCreator().createPokemon(
                     5,
                     pokemonSpecies[ind],
+                    applicationContext,
                     name
                 )
                 Level().initializeLevels(pokemon,pokemon.level,applicationContext)
