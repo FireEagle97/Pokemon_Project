@@ -26,6 +26,11 @@ class PokeAPI {
                 json["sprites"].asJsonObject["versions"].asJsonObject["generation-i"]
                     .asJsonObject["red-blue"].asJsonObject["front_transparent"].asString
             )
+            addProperty(
+                "back_sprite",
+                json["sprites"].asJsonObject["versions"].asJsonObject["generation-i"]
+                    .asJsonObject["red-blue"].asJsonObject["back_transparent"].asString
+            )
         }
 
         return simplified
