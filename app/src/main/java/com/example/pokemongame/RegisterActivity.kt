@@ -34,40 +34,39 @@ class RegisterActivity : AppCompatActivity() {
         val team = ArrayList<Pokemon>()
         //when a pokemon is selected, allow user to select name and submit
         binding.firstChoice.setOnCheckedChangeListener { group, checkedId -> // I don't know if there is a way to remove these params
-                binding.pokemonNameQuery?.visibility = View.VISIBLE
-                binding.pokemonNameInput?.visibility = View.VISIBLE
-                binding.menuBtn?.visibility = View.VISIBLE
+                binding.pokemonNameQuery.visibility = View.VISIBLE
+                binding.pokemonNameInput.visibility = View.VISIBLE
+                binding.menuBtn.visibility = View.VISIBLE
             }
-        binding.menuBtn?.setOnClickListener(){
-                if(binding.inputName.text.isNotBlank()) {
-                    //create selected pokemon
-                    val pokemonSpecies = arrayListOf("bulbasaur", "squirtle", "charmander")
-                    val radioButtonID: Int = binding.firstChoice.checkedRadioButtonId
-                    val radioButton: View = binding.firstChoice.findViewById(radioButtonID)
-                    val ind: Int = binding.firstChoice.indexOfChild(radioButton)
-                    //set name based on if user provided one
-                    val name: String = if (binding.pokemonNameInput!!.text.isNotBlank()) {
-                        binding.pokemonNameInput!!.text.toString()
-                    } else {
-                        pokemonSpecies[ind]
-                    }
-                    val pokemon = PokemonCreator().createPokemon(
-                        5,
-                        pokemonSpecies[ind],
-                        name
-                    )
-                    Level().initializeLevels(pokemon,pokemon.level,applicationContext)
-                    pokemon.hp = pokemon.maxHp
-                    team.add(pokemon)
-                    //passing team & trainer name to next activity
-                    val intent = Intent(this, MainMenuActivity::class.java)
-                    intent.putExtra("team", team)
-                    intent.putExtra("trainerName", binding.inputName.text.toString())
-                    startActivity(intent)
+        binding.menuBtn.setOnClickListener(){
+            if(binding.inputName.text.isNotBlank()) {
+                //create selected pokemon
+                val pokemonSpecies = arrayListOf("bulbasaur", "squirtle", "charmander")
+                val radioButtonID: Int = binding.firstChoice.checkedRadioButtonId
+                val radioButton: View = binding.firstChoice.findViewById(radioButtonID)
+                val ind: Int = binding.firstChoice.indexOfChild(radioButton)
+                //set name based on if user provided one
+                val name: String = if (binding.pokemonNameInput.text.isNotBlank()) {
+                    binding.pokemonNameInput.text.toString()
+                } else {
+                    pokemonSpecies[ind]
                 }
-            else{
-                binding.mustEnterName?.visibility  = View.VISIBLE
-                }
+                val pokemon = PokemonCreator().createPokemon(
+                    5,
+                    pokemonSpecies[ind],
+                    name
+                )
+                Level().initializeLevels(pokemon,pokemon.level,applicationContext)
+                pokemon.hp = pokemon.maxHp
+                team.add(pokemon)
+                //passing team & trainer name to next activity
+                val intent = Intent(this, MainMenuActivity::class.java)
+                intent.putExtra("team", team)
+                intent.putExtra("trainerName", binding.inputName.text.toString())
+                startActivity(intent)
+            } else{
+                binding.mustEnterName.visibility = View.VISIBLE
+            }
         }
 
     }
