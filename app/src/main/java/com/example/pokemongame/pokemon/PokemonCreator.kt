@@ -60,7 +60,8 @@ class PokemonCreator {
             level,
             hp,
             sprites["front_sprite"].asString,
-            sprites["back_sprite"].asString
+            sprites["back_sprite"].asString,
+            species
         )
     }
 }

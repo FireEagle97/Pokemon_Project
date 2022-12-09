@@ -63,14 +63,14 @@ public fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db
     for(i in 0 until team.size){
         team[i].ordering = i
         team[i].inTeam = true
-        if(!db.BattleStatsDao().checkIfExists(team[i].battleStats.species)){
+        if(!db.BattleStatsDao().checkIfExists(team[i].species)){
             db.BattleStatsDao().insert(team[i].battleStats)
         }
     }
     for(i in 0 until collection.size){
         collection[i].ordering = i
         collection[i].inTeam = false
-        if(!db.BattleStatsDao().checkIfExists(collection[i].battleStats.species)){
+        if(!db.BattleStatsDao().checkIfExists(collection[i].species)){
             db.BattleStatsDao().insert(collection[i].battleStats)
         }
     }

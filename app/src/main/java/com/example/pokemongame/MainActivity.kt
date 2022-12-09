@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun checkDBNotEmpty(): Boolean = withContext(Dispatchers.IO) {
+        db.clearAllTables()
         return@withContext (db.PokemonDao().getTeam().isNotEmpty())
     }
 
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         teamAndCollection.add(db.PokemonDao().getCollection())
         for(i in 0 until teamAndCollection.size){
             for(k in 0 until teamAndCollection[i].size){
-                teamAndCollection[i][k].battleStats = db.BattleStatsDao().getBattleStats(teamAndCollection[i][k].battleStats.species)
+                teamAndCollection[i][k].battleStats = db.BattleStatsDao().getBattleStats(teamAndCollection[i][k].species)
 
             }
         }
