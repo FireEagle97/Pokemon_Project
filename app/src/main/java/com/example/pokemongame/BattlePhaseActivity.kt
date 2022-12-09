@@ -98,7 +98,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
 
         //Init Battle Phase with respective teams for utility and data consistency
-        val battlePhase = BattlePhase(playerTeam, enemyTeam, fragmentManager,this, trainerName, gainedExperience)
+        val battlePhase = BattlePhase(playerTeam, enemyTeam,this, trainerName, gainedExperience)
 
         //Start of Battle
         BattlePhase.BattleLog.info("Battle Begun!")

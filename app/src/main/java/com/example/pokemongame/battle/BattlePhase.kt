@@ -10,8 +10,7 @@ import java.util.Random
 import java.util.logging.Logger
 import kotlin.math.floor
 
-class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,
-                  val fragmentManager: FragmentManager, val activity: BattlePhaseActivity,
+class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<Pokemon>,val activity: BattlePhaseActivity,
                   val trainerName: String, val gainedExperience: Array<Double>
 ) {
     companion object{
@@ -33,7 +32,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
         //First turn
         playSingularTurn(speedArray, true, inTrainerBattle, pokemonPlayer.indexInTeam,
-            pokemonEnemy.indexInTeam, faintedAndEndBattleArray, fragmentManager, context)
+            pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
         //If the opposing pokemon has fainted, skip its turn, else perform its turn
         if(faintedAndEndBattleArray[1]){
             //Check if the battle ended, if so, do not log this message
@@ -42,7 +41,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             }
         } else {
             //Second turn
-            playSingularTurn(speedArray, false, inTrainerBattle, pokemonPlayer.indexInTeam, pokemonEnemy.indexInTeam, faintedAndEndBattleArray, fragmentManager, context)
+            playSingularTurn(speedArray, false, inTrainerBattle, pokemonPlayer.indexInTeam, pokemonEnemy.indexInTeam, faintedAndEndBattleArray, context)
         }
 
         return faintedAndEndBattleArray
@@ -51,7 +50,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
     //Plays a single trainer's turn
     private fun playSingularTurn(speedArray: Array<ActivePokemon>, firstTurn: Boolean, inTrainerBattle: Boolean,
                                  pokemonPlayerIndex: Int, pokemonEnemyIndex: Int,
-                                 faintedAndEndBattleArray: Array<Boolean>, fragmentManager: FragmentManager, context: Context){
+                                 faintedAndEndBattleArray: Array<Boolean>, context: Context){
         var index = if (firstTurn){
             0
         } else {
@@ -70,7 +69,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
             if(faintCheck(speedArray, firstTurn)){
                 faintedAndEndBattleArray[1] = true
                 onFaint(speedArray, firstTurn, inTrainerBattle, pokemonPlayerIndex, pokemonEnemyIndex,
-                    faintedAndEndBattleArray, fragmentManager, context)
+                    faintedAndEndBattleArray)
             }
         } else {
             activity.addStringToBattleTextList("Trainer didn't FIGHT, battle turn will be skipped...")
@@ -213,7 +212,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
     //Awards experience, checks if someone won, else forces a switch
     private fun onFaint(speedArray: Array<ActivePokemon>, firstTurn: Boolean, inTrainerBattle: Boolean,
-                        pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, faintedAndEndBattleArray: Array<Boolean>, fragmentManager: FragmentManager, context: Context) {
+                        pokemonPlayerIndex: Int, pokemonEnemyIndex: Int, faintedAndEndBattleArray: Array<Boolean>) {
         swapArrayPositionsIfSecondTurn(speedArray, firstTurn)
 
         //Fainted pokemon will always be in [1]
