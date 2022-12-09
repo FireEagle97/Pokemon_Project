@@ -46,13 +46,13 @@ data class Pokemon(
         level: Int,
         hp: Int,
         inTeam: Boolean = false,
+        species: String,
         frontSprite: String,
         backSprite: String,
-        species: String,
         ordering: Int = 0
     ) : this(
         BattleStats("",0,0,0,0,0,0,0,listOf("")),
-        experienceReward, attack, defense, maxHp, specialAttack, specialDefense, speed, name, moves, experience, level, hp,  frontSprite, backSprite, species, inTeam, ordering)
+        experienceReward, attack, defense, maxHp, specialAttack, specialDefense, speed, name, moves, experience, level, hp,  species, frontSprite, backSprite, inTeam, ordering)
 
 }
 

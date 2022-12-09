@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun checkDBNotEmpty(): Boolean = withContext(Dispatchers.IO) {
-        db.clearAllTables()
         return@withContext (db.PokemonDao().getTeam().isNotEmpty())
     }
 
