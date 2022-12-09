@@ -65,7 +65,8 @@ class PokemonCreator {
             experience,
             level,
             hp,
-            sprites["front_sprite"].asString
+            sprites["front_sprite"].asString,
+            sprites["back_sprite"].asString
         )
     }
 }
