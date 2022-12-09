@@ -2,7 +2,6 @@ package com.example.pokemongame.pokemon
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
@@ -36,6 +35,28 @@ class PokeAPI {
         return simplified
 
     }
+
+    fun simplifyPokedexEntries(apiResponse: String): List<Pokedex> {
+        val json = gsonObj.fromJson(apiResponse, JsonObject::class.java)
+        val simplified = json["pokemon_entries"].asJsonArray.map {
+            JsonObject().apply {
+                addProperty(
+                    "number",
+                    it.asJsonObject["entry_number"].asInt
+                )
+                addProperty(
+                    "name",
+                    it.asJsonObject["pokemon_species"].asJsonObject["name"].asString
+                )
+            }
+        }
+        val simplifiedStr = gsonObj.toJson(simplified)
+        val pokedexType =  object : TypeToken<List<Pokedex>>() {}.type
+        val pokedexEntries : List<Pokedex> = gsonObj.fromJson(simplifiedStr,pokedexType)
+
+        return pokedexEntries
+    }
+
 
     // Function to convert string to URL
     private fun stringToURLConverter(string: String): URL? {

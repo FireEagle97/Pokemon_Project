@@ -13,15 +13,20 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.example.pokemongame.battle.*
 import com.example.pokemongame.databinding.ActivityBattlePhaseBinding
 import com.example.pokemongame.pokemon.*
+import com.example.pokemongame.utility.Connector
+import com.example.pokemongame.utility.PokeApiEndpoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.net.URL
 import java.util.*
 import java.util.logging.Logger
+import kotlin.collections.ArrayList
 
 
 class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDialogListener{
@@ -385,7 +390,20 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
         maxLevel += 5
         //assign random moves
-        val speciesList : MutableList<String> = mutableListOf("bulbasaur", "charmander", "squirtle")
+        var pokedexList : List<Pokedex> = mutableListOf()
+        var speciesList : ArrayList<String> = arrayListOf()
+        runBlocking {
+            val scope = CoroutineScope(Dispatchers.IO)
+            val job = scope.launch {
+                val url = URL("${PokeApiEndpoint.POKEDEX.url}/2")
+                val data = Connector().connect(url) as String
+                pokedexList = PokeAPI().simplifyPokedexEntries(data)
+            }
+            job.join()
+        }
+        pokedexList.forEach{
+            pokedex ->   speciesList.add(pokedex.name)
+        }
         val rndPokeList : ArrayList<Pokemon> = arrayListOf()
         for(i in 0..randPokemons){
             val rndSpecies = speciesList[Random().nextInt(speciesList.size)]
@@ -528,7 +546,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
         return super.onTouchEvent(event)
     }
-    private fun getPokemonBitMap(pokemonImg : String): Bitmap? {
+    fun getPokemonBitMap(pokemonImg : String): Bitmap? {
         var pokemonImage : Bitmap? =null
         runBlocking {
             val scope = CoroutineScope(Dispatchers.IO)
