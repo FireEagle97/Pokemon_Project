@@ -61,10 +61,10 @@ class Level {
         }
 
         //Stat changes (MaxHP has a different formula than the others)
-        val newMaxHPStat = floor((((pokemon.battleStats!!.baseStateMaxHp + 10) * pokemon.level) / 50).toDouble()) + pokemon.level + 10
+        val newMaxHPStat = floor((((pokemon.battleStats!!.baseStatMaxHp + 10) * pokemon.level) / 50).toDouble()) + pokemon.level + 10
         LevelLog.info("${pokemon.name}'s MaxHP stat has increased to $newMaxHPStat")
         pokemon.maxHp = newMaxHPStat.toInt()
-        val newAttackStat = floor((((pokemon.battleStats!!.baseStateAttack + 10) * pokemon.level) / 50).toDouble()) + 5
+        val newAttackStat = floor((((pokemon.battleStats!!.baseStatAttack + 10) * pokemon.level) / 50).toDouble()) + 5
         LevelLog.info("${pokemon.name}'s Attack stat has increased to $newAttackStat")
         pokemon.attack = newAttackStat.toInt()
         val newDefenceStat = floor((((pokemon.battleStats!!.baseStatDefense + 10) * pokemon.level) / 50).toDouble()) + 5

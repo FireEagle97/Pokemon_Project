@@ -37,9 +37,9 @@ class PokemonCreator {
             }
             job.join()
             baseExperienceReward  = battleStats!!.baseExperienceReward
-            baseStatAttack = battleStats!!.baseStateAttack
+            baseStatAttack = battleStats!!.baseStatAttack
             baseStatDefense  = battleStats!!.baseStatDefense
-            baseStatMaxHp  = battleStats!!.baseStateMaxHp
+            baseStatMaxHp  = battleStats!!.baseStatMaxHp
             baseStatSpecialAttack = battleStats!!.baseStatSpecialAttack
             baseStatSpecialDefense = battleStats!!.baseStatSpecialDefense
             baseStatSpeed  = battleStats!!.baseStatSpeed

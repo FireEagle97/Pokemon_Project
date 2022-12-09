@@ -134,8 +134,7 @@
         />
     <ImageView
         android:src="@drawable/pokeball"
-        app:layout_constraintStart_toStartOf="@id/pokemon1_img"
-        app:layout_constraintTop_toBottomOf="@+id/pokemon1_img"
+        app:layout_constraintStart_toStartOf="@id/buttons"
         app:layout_constraintBottom_toTopOf="@+id/buttons"
         android:id="@+id/capture"
         android:layout_width="wrap_content"
@@ -150,8 +149,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="use potion"
-        app:layout_constraintStart_toStartOf="@id/pokemon2_img"
-        app:layout_constraintTop_toBottomOf="@+id/pokemon2_img"
+        app:layout_constraintEnd_toEndOf="@id/buttons"
         app:layout_constraintBottom_toTopOf="@+id/buttons"
         android:visibility="gone" />
 

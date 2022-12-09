@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class BattleStats(
             @PrimaryKey val species: String,
             var baseExperienceReward : Int,
-            var baseStateAttack : Int,
+            var baseStatAttack : Int,
             var baseStatDefense : Int,
-            var baseStateMaxHp : Int,
+            var baseStatMaxHp : Int,
             var baseStatSpecialAttack : Int,
             var baseStatSpecialDefense : Int,
             var baseStatSpeed : Int,
