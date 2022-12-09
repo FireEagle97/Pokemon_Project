@@ -141,6 +141,7 @@ class MoveAssigner {
         var moveDataString: String = ""
         val job = launch {
             //Get the data
+            println(moveName)
             val url: URL = URL("${PokeApiEndpoint.MOVE.url}/${moveName}")
             val data = Connector().connect(url) as String
             //Simplify it

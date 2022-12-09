@@ -451,10 +451,23 @@ fun simplifyMove(apiResponse: String): String =
                     if (it == "physical") "physical" else "special"
                 }
             )
-            addProperty(
-                "type",
-                json["type"].asJsonObject["name"].asString
-            )
+            if(json["past_values"].asJsonArray.isEmpty) {
+                addProperty(
+                    "type",
+                    json["type"].asJsonObject["name"].asString
+                )
+            }
+            else if(json["past_values"].asJsonArray[0].asJsonObject["type"].isJsonNull){
+                addProperty(
+                    "type",
+                    json["type"].asJsonObject["name"].asString
+                )
+            } else {
+                addProperty(
+                    "type",
+                    json["past_values"].asJsonArray[0].asJsonObject["type"].asString
+                )
+            }
             addProperty(
                 "maxPP",
                 json["pp"].asInt
