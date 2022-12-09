@@ -4,11 +4,9 @@ package com.example.pokemongame
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
-import com.example.pokemongame.battle.DamageCalculations
 import com.example.pokemongame.databinding.ActivityMainBinding
 import com.example.pokemongame.pokemon.*
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             var teamAndCollection = ArrayList<List<Pokemon>>()
             runBlocking {
                 if (checkDBNotEmpty()) {
-                    teamAndCollection = getTeamAndCol()
+                    teamAndCollection = getTeamAndCollection()
 //                    intent = Intent(this, MainMenuActivity::class.java)
 
                 }
@@ -67,16 +65,7 @@ class MainActivity : AppCompatActivity() {
         return@withContext (db.PokemonDao().getTeam().isNotEmpty())
     }
 
-    private suspend fun getTeamAndCol(): ArrayList<List<Pokemon>> = withContext(Dispatchers.IO) {
-        val teamAndCollection = ArrayList<List<Pokemon>>()
-        teamAndCollection.add(db.PokemonDao().getTeam())
-        teamAndCollection.add(db.PokemonDao().getCollection())
-        for(i in 0 until teamAndCollection.size){
-            for(k in 0 until teamAndCollection[i].size){
-                teamAndCollection[i][k].battleStats = db.BattleStatsDao().getBattleStats(teamAndCollection[i][k].species)
-
-            }
-        }
-        return@withContext teamAndCollection
+    private suspend fun getTeamAndCollection(): ArrayList<List<Pokemon>> = withContext(Dispatchers.IO) {
+        return@withContext getTeamAndCol(db)
     }
 }

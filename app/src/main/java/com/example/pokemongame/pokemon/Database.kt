@@ -3,6 +3,8 @@ package com.example.pokemongame.pokemon
 import androidx.room.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.lang.reflect.Type
 
 @Dao
@@ -59,7 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun BattleStatsDao(): BattleStatsDao
 }
 
-public fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db:AppDatabase){
+fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db:AppDatabase){
     for(i in 0 until team.size){
         team[i].ordering = i
         team[i].inTeam = true
@@ -75,5 +77,21 @@ public fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db
         }
     }
     db.PokemonDao().insert(team + collection)
+}
+
+/**
+ * returns an arraylist, index 0 will be the team index 1 will be the collection.
+ */
+fun getTeamAndCol(db:AppDatabase): ArrayList<List<Pokemon>>{
+    val teamAndCollection = ArrayList<List<Pokemon>>()
+    teamAndCollection.add(db.PokemonDao().getTeam())
+    teamAndCollection.add(db.PokemonDao().getCollection())
+    for(i in 0 until teamAndCollection.size){
+        for(k in 0 until teamAndCollection[i].size){
+            teamAndCollection[i][k].battleStats = db.BattleStatsDao().getBattleStats(teamAndCollection[i][k].species)
+
+        }
+    }
+    return teamAndCollection
 }
 

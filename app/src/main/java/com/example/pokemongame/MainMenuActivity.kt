@@ -13,6 +13,7 @@ import androidx.room.Room
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
 import com.example.pokemongame.pokemon.AppDatabase
 import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.pokemon.getTeamAndCol
 import com.example.pokemongame.pokemon.saveToDB
 import com.example.pokemongame.team_collection.TeamActivity
 import kotlinx.coroutines.Dispatchers
@@ -136,6 +137,11 @@ class MainMenuActivity : AppCompatActivity() {
 
     private suspend fun save() = withContext(Dispatchers.IO) {
         saveToDB(team, collection, db)
+        val teamAndCollection = getTeamAndCol(db)
+        //resetting to database values to prevent from repeatedly saving same value.
+        team = teamAndCollection[0] as ArrayList<Pokemon>
+        collection = teamAndCollection[1] as ArrayList<Pokemon>
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
