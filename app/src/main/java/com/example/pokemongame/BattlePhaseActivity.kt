@@ -93,12 +93,6 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         //Holds the player's team
         playerTeam =  intent.getSerializableExtra("team") as ArrayList<Pokemon>
 
-        //Testing. Add a poke to the player's team
-        var charm = PokemonCreator().createPokemon(5, "charmander", "Charm")
-        Level().initializeLevels(charm, charm.level, this)
-        charm.hp = charm.maxHp
-        playerTeam.add(charm)
-
         //Holds the the enemy's team. It is changed to a generated enemy team above
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
 

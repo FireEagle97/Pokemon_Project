@@ -23,6 +23,7 @@ class Connector {
                stringBuilder.append(line)
                line = reader.readLine()
            }
+           reader.close()
            //JSON string
            return@withContext stringBuilder.toString()
        } catch (e: Exception) {
