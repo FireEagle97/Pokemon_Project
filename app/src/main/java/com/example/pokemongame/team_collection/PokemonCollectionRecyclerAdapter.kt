@@ -3,6 +3,7 @@ package com.example.pokemongame.team_collection
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pokemongame.BattlePhaseActivity
 import com.example.pokemongame.databinding.PokemonItemCollectionBinding
 import com.example.pokemongame.pokemon.Pokemon
 import com.example.pokemongame.pokemon.getPokemonImageResourceId
@@ -50,7 +51,9 @@ class PokemonCollectionRecyclerAdapter(private val pokemonList: MutableList<Poke
             append(pokemonInfo.battleStats!!.species.toString())
             append(")")
         }
-        binding.sprite.setImageResource(getPokemonImageResourceId(pokemonInfo.battleStats!!.species))
+//        binding.sprite.setImageResource(getPokemonImageResourceId(pokemonInfo.battleStats!!.species))
+
+        binding.sprite.setImageBitmap(BattlePhaseActivity().getPokemonBitMap(pokemonInfo.frontSprite))
     }
 
 
