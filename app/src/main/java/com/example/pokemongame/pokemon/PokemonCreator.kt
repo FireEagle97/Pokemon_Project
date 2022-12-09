@@ -46,7 +46,7 @@ class PokemonCreator {
 
         }
         return Pokemon(
-            battleStats,
+            battleStats!!,
             baseExperienceReward,
             baseStatAttack,
             baseStatDefense,

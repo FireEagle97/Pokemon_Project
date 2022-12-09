@@ -10,7 +10,7 @@ import com.example.pokemongame.R
 //), onDelete = CASCADE)])
 @Entity
 data class Pokemon(
-    @Ignore var battleStats: BattleStats?,
+    @Ignore var battleStats: BattleStats,
     var experienceReward: Int,
     var attack: Int,
     var defense: Int,
@@ -49,7 +49,7 @@ data class Pokemon(
         backSprite: String,
         ordering: Int = 0
     ) : this(
-        null,
+        BattleStats("",0,0,0,0,0,0,0,listOf("")),
         experienceReward, attack, defense, maxHp, specialAttack, specialDefense, speed, name, moves, experience, level, hp,  frontSprite, backSprite,inTeam, ordering)
 
 }

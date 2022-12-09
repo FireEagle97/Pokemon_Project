@@ -56,7 +56,7 @@ object Converters {
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun PokemonDao(): PokemonDao
-    abstract fun BattleStatsDao(): BattleStatsDao
+//    abstract fun BattleStatsDao(): BattleStatsDao
 }
 
 public fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db:AppDatabase){
