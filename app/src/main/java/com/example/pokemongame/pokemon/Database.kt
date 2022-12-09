@@ -67,7 +67,7 @@ object Converters {
     }
 }
 
-@Database(entities = [Pokemon ::class, BattleStats ::class, TrainerName ::class], version = 2)
+@Database(entities = [Pokemon ::class, BattleStats ::class, TrainerName ::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun PokemonDao(): PokemonDao

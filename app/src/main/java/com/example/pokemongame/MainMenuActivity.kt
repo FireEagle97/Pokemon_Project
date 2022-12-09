@@ -38,6 +38,7 @@ class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = AppDatabase.getDatabase(applicationContext)
+
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         team =

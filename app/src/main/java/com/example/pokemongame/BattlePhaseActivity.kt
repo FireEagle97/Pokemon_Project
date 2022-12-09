@@ -407,11 +407,15 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
             rndPokeList.add(PokemonCreator().createPokemon(rndLevel,rndSpecies, applicationContext))
         }
-        //passing moves , hp , experience
-        for (pokemon in rndPokeList) {
-            Level().initializeLevels(pokemon,pokemon.level,applicationContext)
-            pokemon.hp = pokemon.maxHp
-            TrainerBattleLog.info{"initializing enemy pokemon"}
+        //Coroutine to initialize the pokemon's data asap while not blocking the main thread
+        val scope = CoroutineScope(Dispatchers.IO)
+        scope.launch{
+            //passing moves , hp , experience
+            for (pokemon in rndPokeList) {
+                Level().initializeLevels(pokemon, pokemon.level, applicationContext)
+                pokemon.hp = pokemon.maxHp
+                TrainerBattleLog.info { "initializing enemy pokemon" }
+            }
         }
 
         return rndPokeList
