@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
@@ -109,6 +110,10 @@ class MainMenuActivity : AppCompatActivity() {
             intent.putExtra("trainerName", trainerName)
             intent.putExtra("inTrainerBattle", true)
             startActivityForResult(intent, REQ_CODE)
+        }
+
+        binding.saveBtn!!.setOnClickListener{
+
         }
     }
 

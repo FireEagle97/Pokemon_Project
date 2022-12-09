@@ -59,3 +59,15 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun BattleStatsDao(): BattleStatsDao
 }
 
+public fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db:AppDatabase){
+    for(i in 0 until team.size){
+        team[i].ordering = i
+        team[i].inTeam = true
+    }
+    for(i in 0 until collection.size){
+        collection[i].ordering = i
+        collection[i].inTeam = false
+    }
+    db.PokemonDao().insert(team + collection)
+}
+
