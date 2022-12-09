@@ -8,9 +8,16 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.example.pokemongame.databinding.ActivityMainMenuBinding
+import com.example.pokemongame.pokemon.AppDatabase
 import com.example.pokemongame.pokemon.Pokemon
+import com.example.pokemongame.pokemon.saveToDB
 import com.example.pokemongame.team_collection.TeamActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.logging.Logger
 
 
@@ -24,10 +31,18 @@ class MainMenuActivity : AppCompatActivity() {
     private lateinit var team: ArrayList<Pokemon>
     private lateinit var trainerName: String
     private lateinit var collection: ArrayList<Pokemon>
+    private lateinit var db: AppDatabase
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "name"
+        ).build()
+
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         team =
@@ -113,8 +128,14 @@ class MainMenuActivity : AppCompatActivity() {
         }
 
         binding.saveBtn!!.setOnClickListener{
-
+            lifecycleScope.launch{
+                save()
+            }
         }
+    }
+
+    private suspend fun save() = withContext(Dispatchers.IO) {
+        saveToDB(team, collection, db)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

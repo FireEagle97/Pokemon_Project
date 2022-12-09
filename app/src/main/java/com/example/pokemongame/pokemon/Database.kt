@@ -56,17 +56,23 @@ object Converters {
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun PokemonDao(): PokemonDao
-//    abstract fun BattleStatsDao(): BattleStatsDao
+    abstract fun BattleStatsDao(): BattleStatsDao
 }
 
 public fun saveToDB(team: ArrayList<Pokemon>, collection: ArrayList<Pokemon>, db:AppDatabase){
     for(i in 0 until team.size){
         team[i].ordering = i
         team[i].inTeam = true
+        if(!db.BattleStatsDao().checkIfExists(team[i].battleStats.species)){
+            db.BattleStatsDao().insert(team[i].battleStats)
+        }
     }
     for(i in 0 until collection.size){
         collection[i].ordering = i
         collection[i].inTeam = false
+        if(!db.BattleStatsDao().checkIfExists(collection[i].battleStats.species)){
+            db.BattleStatsDao().insert(collection[i].battleStats)
+        }
     }
     db.PokemonDao().insert(team + collection)
 }
