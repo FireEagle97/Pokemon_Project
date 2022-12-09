@@ -528,7 +528,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
         return super.onTouchEvent(event)
     }
-    private fun getPokemonBitMap(pokemonImg : String): Bitmap? {
+    fun getPokemonBitMap(pokemonImg : String): Bitmap? {
         var pokemonImage : Bitmap? =null
         runBlocking {
             val scope = CoroutineScope(Dispatchers.IO)
