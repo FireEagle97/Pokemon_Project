@@ -13,16 +13,15 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
 import com.example.pokemongame.battle.*
 import com.example.pokemongame.databinding.ActivityBattlePhaseBinding
 import com.example.pokemongame.pokemon.*
-import com.example.pokemongame.utility.Connector
-import kotlinx.coroutines.*
-import java.net.URL
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 import java.util.logging.Logger
-import kotlin.collections.ArrayList
 
 
 class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDialogListener{
@@ -33,7 +32,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
     private var inTrainerBattle: Boolean = false
     //Initialize fragmentManager for various tasks
     val fragmentManager = supportFragmentManager
-    //Initialize Level class for utility to level up the PLAYER's pokemon
+//    //Initialize Level class for utility to level up the PLAYER's pokemon
     val levelClass = Level(fragmentManager)
     //new Move holder for player
     lateinit var newMove: Move
@@ -91,11 +90,10 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
 
         //Testing. Add a poke to the player's team
         var charm = PokemonCreator().createPokemon(5, "charmander", "Charm")
-        if (charm != null) {
-            Level().initializeLevels(charm, charm.level, this)
-            charm.hp = charm.maxHp
-            playerTeam.add(charm)
-        }
+        Level().initializeLevels(charm, charm.level, this)
+        charm.hp = charm.maxHp
+        playerTeam.add(charm)
+
         //Holds the the enemy's team. It is changed to a generated enemy team above
         enemyTeam = generateOpponentTeam(playerTeam,applicationContext)
 
@@ -121,7 +119,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Level.text = pPokemonLevel
         var pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
         binding.pokemon1Hp.text = pPokemon1Hp
-        binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon))
+        binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon.pokemon.backSprite))
 //        binding.pokemon1Img.setImageResource(getPokemonImageResourceId(playerActivePokemon.pokemon.frontSprite))
 
         //If we are in a trainer battle, print a "sent out" message, else print a "appeared" message
@@ -143,8 +141,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon2Level.text = ePokemonLevel
         var ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
         binding.pokemon2Hp.text = ePokemon2Hp
-        var playerImage : Bitmap? = getPokemonBitMap(enemyActivePokemon)
-        binding.pokemon2Img.setImageBitmap(getPokemonBitMap(enemyActivePokemon))
+        binding.pokemon2Img.setImageBitmap(getPokemonBitMap(enemyActivePokemon.pokemon.frontSprite))
         //Hide pokemon2's data
         binding.pokemon2Name.visibility = INVISIBLE
         binding.pokemon2Level.visibility = INVISIBLE
@@ -183,7 +180,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             binding.pokemon1Level.text = pPokemonLevel
             val pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
             binding.pokemon1Hp.text = pPokemon1Hp
-            binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon))
+            binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon.pokemon.backSprite))
             if(!forcePlayerSwitch[0]) {
                 //Choose a random move for the enemy
                 val enemyMovePosition = Random().nextInt(enemyActivePokemon.pokemon.moves.size)
@@ -412,14 +409,14 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         binding.pokemon1Level.text = pPokemonLevel
         val pPokemon1Hp= "Hp: " +playerActivePokemon.pokemon.hp + "/" + playerActivePokemon.pokemon.maxHp
         binding.pokemon1Hp.text = pPokemon1Hp
-        binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon))
+        binding.pokemon1Img.setImageBitmap(getPokemonBitMap(playerActivePokemon.pokemon.backSprite))
 
         binding.pokemon2Name.text = enemyActivePokemon.pokemon.name
         val ePokemonLevel = "level: " + enemyActivePokemon.pokemon.level
         binding.pokemon2Level.text = ePokemonLevel
         val ePokemon2Hp = "Hp: " + enemyActivePokemon.pokemon.hp + "/" + enemyActivePokemon.pokemon.maxHp
         binding.pokemon2Hp.text = ePokemon2Hp
-        binding.pokemon2Img.setImageBitmap(getPokemonBitMap(enemyActivePokemon))
+        binding.pokemon2Img.setImageBitmap(getPokemonBitMap(enemyActivePokemon.pokemon.frontSprite))
     }
 
     fun showBattleText(text: String){
@@ -531,12 +528,13 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
         }
         return super.onTouchEvent(event)
     }
-    private fun getPokemonBitMap(activePokemon: ActivePokemon): Bitmap? {
+    private fun getPokemonBitMap(pokemonImg : String): Bitmap? {
         var pokemonImage : Bitmap? =null
         runBlocking {
             val scope = CoroutineScope(Dispatchers.IO)
             val job = scope.launch {
-                var imageBitMap = PokeAPI().imageLoader(activePokemon.pokemon.frontSprite)
+
+                var imageBitMap = PokeAPI().imageLoader(pokemonImg)
                 imageBitMap = Bitmap.createScaledBitmap(imageBitMap!!,600,600,true)
                 pokemonImage = imageBitMap
             }
