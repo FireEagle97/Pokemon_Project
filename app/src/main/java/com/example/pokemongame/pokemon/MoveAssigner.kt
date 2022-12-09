@@ -110,7 +110,7 @@ class MoveAssigner {
                             //Replace a move if pokemon already has 4 moves
                             if (pokemon.moves.count() == 4) {
 
-                                //1 is always chosen for AI
+                                //In between 1 and 4 is chosen for AI
                                 val input = random.nextInt(5)
                                 if(input in 1..4){
                                     val oldMove = pokemon.moves[input-1].name
@@ -141,7 +141,6 @@ class MoveAssigner {
         var moveDataString: String = ""
         val job = launch {
             //Get the data
-            println(moveName)
             val url: URL = URL("${PokeApiEndpoint.MOVE.url}/${moveName}")
             val data = Connector().connect(url) as String
             //Simplify it
