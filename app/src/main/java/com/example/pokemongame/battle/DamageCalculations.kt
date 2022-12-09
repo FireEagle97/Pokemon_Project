@@ -21,7 +21,7 @@ class DamageCalculations(val activity: BattlePhaseActivity) {
         val DamageLog: Logger = Logger.getLogger(DamageCalculations::class.java.name)
     }
     //Note: If the move does no damage because it isn't a damaging move, determine it outside of this class
-    fun calculateDamage(attackerPokemon: Pokemon, attackerMove : Move, defenderPokemon: Pokemon, context: Context): Int{
+    fun calculateDamage(attackerPokemon: Pokemon, attackerMove : Move, defenderPokemon: Pokemon): Int{
 
         //Attack hits Defence and Special Attack hits Special Defence
         var damage: Double = if(attackerMove.damageClass == "PHYSICAL"){

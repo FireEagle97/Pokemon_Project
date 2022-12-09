@@ -1,67 +1,66 @@
 package com.example.pokemongame.pokemon
 
-import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.IOException
+import com.example.pokemongame.utility.PokeApiEndpoint
 import java.util.logging.Logger
+import com.example.pokemongame.utility.Connector
+import com.google.gson.JsonObject
+import kotlinx.coroutines.*
+import java.net.URL
 
 class PokemonCreator {
     companion object{
         val pokemonCreatorLog : Logger = Logger.getLogger(PokemonCreator::class.java.name)
     }
 
-    private fun getPokemonBattleStats(species: String, context: Context): BattleStats {
-        val fileList = context.assets.list("pokemon")!!
-        var battleStatsData: String = ""
-        try {
-            if ("${species}.json" in fileList) {
-                val fileName = "pokemon/${species}.json"
 
-                battleStatsData = context.assets.open(fileName).bufferedReader().use {
-                    it.readText()
-                }
-
-            }
-        }catch (ioException: IOException) {
-            ioException.printStackTrace()
-            null
-        }
-        val gson = Gson()
-        val listBattleStatsType = object : TypeToken<BattleStats>() {}.type
-
-        return gson.fromJson(battleStatsData, listBattleStatsType)
-
-    }
-
-    fun createPokemon(level: Int, species: String, context: Context,name : String = species): Pokemon {
+    fun createPokemon(level: Int, species: String,name : String = species): Pokemon {
         //get The battleStats
-        val battleStats: BattleStats = getPokemonBattleStats(species, context)
+        var baseExperienceReward : Int
+        var baseStatAttack : Int
+        var baseStatDefense : Int
+        var baseStatMaxHp : Int
+        var baseStatSpecialAttack : Int
+        var baseStatSpecialDefense : Int
+        var baseStatSpeed : Int
+        var battleStats: BattleStats? = null
         val moves: ArrayList<Move> = arrayListOf()
-        //temp vals
-        val experience: Double = 0.0
-        val hp: Int = 0
-        val baseExperienceReward : Int = battleStats.baseExperienceReward
-        val baseStateAttack : Int = battleStats.baseStateAttack
-        val baseStatDefense : Int = battleStats.baseStatDefense
-        val baseStatMaxHp : Int = battleStats.baseStateMaxHp
-        val baseStatSpecialAttack : Int = battleStats.baseStatSpecialAttack
-        val baseStatSpecialDefense : Int = battleStats.baseStatSpecialDefense
-        val baseStatSpeed : Int = battleStats.baseStatSpeed
+        var sprites  = JsonObject()
+        val experience = 0.0
+        val hp = 0
+        runBlocking {
+            val scope = CoroutineScope(Dispatchers.IO)
+            val job = scope.launch {
+                val url = URL("${PokeApiEndpoint.POKEMON.url}/${species}")
+                val data = Connector().connect(url) as String
+                battleStats = PokeAPI().simplifyBattleStats(data)
+                sprites = PokeAPI().getPokemonSprite(data)
+            }
+            job.join()
+            baseExperienceReward  = battleStats!!.baseExperienceReward
+            baseStatAttack = battleStats!!.baseStateAttack
+            baseStatDefense  = battleStats!!.baseStatDefense
+            baseStatMaxHp  = battleStats!!.baseStateMaxHp
+            baseStatSpecialAttack = battleStats!!.baseStatSpecialAttack
+            baseStatSpecialDefense = battleStats!!.baseStatSpecialDefense
+            baseStatSpeed  = battleStats!!.baseStatSpeed
+
+        }
         return Pokemon(
-                battleStats,
-                baseExperienceReward,
-                baseStateAttack,
-                baseStatDefense,
-                baseStatMaxHp,
-                baseStatSpecialAttack,
-                baseStatSpecialDefense,
-                baseStatSpeed,
-                name,
-                moves,
-                experience,
-                level,
-                hp,
+            battleStats,
+            baseExperienceReward,
+            baseStatAttack,
+            baseStatDefense,
+            baseStatMaxHp,
+            baseStatSpecialAttack,
+            baseStatSpecialDefense,
+            baseStatSpeed,
+            name,
+            moves,
+            experience,
+            level,
+            hp,
+            sprites["front_sprite"].asString,
+            sprites["back_sprite"].asString
         )
     }
 }

@@ -41,7 +41,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.menuBtn?.setOnClickListener(){
                 if(binding.inputName.text.isNotBlank()) {
                     //create selected pokemon
-                    val pokemonSpecies = arrayListOf<String>("bulbasaur", "squirtle", "charmander")
+                    val pokemonSpecies = arrayListOf("bulbasaur", "squirtle", "charmander")
                     val radioButtonID: Int = binding.firstChoice.checkedRadioButtonId
                     val radioButton: View = binding.firstChoice.findViewById(radioButtonID)
                     val ind: Int = binding.firstChoice.indexOfChild(radioButton)
@@ -54,7 +54,6 @@ class RegisterActivity : AppCompatActivity() {
                     val pokemon = PokemonCreator().createPokemon(
                         5,
                         pokemonSpecies[ind],
-                        applicationContext,
                         name
                     )
                     Level().initializeLevels(pokemon,pokemon.level,applicationContext)
@@ -71,13 +70,6 @@ class RegisterActivity : AppCompatActivity() {
                 }
         }
 
-
-
-
-//
-//        binding.menuBtn?.setOnClickListener{
-
-        //}
     }
 
 }

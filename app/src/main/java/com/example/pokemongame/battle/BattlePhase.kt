@@ -132,7 +132,7 @@ class BattlePhase(val playerTeam: ArrayList<Pokemon>, val enemyTeam: ArrayList<P
 
                 BattleLog.info("Old HP of defending pokemon: ${speedArray[1].pokemon.hp}")
                 speedArray[1].pokemon.hp -= DamageCalculations(activity).calculateDamage(speedArray[0].pokemon,
-                    speedArray[0].chosenMove!!, speedArray[1].pokemon, context)
+                    speedArray[0].chosenMove!!, speedArray[1].pokemon)
                 //Set HP to 0 if it would bring it into the negatives instead
                 if(speedArray[1].pokemon.hp < 0){
                     speedArray[1].pokemon.hp = 0

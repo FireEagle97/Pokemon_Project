@@ -15,5 +15,6 @@ data class BattleStats(
             var baseStatSpeed : Int,
             var types : List<String>,
 
+
 ): java.io.Serializable
 
