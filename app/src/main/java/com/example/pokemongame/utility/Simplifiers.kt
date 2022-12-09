@@ -462,6 +462,11 @@ fun simplifyMove(apiResponse: String): String =
                     "type",
                     json["type"].asJsonObject["name"].asString
                 )
+            } else if(!json["past_values"].asJsonArray[0].asJsonObject["type"].isJsonNull){
+                addProperty(
+                    "type",
+                    json["past_values"].asJsonArray[0].asJsonObject["type"].asJsonObject["name"].asString
+                )
             } else {
                 addProperty(
                     "type",
