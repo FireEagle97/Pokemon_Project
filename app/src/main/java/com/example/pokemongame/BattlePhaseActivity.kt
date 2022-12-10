@@ -252,6 +252,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
             playerActivePokemon.chosenMove = null
             TrainerBattleLog.info("$trainerName healed their pokemon by using a potion!")
             addStringToBattleTextList("$trainerName healed their pokemon by using a potion!", true, true, false)
+            updateUI(playerActivePokemon, enemyActivePokemon)
             callBattlePhase(battlePhase, inTrainerBattle, faintedAndEndBattleArray)
         }
 
