@@ -65,6 +65,7 @@ class RegisterActivity : AppCompatActivity() {
                 intent.putExtra("team", team)
                 intent.putExtra("trainerName", binding.inputName.text.toString())
                 startActivity(intent)
+                finish()
             } else{
                 binding.mustEnterName.visibility = View.VISIBLE
             }
