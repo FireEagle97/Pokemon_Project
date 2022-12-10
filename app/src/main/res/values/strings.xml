@@ -44,5 +44,7 @@
     <string name="team">TEAM</string>
 
     <string name="userName">NEW NAME FROM SHARED PREFERENCES</string>
+    <string name="save_gamestate_to_database">Save gamestate to Database</string>
+    <string name="save_game">save game</string>
 
 </resources>
