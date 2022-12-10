@@ -34,7 +34,6 @@ class PokemonCreator {
             val job = scope.launch {
                 if(db.BattleStatsDao().checkIfExists(species)){
                     battleStats = db.BattleStatsDao().getBattleStats(species)
-                    Toast.makeText(context, "Loaded battlestats from db", Toast.LENGTH_SHORT).show()
                 }
                 else {
                     val url = URL("${PokeApiEndpoint.POKEMON.url}/${species}")

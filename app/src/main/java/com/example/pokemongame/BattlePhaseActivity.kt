@@ -519,6 +519,7 @@ class BattlePhaseActivity : AppCompatActivity(), AddMoveDialogFragment.AddMoveDi
                         //If fainted pokemon is not in player's team, reward player pokemon by calling fragment manager
                         Level(fragmentManager).addExperience(playerActivePokemon.pokemon, gainedExperience[0], this)
                     }
+                    faintedAndEndBattleArray[1] = false
                 }
 
                 if(endBattle){
