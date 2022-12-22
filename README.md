@@ -11,6 +11,6 @@ A simplified pokemon game on Android that has two modes wild and trainer modes.
 clone the repository and open it on Android studio.
 
 ## Authors
-Bastian Fernandez Cortez
-Maxime Rayvich
+Bastian Fernandez Cortez, 
+Maxime Rayvic, 
 Dany Makhoul
