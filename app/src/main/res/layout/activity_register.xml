@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_weight="2"
+    android:background="@drawable/main_img_port">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:fontFamily="@font/opensansbold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/trainer_name_prompt"
+         />
+    <TextView
+        android:id="@+id/must_enter_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/opensansbold"
+        android:text="@string/must_enter_trainer_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        />
+
+    <EditText
+        android:id="@+id/input_name"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensansbold"
+        android:maxLength="20"
+        android:layout_marginStart="20dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/must_enter_name" />
+
+    <TextView
+        android:id="@+id/starting_pokemon_qeury"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginStart="15dp"
+        app:layout_constraintTop_toBottomOf="@id/input_name"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/starting_pokemon_query"
+
+
+        />
+    <RadioGroup
+        android:id="@+id/first_choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/starting_pokemon_qeury"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="15dp"
+
+
+        >
+        <RadioButton
+            android:id="@+id/pokemon1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="blastauise (lvl 4)"
+            android:textColor="@color/white"
+            android:fontFamily="@font/opensansbold"
+            android:drawableEnd="@drawable/bulbasaur"
+            android:drawablePadding="30dp"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+            />
+
+        <RadioButton
+            android:id="@+id/pokemon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="blastauise (lvl 4)"
+            android:textColor="@color/white"
+            android:fontFamily="@font/opensansbold"
+            android:drawableEnd="@drawable/bulbasaur"
+            android:drawablePadding="30dp"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+
+            />
+        <RadioButton
+            android:id="@+id/pokemon3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="blastauise (lvl 4)"
+            android:textColor="@color/white"
+            android:fontFamily="@font/opensansbold"
+            android:drawableEnd="@drawable/bulbasaur"
+            android:drawablePadding="30dp"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+            />
+    </RadioGroup>
+    <TextView
+        android:id="@+id/pokemonNameQuery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="18sp"
+        android:text="@string/what_will_your_pokemon_s_name_be"
+        android:textColor="@color/white"
+        android:layout_marginStart="15dp"
+        android:fontFamily="@font/opensansbold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/first_choice"
+        android:visibility="gone"
+
+
+        />
+
+    <EditText
+        android:id="@+id/pokemon_name_input"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:maxLength="20"
+        android:singleLine="true"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/opensansbold"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/pokemonNameQuery"
+        app:layout_constraintStart_toStartOf="parent"
+        app:backgroundTint="@color/white"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/menuBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/first_choice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="18sp"
+        android:fontFamily="@font/opensansbold"
+        android:textColor="@color/red"
+        android:backgroundTint="@color/transparent"
+        app:strokeColor="@color/red"
+        app:strokeWidth="2dp"
+        android:text="@string/go_to_menu"
+        android:visibility="gone"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

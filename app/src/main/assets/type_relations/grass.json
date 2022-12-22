@@ -1,0 +1,11 @@
+{
+    "water": "super_effective",
+    "rock": "super_effective",
+    "ground": "super_effective",
+    "fire": "not_very_effective",
+    "grass": "not_very_effective",
+    "poison": "not_very_effective",
+    "flying": "not_very_effective",
+    "bug": "not_very_effective",
+    "dragon": "not_very_effective"
+}

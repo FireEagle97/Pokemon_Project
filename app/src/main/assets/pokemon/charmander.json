@@ -1,0 +1,13 @@
+{
+  "baseExperienceReward": 62,
+  "baseStateAttack": 52,
+  "baseStatDefense": 43,
+  "baseStateMaxHp": 39,
+  "baseStatSpecialAttack": 60,
+  "baseStatSpecialDefense": 50,
+  "baseStatSpeed": 65,
+  "species": "charmander",
+  "types": [
+    "fire"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "baseExperienceReward": 50,
+  "baseStateAttack": 45,
+  "baseStatDefense": 40,
+  "baseStateMaxHp": 40,
+  "baseStatSpecialAttack": 35,
+  "baseStatSpecialDefense": 35,
+  "baseStatSpeed": 56,
+  "species": "pidgey",
+  "types": [
+    "normal",
+    "flying"
+  ]
+}

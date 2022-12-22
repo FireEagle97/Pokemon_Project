@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pikachu"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:text="@string/dawson_pokemon"
+        android:textStyle="bold"
+        android:fontFamily="@font/opensansbold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/blue"
+        android:textSize="30sp"/>
+    <Button
+        android:id="@+id/start"
+        android:text="@string/start_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensansbold"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:backgroundTint="@color/yellow"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="2dp"
+        app:layout_constraintBottom_toTopOf="@id/credits"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="40dp"
+        >
+    </Button>
+    <TextView
+        android:id="@+id/credits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/opensansbold"
+        android:text="@string/credit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/black"
+        android:background="@color/white"
+        android:textSize="15sp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

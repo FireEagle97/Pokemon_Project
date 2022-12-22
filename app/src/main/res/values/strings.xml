@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">PokemonGame</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="wild_battle">Wild Battle</string>
+    <string name="trainer_battle">Trainer Battle</string>
+    <string name="pokemon_center">Pokemon Center</string>
+    <string name="start_game">Start Game</string>
+    <string name="dawson_pokemon">Dawson Pokemon</string>
+    <string name="credit">Created by Dany Makhoul, Bastian Fernandez-Cortez and Maxime Rayvich</string>
+    <string name="trainer_name_prompt">Please enter your name, trainer!</string>
+    <string name="starting_pokemon_query">Select your starting pokemon!</string>
+    <string name="go_to_menu">Go to menu</string>
+
+    //Menu strings
+    <string name="change_team">Change Team</string>
+    <string name="battle_fight">Fight</string>
+    <string name="battle_run">Run</string>
+    <string name="switch_pokemon">Switch</string>
+    <string name="item">Item</string>
+    <string name="pokemon1name">pokemon1Name</string>
+    <string name="pokemon1level">pokemon1level</string>
+    <string name="pokemon1hp">pokemon1hp</string>
+    <string name="pokemon2level">pokemon2level</string>
+    <string name="pokemon2hp">pokemon2hp</string>
+    <string name="what_will_your_pokemon_s_name_be">What will your pokemon\'s name be?</string>
+    <string name="must_enter_trainer_name">Must enter trainer name!</string>
+    <string name="save">save</string>
+    <string name="trainer_name">Enter your name</string>
+
+    //Battle strings
+    <string name="switch_button">Switch</string>
+    <string name="select">Select</string>
+    <string name="move_used">move used:</string>
+    <string name="learn_move">Do you want to learn a new Move?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="image_of_the_pokemon">image_of_the_pokemon</string>
+    <string name="move_up">move up</string>
+    <string name="move_down">move down</string>
+    <string name="move_over">move over</string>
+    <string name="move_to_team">move_to_team</string>
+    <string name="collection">COLLECTION</string>
+    <string name="team">TEAM</string>
+
+    <string name="userName">NEW NAME FROM SHARED PREFERENCES</string>
+    <string name="save_gamestate_to_database">Save gamestate to Database</string>
+    <string name="save_game">save game</string>
+
+</resources>
